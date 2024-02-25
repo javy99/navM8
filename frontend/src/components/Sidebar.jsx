@@ -62,11 +62,6 @@ const Sidebar = ({ user }) => {
           action: () => console.log("How It Works"),
         },
         {
-          icon: FaSignInAlt,
-          label: "Sign Up / Login",
-          action: () => console.log("Sign Up/Login"),
-        },
-        {
           icon: FaUserCircle,
           label: "About Us",
           action: () => console.log("About Us"),
@@ -77,16 +72,6 @@ const Sidebar = ({ user }) => {
           action: () => console.log("Contact Us"),
         },
       ];
-
-  const logoutLink = user
-    ? [
-        {
-          icon: FaSignInAlt,
-          label: "Log Out",
-          action: () => console.log("Log Out"),
-        },
-      ]
-    : [];
 
   return (
     <Box
@@ -119,7 +104,7 @@ const Sidebar = ({ user }) => {
               variant="ghost"
               justifyContent="flex-start"
               onClick={link.action}
-              fontWeight={300} 
+              fontWeight={300}
               color={textColor}
               _hover={{
                 color: hoverTextColor,
@@ -134,31 +119,6 @@ const Sidebar = ({ user }) => {
           ))}
         </VStack>
       </Flex>
-
-      {user && (
-        <VStack spacing={4} align="stretch">
-          {logoutLink.map((link) => (
-            <Button
-              key={link.label}
-              leftIcon={<Icon as={link.icon} color={textColor} />}
-              variant="ghost"
-              justifyContent="flex-start"
-              onClick={link.action}
-              fontWeight={300} 
-              color={textColor}
-              _hover={{
-                color: hoverTextColor,
-                bg: hoverBgColor,
-                ".chakra-icon": {
-                  color: iconHoverColor,
-                },
-              }}
-            >
-              {link.label}
-            </Button>
-          ))}
-        </VStack>
-      )}
     </Box>
   );
 };

@@ -2,8 +2,10 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
 import App from "./App.jsx";
-import './index.css'
-// Extend the theme to include custom fonts, colors, etc
+import "./index.css";
+
+import { AuthContextProvider } from "./context/AuthContext";
+
 const theme = extendTheme({
   fonts: {
     heading: "Poppins, sans-serif",
@@ -23,8 +25,10 @@ const container = document.getElementById("root");
 const root = createRoot(container); // Create a root.
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
+    <AuthContextProvider>
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
+    </AuthContextProvider>
   </React.StrictMode>
 );

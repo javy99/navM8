@@ -5,7 +5,6 @@ import {
   Button,
   IconButton,
   HStack,
-  VStack,
   useDisclosure,
   Divider,
   useColorModeValue,

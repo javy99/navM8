@@ -1,9 +1,9 @@
 import React from "react";
 import { Flex, Text, Box } from "@chakra-ui/react";
-import Navbar from "./Navbar";
-import SearchBar from "./SearchBar";
-import FeaturedGuides from "./FeaturedGuides";
-import Sidebar from "./Sidebar";
+import Navbar from "../components/Navbar";
+import SearchBar from "../components/SearchBar";
+import FeaturedGuides from "../components/FeaturedGuides";
+import Sidebar from "../components/Sidebar";
 import HeaderBgImage from "../assets/hero-bg6.jpg";
 
 const HomePage = ({ user }) => {
@@ -30,7 +30,11 @@ const HomePage = ({ user }) => {
           </Text>
           <SearchBar />
         </Box>
-        <Flex minHeight="100vh" direction={{ base: "column", md: "row" }} pb={5}>
+        <Flex
+          minHeight="100vh"
+          direction={{ base: "column", md: "row" }}
+          pb={5}
+        >
           <Flex direction="column" flex="1" overflowY="auto">
             <FeaturedGuides />
           </Flex>

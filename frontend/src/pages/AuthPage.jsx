@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -13,7 +13,7 @@ import {
 import AuthBgImage from "../assets/hero-bg5.jpg";
 
 const AuthPage = () => {
-  const [isSignUp, setIsSignUp] = React.useState(true); // Toggle between signup and login
+  const [isSignUp, setIsSignUp] = useState(true); // Toggle between signup and login
   const signUpButtonBgColor = useColorModeValue("#0B6B78", "#D1F366");
   const signUpButtonTextColor = useColorModeValue("white", "#141627");
   const placeholderTextColor = useColorModeValue("#0B6B78", "white");
@@ -88,19 +88,6 @@ const AuthPage = () => {
                   },
                 }}
               />
-              {isSignUp && (
-                <Input
-                  color={signUpButtonBgColor}
-                  placeholder="Confirm Password"
-                  type="password"
-                  focusBorderColor={signUpButtonBgColor}
-                  sx={{
-                    "::placeholder": {
-                      color: placeholderTextColor,
-                    },
-                  }}
-                />
-              )}
               <Button
                 width="full"
                 bg={signUpButtonBgColor}
