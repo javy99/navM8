@@ -5,8 +5,8 @@ import {
   Image,
   VStack,
   Input,
-  Button,
   Heading,
+  Button as ChakraButton,
   Text,
   useColorModeValue,
   InputGroup,
@@ -16,6 +16,7 @@ import AuthBgImage from "../assets/hero-bg5.jpg";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import Button from "../components/Button";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +39,6 @@ const Login = () => {
   };
 
   const bgColor = useColorModeValue("#0B6B78", "#D1F366");
-  const textColor = useColorModeValue("white", "#141627");
   const placeholderColor = useColorModeValue("#0B6B78", "white");
   // Added a light background color for the form container
   const formBgColor = useColorModeValue(
@@ -131,7 +131,7 @@ const Login = () => {
                   autoComplete="current-password"
                 />
                 <InputRightElement width="4.5rem">
-                  <Button
+                  <ChakraButton
                     h="1.75rem"
                     size="sm"
                     onClick={() =>
@@ -143,20 +143,11 @@ const Login = () => {
                     ) : (
                       <ViewIcon color={bgColor} />
                     )}
-                  </Button>
+                  </ChakraButton>
                 </InputRightElement>
               </InputGroup>
 
-              <Button
-                disabled={isLoading}
-                type="submit"
-                width="full"
-                bg={bgColor}
-                color={textColor}
-                _hover={{
-                  bg: bgColor,
-                }}
-              >
+              <Button disabled={isLoading} type="submit" width="full">
                 Login
               </Button>
               {error && (

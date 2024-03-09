@@ -5,7 +5,7 @@ import {
   Image,
   VStack,
   Input,
-  Button,
+  Button as ChakraButton,
   Heading,
   Text,
   useColorModeValue,
@@ -16,6 +16,7 @@ import AuthBgImage from "../assets/hero-bg5.jpg";
 import { useNavigate } from "react-router-dom";
 import { useSignup } from "../hooks/useSignup";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import Button from "../components/Button";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -39,8 +40,12 @@ const Signup = () => {
   };
 
   const bgColor = useColorModeValue("#0B6B78", "#D1F366");
-  const textColor = useColorModeValue("white", "#141627");
   const placeholderColor = useColorModeValue("#0B6B78", "white");
+  // Added a light background color for the form container
+  const formBgColor = useColorModeValue(
+    "linear(to-b, gray.100, gray.200)",
+    "linear(to-b, gray.700, gray.800)"
+  );
 
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
@@ -85,6 +90,12 @@ const Signup = () => {
               maxW="md"
               px={{ base: 4, md: 8 }}
               py={8}
+              bg={formBgColor}
+              boxShadow="xl"
+              p={8} // Increased padding around the form container
+              m={4} // Added margin for separation
+              bgGradient={formBgColor} // Applied gradient background
+              borderRadius="lg" // Rounded corners
             >
               <Heading size="lg" color={bgColor}>
                 Sign Up
@@ -131,24 +142,23 @@ const Signup = () => {
                   autoComplete="current-password"
                 />
                 <InputRightElement width="4.5rem">
-                  <Button
+                  <ChakraButton
                     h="1.75rem"
                     size="sm"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <ViewOffIcon color={textColor} /> : <ViewIcon color={textColor}/>}
-                  </Button>
+                    {showPassword ? (
+                      <ViewOffIcon color={bgColor} />
+                    ) : (
+                      <ViewIcon color={bgColor} />
+                    )}
+                  </ChakraButton>
                 </InputRightElement>
               </InputGroup>
               <Button
                 disabled={isLoading}
                 type="submit"
                 width="full"
-                bg={bgColor}
-                color={textColor}
-                _hover={{
-                  bg: bgColor,
-                }}
               >
                 Sign Up
               </Button>

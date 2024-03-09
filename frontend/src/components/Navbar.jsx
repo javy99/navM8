@@ -1,93 +1,89 @@
 import React from "react";
 import {
   Flex,
-  Button,
-  Box,
   Text,
   useColorMode,
   IconButton,
   useColorModeValue,
+  HStack,
+  Icon,
+  Image,
 } from "@chakra-ui/react";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { BsMoonFill, BsSunFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
+import Button from "./Button";
+import { BsPersonCircle } from "react-icons/bs";
+import { useUserProfilePhoto } from "../hooks/useUserProfilePhoto";
 
 const Navbar = () => {
   const { logout } = useLogout();
   const { state } = useAuthContext();
   const { user } = state;
 
-  const handleClick = () => {
-    logout();
-  };
+  // Use the hook to get the current profile photo
+  const { photo: userPhoto } = useUserProfilePhoto();
 
+  const handleClick = () => logout();
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
-  const signUpLoginBg = useColorModeValue("#0B6B78", "#D1F366"); // Background color for the button
-  const signUpLoginColor = useColorModeValue("white", "#141627"); // Text color for better contrast
+  const signUpLoginBg = useColorModeValue("#0B6B78", "#D1F366");
 
   return (
     <Flex
-      h="60px"
+      as="nav"
+      height="70px"
       alignItems="center"
       justifyContent="flex-end"
       px={4}
       boxShadow="md"
-      width="full"
-      maxWidth="1920px" // Adjust for a more compact presentation
-      mx="auto" // Center the navbar
+      gap={4}
     >
-      {user && (
-        <Flex align="center">
-          <Text mr={4}>{user.email}</Text>
-          <Button
-            mr={4}
-            bg={signUpLoginBg}
-            color={signUpLoginColor}
-            _hover={{
-              bg: signUpLoginBg,
-            }}
-            onClick={handleClick}
-          >
-            Logout
-          </Button>
-        </Flex>
-      )}
-      {!user && (
-        <Box>
-          <Button
-            mr={4}
-            bg={signUpLoginBg}
-            color={signUpLoginColor}
-            _hover={{
-              bg: signUpLoginBg,
-            }}
-            onClick={() => navigate("/signup")}
-          >
-            Sign Up
-          </Button>
-          <Button
-            mr={4}
-            bg={signUpLoginBg}
-            color={signUpLoginColor}
-            _hover={{
-              bg: signUpLoginBg,
-            }}
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </Button>
-        </Box>
-      )}
+      <HStack spacing={4}>
+        {user && (
+          <>
+            {userPhoto ? (
+              <Image
+                borderRadius="full"
+                boxSize="2.5rem"
+                src={userPhoto}
+                alt="Profile photo"
+              />
+            ) : (
+              <Icon
+                as={BsPersonCircle}
+                boxSize="2.5rem"
+                color="rgba(0, 0, 0, 0.3)"
+              />
+            )}
+            <Text color={signUpLoginBg} fontWeight={600}>
+              {user.email}
+            </Text>
+            <Button onClick={handleClick}>Logout</Button>
+          </>
+        )}
+        {!user && (
+          <>
+            <Button onClick={() => navigate("/signup")}>Sign Up</Button>
+            <Button onClick={() => navigate("/login")}>Login</Button>
+          </>
+        )}
 
-      <IconButton
-        icon={colorMode === "light" ? <FaMoon color="#0B6B78" /> : <FaSun />}
-        onClick={toggleColorMode}
-        aria-label="Toggle dark mode"
-        mr={4} // Add margin to the right for spacing before the calendar component
-      />
-      {/* Placeholder for the calendar component integration */}
+        <IconButton
+          icon={
+            colorMode === "light" ? (
+              <BsMoonFill color="#0B6B78" />
+            ) : (
+              <BsSunFill />
+            )
+          }
+          onClick={toggleColorMode}
+          aria-label="Toggle dark mode"
+          mr={4}
+        />
+        {/* Placeholder for the calendar component integration */}
+      </HStack>
     </Flex>
   );
 };

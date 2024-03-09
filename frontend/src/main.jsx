@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import "./index.css";
 
 import { AuthContextProvider } from "./context/AuthContext";
+import { UserContextProvider } from "./context/UserContext";
 
 const theme = extendTheme({
   fonts: {
@@ -26,9 +27,11 @@ const root = createRoot(container); // Create a root.
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <ChakraProvider theme={theme}>
-        <App />
-      </ChakraProvider>
+      <UserContextProvider>
+        <ChakraProvider theme={theme}>
+          <App />
+        </ChakraProvider>
+      </UserContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );
