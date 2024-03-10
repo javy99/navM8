@@ -1,0 +1,104 @@
+{
+  "guides": [
+    {
+      "id": 1,
+      "name": "John Smith",
+      "city": "New York City",
+      "country": "USA",
+      "description": "I'm a seasoned tour guide with over 10 years of experience in showcasing the best of New York City.",
+      "interests": ["History", "Art", "Food"],
+      "review": 4.8,
+      "spokenLanguages": ["English"]
+    },
+    {
+      "id": 2,
+      "name": "Maria Garcia",
+      "city": "Barcelona",
+      "country": "Spain",
+      "description": "Hola! I'm Maria, your friendly guide to exploring the vibrant city of Barcelona. Let's uncover its rich history and culture together.",
+      "interests": ["Architecture", "Gastronomy", "Local Culture"],
+      "review": 4.9,
+      "spokenLanguages": ["Spanish", "English"]
+    },
+    {
+      "id": 3,
+      "name": "Mohammed Ali",
+      "city": "Cairo",
+      "country": "Egypt",
+      "description": "Welcome to Cairo! I'm Mohammed, your knowledgeable guide to the wonders of ancient Egypt. Let's explore the pyramids and more.",
+      "interests": ["Archaeology", "Desert Adventures", "Local Cuisine"],
+      "review": 4.7,
+      "spokenLanguages": ["Arabic", "English"]
+    },
+    {
+      "id": 4,
+      "name": "Sophie Müller",
+      "city": "Berlin",
+      "country": "Germany",
+      "description": "Guten Tag! I'm Sophie, your guide to Berlin's eclectic neighborhoods, fascinating history, and vibrant arts scene. Join me for an unforgettable experience.",
+      "interests": ["History", "Art", "Cuisine"],
+      "review": 4.6,
+      "spokenLanguages": ["German", "English"]
+    },
+    {
+      "id": 5,
+      "name": "Alessandro Rossi",
+      "city": "Rome",
+      "country": "Italy",
+      "description": "Ciao! I'm Alessandro, your friendly guide to the Eternal City of Rome. Let's explore its ancient ruins, magnificent churches, and delicious cuisine.",
+      "interests": ["History", "Art", "Cuisine"],
+      "review": 4.9,
+      "spokenLanguages": ["Italian", "English"]
+    },
+    {
+      "id": 6,
+      "name": "Olga Ivanova",
+      "city": "St. Petersburg",
+      "country": "Russia",
+      "description": "Привет! I'm Olga, your local guide to the majestic city of St. Petersburg. Join me to discover its imperial palaces, world-class museums, and vibrant culture.",
+      "interests": ["History", "Art", "Cultural Heritage"],
+      "review": 4.8,
+      "spokenLanguages": ["Russian", "English"]
+    },
+    {
+      "id": 7,
+      "name": "Chen Wei",
+      "city": "Beijing",
+      "country": "China",
+      "description": "你好! I'm Chen Wei, your knowledgeable guide to the wonders of Beijing, from the Great Wall to the Forbidden City. Let's explore together!",
+      "interests": ["History", "Culture", "Cuisine"],
+      "review": 4.7,
+      "spokenLanguages": ["Mandarin", "English"]
+    },
+    {
+      "id": 8,
+      "name": "Luisa Silva",
+      "city": "Lisbon",
+      "country": "Portugal",
+      "description": "Olá! I'm Luisa, your enthusiastic guide to the charming city of Lisbon. Join me to discover its historic neighborhoods, delicious food, and warm hospitality.",
+      "interests": ["History", "Culture", "Gastronomy"],
+      "review": 4.8,
+      "spokenLanguages": ["Portuguese", "English"]
+    },
+    {
+      "id": 9,
+      "name": "David Johnson",
+      "city": "Sydney",
+      "country": "Australia",
+      "description": "G'day mate! I'm David, your local guide to Sydney's stunning beaches, iconic landmarks, and vibrant culture. Let's explore the land Down Under!",
+      "interests": ["Nature", "Adventure", "Surfing"],
+      "review": 4.6,
+      "spokenLanguages": ["English"]
+    },
+    {
+      "id": 10,
+      "name": "Anna Petrova",
+      "city": "Moscow",
+      "country": "Russia",
+      "description": "Привет! I'm Anna, your friendly guide to the bustling metropolis of Moscow. Join me to uncover its historic sites, cultural treasures, and vibrant nightlife.",
+      "interests": ["History", "Art", "Nightlife"],
+      "review": 4.7,
+      "spokenLanguages": ["Russian", "English"]
+    }
+  ]
+}

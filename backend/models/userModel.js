@@ -20,6 +20,18 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  // new entry
+  firstName: String,
+  lastName: String,
+  phoneNumber: String,
+  country: String,
+  city: String,
+  birthDate: Date,
+  gender: String,
+  languagesSpoken: [String],
+  interests: [String],
+  bio: String,
+  
 });
 
 // Signup static method

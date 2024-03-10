@@ -11,15 +11,18 @@ import MyBookings from "./pages/MyBookings";
 import About from "./pages/About";
 import Favorites from "./pages/Favorites";
 import MyTours from "./pages/MyTours";
+import { GlobalStyles } from "./components/GlobalStyles";
 
 const App = () => {
   const { state } = useAuthContext();
   const { user } = state;
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* <Route
+    <>
+      <GlobalStyles />
+      <BrowserRouter>
+        <Routes>
+          {/* <Route
           path="/"
           element={user ? <HomePage user={user} /> : <Navigate to="/login" />}
         />
@@ -32,17 +35,18 @@ const App = () => {
           element={!user ? <Login /> : <Navigate to="/" />}
         /> */}
 
-        <Route path="/" element={<HomePage user={user} />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/bookings" element={<MyBookings />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/mytours" element={<MyTours />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="/" element={<HomePage user={user} />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/bookings" element={<MyBookings />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/mytours" element={<MyTours />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 

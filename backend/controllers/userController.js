@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const validator = require("validator");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, {
@@ -39,35 +41,57 @@ const signupUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser, signupUser };
+// update user
+const updateProfile = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    phoneNumber,
+    email,
+    country,
+    city,
+    birthDate,
+    gender,
+    languagesSpoken,
+    interests,
+    bio,
+    currentPassword,
+    newPassword,
+  } = req.body;
 
-// // signup controller
-// const signupUser = async (req, res) => {
-//   try {
-//     const { username, email, password, userType } = req.body;
-//     const user = await User.signup(username, email, password, userType); // Using the static signup method
-//     res
-//       .status(201)
-//       .json({ message: "User created successfully", userId: user._id });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ message: "Error creating user", error: error.message });
-//   }
-// };
+  try {
+    const user = await User.findById(req.user._id);
 
-// // Login controller
-// const loginUser = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-//     const user = await User.login(email, password); // Using the static login method
-//     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-//       expiresIn: "2h",
-//     });
-//     res.status(200).json({ token });
-//   } catch (error) {
-//     res.status(500).json({ message: "Login error", error: error.message });
-//   }
-// };
+    // Update fields
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.email = email || user.email;
+    user.country = country || user.country;
+    user.city = city || user.city;
+    user.birthDate = birthDate || user.birthDate;
+    user.gender = gender || user.gender;
+    user.languagesSpoken = languagesSpoken || user.languagesSpoken;
+    user.interests = interests || user.interests;
+    user.bio = bio || user.bio;
 
-// module.exports = { signupUser, loginUser };
+    // Optional: Change password
+    if (currentPassword && newPassword) {
+      const match = await bcrypt.compare(currentPassword, user.password);
+      if (!match) throw Error("Current password is incorrect");
+      if (!validator.isStrongPassword(newPassword)) {
+        throw Error("New password is not strong enough");
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { signupUser, loginUser, updateProfile };

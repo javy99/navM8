@@ -17,6 +17,16 @@ const theme = extendTheme({
       body: {
         bg: props.colorMode === "dark" ? "#141627" : "white",
       },
+      html: {
+        fontSize: {
+          base: "16px", // Default font size for all screen sizes
+          sm: "16px", // For screens wider than 480px (usually no change needed if starting at 16px)
+          md: "17px", // For screens wider than 768px
+          lg: "18px", // For screens wider than 992px
+          xl: "18px", // For screens wider than 1280px (may not need to increase further)
+          "2xl": "18px", // For screens wider than 1536px (maintain readability without going too large)
+        },
+      },
     }),
   },
 });
