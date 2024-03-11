@@ -25,7 +25,10 @@ const Navbar = () => {
   // Use the hook to get the current profile photo
   const { photo: userPhoto } = useUserProfilePhoto();
 
-  const handleClick = () => logout();
+  const handleClick = () => {
+    logout();
+    navigate("/")
+  }
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
   const signUpLoginBg = useColorModeValue("#0B6B78", "#D1F366");

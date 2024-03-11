@@ -33,6 +33,7 @@ import {
 import ReactCountryFlag from "react-country-flag";
 import { useUserProfilePhoto } from "../hooks/useUserProfilePhoto";
 import Button from "../components/Button";
+import useProfileUpdate from "../hooks/useProfileUpdate";
 
 const formLabelStyle = {
   fontSize: "1.25rem",
@@ -69,22 +70,23 @@ function Profile() {
   const toast = useToast();
   const inputFileRef = useRef(null);
   const { photo, setPhoto, removePhoto } = useUserProfilePhoto();
+  const { updateProfile, isLoading } = useProfileUpdate(user, toast);
 
   const primaryColor = useColorModeValue("#0B6B78", "#D1F366");
   const secondaryColor = useColorModeValue("#69490B", "#000");
 
   const [userInfo, setUserInfo] = useState({
-    name: user?.firstName || "",
-    surname: user?.lastName || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
     country: user?.country || "",
     city: user?.city || "",
-    languages: user?.languagesSpoken || "",
-    interests: user?.interests || "",
+    languagesSpoken: user?.languagesSpoken || [],
+    interests: user?.interests || [],
     photo: photo,
     gender: user?.gender || "",
     bio: user?.bio || "",
-    contact: user?.phoneNumber || "",
-    birthday: user?.birthDate || "",
+    phoneNumber: user?.phoneNumber || "",
+    birthDate: user?.birthDate || "",
     currentPassword: "",
     newPassword: "",
   });
@@ -95,6 +97,7 @@ function Profile() {
 
   const handleUserInfoChange = (event) => {
     const { name, value } = event.target;
+    console.log(value);
     setUserInfo({ ...userInfo, [name]: value });
   };
 
@@ -148,57 +151,7 @@ function Profile() {
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
 
-    // URL for your profile update endpoint
-    const updateProfileUrl = `${import.meta.env.VITE_API_URL}/auth/profile`;
-    console.log(
-      "VITE_API_URL:",
-      `${import.meta.env.VITE_API_URL}/auth/profile`
-    );
-
-    try {
-      const response = await fetch(updateProfileUrl, {
-        method: "PATCH", // or 'PUT', depending on your backend setup
-        headers: {
-          "Content-Type": "application/json",
-          // Include the authorization token
-          Authorization: `Bearer ${user.token}`, // Ensure you have the token available
-        },
-        body: JSON.stringify(userInfo),
-      });
-
-      const data = await response.json();
-      console.log("Updated user data from server:", data);
-      console.log(userInfo);
-
-      if (response.ok) {
-        toast({
-          title: "Profile updated successfully.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-      } else {
-        throw new Error(
-          data.error || "An error occurred while updating the profile."
-        );
-      }
-    } catch (error) {
-      console.log("Error details:", error);
-      let errorMessage = "Error updating profile.";
-      if (error.name === "TypeError" && error.message === "Failed to fetch") {
-        errorMessage =
-          "Failed to fetch: The request cannot be made. Possibly a network error or CORS issue.";
-      } else if (error.message) {
-        errorMessage += ` ${error.message}`;
-      }
-      toast({
-        title: "Error updating profile.",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+    await updateProfile(userInfo);
   };
 
   return (
@@ -397,27 +350,27 @@ function Profile() {
           <VStack spacing={4} align="stretch" py={6} px={12}>
             <Flex justifyContent="space-between" gap={12} mb={6}>
               <FormControl id="first-name" isRequired>
-                <FormLabel htmlFor="name" {...formLabelStyle}>
+                <FormLabel htmlFor="firstName" {...formLabelStyle}>
                   First name
                 </FormLabel>
                 <Input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={userInfo.name}
+                  id="firstName"
+                  name="firstName"
+                  value={userInfo.firstName}
                   onChange={handleUserInfoChange}
                   {...formInputStyle}
                 />
               </FormControl>
               <FormControl id="last-name" isRequired>
-                <FormLabel htmlFor="surname" {...formLabelStyle}>
+                <FormLabel htmlFor="lastName" {...formLabelStyle}>
                   Last name
                 </FormLabel>
                 <Input
                   type="text"
-                  id="surname"
-                  name="surname"
-                  value={userInfo.surname}
+                  id="lastName"
+                  name="lastName"
+                  value={userInfo.lastName}
                   onChange={handleUserInfoChange}
                   {...formInputStyle}
                 />
@@ -425,14 +378,14 @@ function Profile() {
             </Flex>
             <Flex justifyContent="space-between" gap={12} mb={6}>
               <FormControl id="phone-number" isRequired>
-                <FormLabel htmlFor="contact" {...formLabelStyle}>
+                <FormLabel htmlFor="phoneNumber" {...formLabelStyle}>
                   Phone number
                 </FormLabel>
                 <Input
                   type="number"
-                  id="contact"
-                  name="contact"
-                  value={userInfo.contact}
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={userInfo.phoneNumber}
                   onChange={handleUserInfoChange}
                   {...formInputStyle}
                 />
@@ -445,7 +398,7 @@ function Profile() {
                   type="email"
                   id="email"
                   name="email"
-                  value={user?.email}
+                  value={userInfo.email}
                   onChange={handleUserInfoChange}
                   {...formInputStyle}
                 />
@@ -481,14 +434,14 @@ function Profile() {
             </Flex>
             <Flex justifyContent="space-between" gap={12} mb={6}>
               <FormControl id="birth-date" isRequired>
-                <FormLabel htmlFor="birthday" {...formLabelStyle}>
+                <FormLabel htmlFor="birthDate" {...formLabelStyle}>
                   Birth Date
                 </FormLabel>
                 <Input
                   type="date"
-                  id="birthday"
-                  name="birthday"
-                  value={userInfo.birthday}
+                  id="birthDate"
+                  name="birthDate"
+                  value={userInfo.birthDate}
                   onChange={handleUserInfoChange}
                   {...formInputStyle}
                 />
@@ -508,14 +461,14 @@ function Profile() {
               </FormControl>
             </Flex>
             <FormControl id="languages-spoken" mb={6} isRequired>
-              <FormLabel htmlFor="languages" {...formLabelStyle}>
+              <FormLabel htmlFor="languagesSpoken" {...formLabelStyle}>
                 Languages spoken
               </FormLabel>
               <Input
                 type="text"
-                id="languages"
-                name="languages"
-                value={userInfo.languages}
+                id="languagesSpoken"
+                name="languagesSpoken"
+                value={userInfo.languagesSpoken}
                 onChange={handleUserInfoChange}
                 {...formInputStyle}
               />

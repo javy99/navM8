@@ -77,10 +77,10 @@ const HomePage = ({ user }) => {
                 >
                   My Bookings
                 </Text>
-                <BookingCard />
-                <BookingCard />
-                <BookingCard />
-                <BookingCard />
+                <BookingCard width="330px" />
+                <BookingCard width="330px" />
+                <BookingCard width="330px" />
+                <BookingCard width="330px" />
               </Box>
             </>
           )}

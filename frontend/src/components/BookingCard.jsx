@@ -4,7 +4,6 @@ import {
   Flex,
   Image,
   Icon,
-  Button,
   Card as ChakraCard,
   CardHeader,
   CardBody,
@@ -15,7 +14,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { BsCalendar2 } from "react-icons/bs";
 
-const BookingCard = () => {
+
+const BookingCard = ({ width }) => {
   const navigate = useNavigate();
   const primaryColor = useColorModeValue("#0B6B78", "#D1F366");
   const secondaryColor = useColorModeValue("#69490B", "#000");
@@ -28,7 +28,7 @@ const BookingCard = () => {
     <ChakraCard
       direction="row"
       borderRadius="xl"
-      w="330px"
+      width={width}
       bg="#F6FBFC"
       transition="all 0.3s"
       _hover={{
@@ -50,12 +50,12 @@ const BookingCard = () => {
           borderRadius="xl"
         />
       </VStack>
-      <Flex flexDirection="column" pl={5} justifyContent='center'>
+      <Flex flexDirection="column" pl={5} justifyContent="center">
         <Text fontWeight="bold" fontSize="xl" mb={3} color={primaryColor}>
           {/* {guide.name} */}Skardu
         </Text>
         <Flex>
-          <Icon as={BsCalendar2} color="#EC502C" w={5} h={5}/>
+          <Icon as={BsCalendar2} color="#EC502C" w={5} h={5} />
           <Text ml={2} color={secondaryColor}>
             16 Jan - 25 Jan
           </Text>
