@@ -17,6 +17,7 @@ import {
   Heading,
   Select,
   Textarea,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -35,35 +36,6 @@ import { useUserProfilePhoto } from "../hooks/useUserProfilePhoto";
 import Button from "../components/Button";
 import useProfileUpdate from "../hooks/useProfileUpdate";
 
-const formLabelStyle = {
-  fontSize: "1.25rem",
-  color: "#000",
-  fontWeight: "bold",
-};
-
-const formInputStyle = {
-  boxShadow: "inset 0 0 2px 2px rgba(0, 0, 0, 0.2)",
-  borderRadius: "0.9375rem",
-  height: "4.375rem",
-  fontSize: "1.25rem",
-  variant: "unstyled",
-  px: "1.5rem",
-  _focus: {
-    borderBottom: "0.25rem solid #0B6B78",
-  },
-};
-
-const formSelectStyle = {
-  boxShadow: "inset 0 0 2px 2px rgba(0, 0, 0, 0.2)",
-  borderRadius: "0.9375rem",
-  height: "4.375rem",
-  fontSize: "1.25rem",
-  variant: "unstyled",
-  _focus: {
-    borderBottom: "0.25rem solid #0B6B78",
-  },
-};
-
 function Profile() {
   const { state } = useAuthContext();
   const { user } = state;
@@ -72,8 +44,61 @@ function Profile() {
   const { photo, setPhoto, removePhoto } = useUserProfilePhoto();
   const { updateProfile, isLoading } = useProfileUpdate(user, toast);
 
-  const primaryColor = useColorModeValue("#0B6B78", "#D1F366");
-  const secondaryColor = useColorModeValue("#69490B", "#000");
+  const primaryColor = "#0B6B78";
+  const secondaryColor = "#69490B";
+  const whiteColor = "#fff";
+
+  // Responsive adjustments
+  const formFontSize = useBreakpointValue({
+    base: "sm",
+    md: "md",
+    xxl: "lg",
+  });
+  const formPaddingX = useBreakpointValue({ base: 4, md: 6 });
+  const formInputHeight = useBreakpointValue({
+    base: "2.5rem",
+    xl: "3rem",
+  });
+  const bioTextareaHeight = useBreakpointValue({ base: "120px", lg: "150px" });
+  const formControlLayout = useBreakpointValue({ base: "column", xl: "row" });
+  const headingFontSize = useBreakpointValue({
+    base: "lg",
+    xl: "xl",
+    xxl: "2xl",
+  });
+
+  const vStackPaddingX = useBreakpointValue({ base: 4, md: 6, lg: 8 });
+  const vStackPaddingY = useBreakpointValue({ base: 3, md: 4, lg: 4 });
+  const inputGap = useBreakpointValue({ base: 6, lg: 8, xxl: 12 });
+
+  const formLabelStyle = {
+    color: "#000",
+    fontWeight: "bold",
+    fontSize: formFontSize,
+  };
+
+  const formInputStyle = {
+    boxShadow: "inset 0 0 2px 2px rgba(0, 0, 0, 0.2)",
+    borderRadius: "0.9375rem",
+    height: formInputHeight,
+    variant: "unstyled",
+    px: formPaddingX,
+    _focus: {
+      borderBottom: "0.25rem solid #0B6B78",
+    },
+    fontSize: formFontSize,
+  };
+
+  const formSelectStyle = {
+    boxShadow: "inset 0 0 2px 2px rgba(0, 0, 0, 0.2)",
+    borderRadius: "0.9375rem",
+    height: formInputHeight,
+    variant: "unstyled",
+    _focus: {
+      borderBottom: "0.25rem solid #0B6B78",
+    },
+    fontSize: formFontSize,
+  };
 
   const [userInfo, setUserInfo] = useState({
     firstName: user?.firstName || "",
@@ -154,15 +179,59 @@ function Profile() {
     await updateProfile(userInfo);
   };
 
+  const bgImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`;
+  const iconSize = useBreakpointValue({
+    base: "100px",
+    md: "150px",
+    lg: "180px",
+  });
+  const profileInfoFontSize = useBreakpointValue({
+    base: "md",
+    md: "lg",
+    lg: "xl",
+  });
+  const profileContainerWidth = useBreakpointValue({
+    base: "90%",
+    md: "80%",
+    lg: "85%",
+    xl: "70%",
+  });
+  const profileContainerPadding = useBreakpointValue({
+    base: 3,
+    sm: 3.5,
+    md: 4,
+    lg: 4,
+  });
+  const profileContainerHeight = useBreakpointValue({
+    base: "auto",
+  });
+
+  const buttonSize = useBreakpointValue({ base: "xs", sm: "sm", md: "md" });
+
+  const iconButtonSize = useBreakpointValue({
+    base: "sm", // Adjusted for smaller screens
+    md: "md", // Adjust size as needed
+  });
+
+  // Further responsive design adjustments
+  const profilePaddingY = useBreakpointValue({ base: 2, md: 4 });
+  const profileMarginBottom = useBreakpointValue({ base: 4, md: 6 });
+  const profileWidth = useBreakpointValue({
+    base: "90%",
+    md: "85%",
+    lg: "80%",
+    xl: "70%",
+  });
+
   return (
-    <Flex minHeight="100vh" direction={{ base: "column", md: "row" }}>
+    <Flex direction={{ base: "column", lg: "row" }} minHeight="100vh">
       <Sidebar user={user} />
       <Flex direction="column" flex="1" overflowY="auto">
         <Navbar />
         <Box
-          bgImage={`linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`}
+          bgImage={bgImage}
           bgSize="cover"
-          minHeight="17.5rem"
+          minHeight={{ base: "14rem", md: "15rem", lg: "16rem", xl: "18rem" }}
           bgPosition="center"
           position="relative"
         >
@@ -173,12 +242,12 @@ function Profile() {
             left="50%"
             bottom="0"
             transform="translate(-50%, 50%)"
-            borderRadius="8.125rem"
-            bg={useColorModeValue("white", "gray.800")}
-            p={6}
+            borderRadius="full"
+            bg={whiteColor}
+            p={profileContainerPadding}
             boxShadow="xl"
-            w="55%"
-            height="85%"
+            width={profileContainerWidth}
+            height={profileContainerHeight}
           >
             <Box
               boxShadow="xl"
@@ -192,14 +261,14 @@ function Profile() {
               {userInfo.photo ? (
                 <Image
                   borderRadius="full"
-                  boxSize="12.5rem"
+                  boxSize={iconSize}
                   src={userInfo.photo}
                   alt="Profile photo"
                 />
               ) : (
                 <Icon
                   as={BsPersonCircle}
-                  boxSize="12.5rem"
+                  boxSize={iconSize}
                   color="rgba(0, 0, 0, 0.3)"
                 />
               )}
@@ -208,10 +277,10 @@ function Profile() {
                 aria-label="Remove photo"
                 icon={<BsTrashFill color="#fff" />}
                 position="absolute"
-                top={-2}
-                right={-2}
+                top={{ base: -2, sm: -3, md: -3.5, lg: -3 }}
+                right={{ base: -2, sm: -3, md: -3.5, lg: -3 }}
                 onClick={handleRemovePhoto}
-                size="md"
+                size={buttonSize}
                 isRound
                 _hover={{ bg: "#FF0B0B" }}
               />
@@ -230,28 +299,33 @@ function Profile() {
                 aria-label="Add photo"
                 icon={<BsCameraFill color="#fff" />}
                 position="absolute"
-                bottom={-2}
-                right={-2}
+                bottom={{ base: -2, sm: -3, md: -3.5, lg: -3 }}
+                right={{ base: -2, sm: -3, md: -3.5, lg: -3 }}
                 onClick={handleButtonClick}
-                size="md"
+                size={buttonSize}
                 isRound
                 _hover={{ bg: primaryColor }}
               />
             </Box>
 
-            <Flex flexDirection="column" alignItems="flex-start">
+            <Flex
+              flexDirection="column"
+              alignItems="flex-start"
+              ml={{ md: 6 }}
+              mr={{ base: 3, sm: 0 }}
+            >
               <Text
                 color={primaryColor}
                 fontWeight="bold"
-                fontSize="1.75rem"
-                mb={2}
+                fontSize={profileInfoFontSize}
+                mb={{ base: 1, md: 2 }}
               >
                 Javlonbek Kosimov
               </Text>
               <Badge
                 bgColor="#0B6B781A"
                 color="#0B6B78B3"
-                p={2}
+                p={{ base: 1.5, md: 2 }}
                 borderRadius="xl"
                 display="flex"
                 alignItems="center"
@@ -261,30 +335,26 @@ function Profile() {
                 <ReactCountryFlag
                   countryCode="HU"
                   svg
-                  style={{
-                    fontSize: "1.125rem",
-                    lineHeight: "1.125rem",
-                  }}
+                  style={{ width: "1.5em", height: "1.5em" }}
                 />
                 <Text textTransform="capitalize" ml={2}>
                   Hungary, Budapest
                 </Text>
               </Badge>
-              <Text
-                color={secondaryColor}
-                fontSize="1rem"
-                fontWeight="semibold"
-              >
-                24 y.o.{" "}
+              <Text color={secondaryColor} fontSize="sm" fontWeight="semibold">
+                24 y.o.
               </Text>
             </Flex>
-            <Box height="inherit" bg="#0000001A">
+            <Box display={{ base: "none", md: "block" }} bg="#0000001A">
               <Divider orientation="vertical" />
             </Box>
             <Flex
+              display={{ base: "none", sm: "flex" }}
               flexDirection="column"
-              alignItems="flex-start"
+              alignItems={{ sm: "flex-start" }}
               color={secondaryColor}
+              fontSize="sm"
+              mr={{ sm: 3 }}
             >
               <Text mb={2}>
                 <b>Tours Taken:</b> 5
@@ -297,58 +367,67 @@ function Profile() {
                   Review:
                 </Text>
                 <Flex>
-                  <Icon as={BsStarFill} color="#DFB300" boxSize={5} mr={1} />
-                  <Icon as={BsStarFill} color="#DFB300" boxSize={5} mr={1} />
-                  <Icon as={BsStarFill} color="#DFB300" boxSize={5} mr={1} />
-                  <Icon as={BsStarHalf} color="#DFB300" boxSize={5} mr={1} />
-                  <Icon as={BsStar} color="#DFB300" boxSize={5} />
+                  <Icon as={BsStarFill} color="#DFB300" boxSize={4} mr={1} />
+                  <Icon as={BsStarFill} color="#DFB300" boxSize={4} mr={1} />
+                  <Icon as={BsStarFill} color="#DFB300" boxSize={4} mr={1} />
+                  <Icon as={BsStarHalf} color="#DFB300" boxSize={4} mr={1} />
+                  <Icon as={BsStar} color="#DFB300" boxSize={4} />
                 </Flex>
               </Flex>
             </Flex>
           </Flex>
         </Box>
-
-        {/* <VStack
-          as="form"
-          spacing={4}
-          onSubmit={handleSubmit}
-          w="full"
-          maxW="lg"
-          m="0 auto"
-          pt={200}
-        >
-        </VStack> */}
         <Box
           as="form"
           onSubmit={handleSubmit}
           maxWidth="100%"
           mx="auto"
           boxShadow="xl"
-          mt="9.375rem"
+          mt={{
+            base: "6rem",
+            md: "8rem",
+            lg: "9rem",
+          }}
           mb="3.125rem"
-          width="85%"
-          borderRadius="3rem"
-          borderTopLeftRadius="3rem"
-          borderTopRightRadius="3rem"
+          w={{ base: "95%", lg: "85%" }}
+          borderRadius="2rem"
+          borderTopLeftRadius="2rem"
+          borderTopRightRadius="2rem"
           borderBottomLeftRadius="1rem"
           borderBottomRightRadius="1rem"
           overflow="hidden"
           borderBottom="1rem solid #0B6B78"
           pb="3rem"
         >
+          {/* <Box
+          as="form"
+          onSubmit={handleSubmit}
+          mx="auto"
+          p={8}
+          shadow="base"
+          borderWidth="1px"
+          maxWidth="100%"
+          borderRadius="lg"
+          w={{ base: "full"}}
+        > */}
           <Heading
             as="h3"
-            fontSize="1.5rem"
+            fontSize={headingFontSize}
             mb={6}
             bg="#ececec"
-            py={6}
-            px={12}
+            py={vStackPaddingY}
+            px={vStackPaddingX}
             boxShadow="lg"
           >
             Personal Information
           </Heading>
-          <VStack spacing={4} align="stretch" py={6} px={12}>
-            <Flex justifyContent="space-between" gap={12} mb={6}>
+          <VStack
+            spacing={inputGap}
+            align="stretch"
+            py={vStackPaddingY}
+            px={vStackPaddingX}
+          >
+            <Flex direction={formControlLayout} gap={inputGap}>
               <FormControl id="first-name" isRequired>
                 <FormLabel htmlFor="firstName" {...formLabelStyle}>
                   First name
@@ -376,7 +455,7 @@ function Profile() {
                 />
               </FormControl>
             </Flex>
-            <Flex justifyContent="space-between" gap={12} mb={6}>
+            <Flex direction={formControlLayout} gap={inputGap}>
               <FormControl id="phone-number" isRequired>
                 <FormLabel htmlFor="phoneNumber" {...formLabelStyle}>
                   Phone number
@@ -404,7 +483,7 @@ function Profile() {
                 />
               </FormControl>
             </Flex>
-            <Flex justifyContent="space-between" gap={12} mb={6}>
+            <Flex direction={formControlLayout} gap={inputGap}>
               <FormControl id="country" isRequired>
                 <FormLabel htmlFor="country" {...formLabelStyle}>
                   Country
@@ -432,7 +511,7 @@ function Profile() {
                 />
               </FormControl>
             </Flex>
-            <Flex justifyContent="space-between" gap={12} mb={6}>
+            <Flex direction={formControlLayout} gap={inputGap}>
               <FormControl id="birth-date" isRequired>
                 <FormLabel htmlFor="birthDate" {...formLabelStyle}>
                   Birth Date
@@ -460,7 +539,7 @@ function Profile() {
                 </Select>
               </FormControl>
             </Flex>
-            <FormControl id="languages-spoken" mb={6} isRequired>
+            <FormControl id="languages-spoken" isRequired>
               <FormLabel htmlFor="languagesSpoken" {...formLabelStyle}>
                 Languages spoken
               </FormLabel>
@@ -473,7 +552,7 @@ function Profile() {
                 {...formInputStyle}
               />
             </FormControl>
-            <FormControl id="interests" mb={6} isRequired>
+            <FormControl id="interests" isRequired>
               <FormLabel htmlFor="interests" {...formLabelStyle}>
                 Interests
               </FormLabel>
@@ -493,24 +572,30 @@ function Profile() {
                 name="bio"
                 value={userInfo.bio}
                 onChange={handleUserInfoChange}
+                height={bioTextareaHeight}
               />
             </FormControl>
           </VStack>
 
           <Heading
             as="h3"
-            size="lg"
-            mt={10}
+            fontSize={headingFontSize}
+            mt={6}
             mb={6}
             bg="#ececec"
-            py={6}
-            px={12}
+            py={vStackPaddingY}
+            px={vStackPaddingX}
             boxShadow="lg"
           >
             Password
           </Heading>
-          <VStack spacing={4} align="stretch" py={6} px={12}>
-            <FormControl id="current-password" mb={6}>
+          <VStack
+            align="stretch"
+            spacing={inputGap}
+            py={vStackPaddingY}
+            px={vStackPaddingX}
+          >
+            <FormControl id="current-password">
               <FormLabel {...formLabelStyle}>Current password</FormLabel>
               <Input
                 type="password"
@@ -533,7 +618,12 @@ function Profile() {
             </FormControl>
           </VStack>
 
-          <Flex justifyContent="flex-end" gap={5} mt={6} px={12}>
+          <Flex
+            justifyContent="flex-end"
+            gap={5}
+            mt={6}
+            px={vStackPaddingX}
+          >
             <Button>Edit</Button>
             <Button type="submit">Save</Button>
           </Flex>

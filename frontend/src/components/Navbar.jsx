@@ -2,68 +2,89 @@ import React from "react";
 import {
   Flex,
   Text,
-  useColorMode,
-  IconButton,
-  useColorModeValue,
   HStack,
   Icon,
   Image,
+  useBreakpointValue,
 } from "@chakra-ui/react";
-import { BsMoonFill, BsSunFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
 import Button from "./Button";
 import { BsPersonCircle } from "react-icons/bs";
 import { useUserProfilePhoto } from "../hooks/useUserProfilePhoto";
+import { IconButton } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { useSidebarContext } from "../context/SidebarContext";
 
 const Navbar = () => {
   const { logout } = useLogout();
   const { state } = useAuthContext();
   const { user } = state;
-
-  // Use the hook to get the current profile photo
+  const { toggleSidebar } = useSidebarContext();
   const { photo: userPhoto } = useUserProfilePhoto();
-
-  const handleClick = () => {
-    logout();
-    navigate("/")
-  }
   const navigate = useNavigate();
-  const { colorMode, toggleColorMode } = useColorMode();
-  const signUpLoginBg = useColorModeValue("#0B6B78", "#D1F366");
+
+  const handleLogoutClick = () => {
+    logout();
+    navigate("/");
+  };
+
+  const primaryColor = "#0B6B78";
+  const whiteColor = "white";
+  const navPadding = useBreakpointValue({ base: 2, md: 4 });
+  const iconSize = useBreakpointValue({ base: "2rem", md: "2.5rem" });
+  // Declare variables for responsive display without conditionals
+  const isMobile = useBreakpointValue({ base: true, sm: false });
 
   return (
     <Flex
       as="nav"
       height="70px"
       alignItems="center"
-      justifyContent="flex-end"
-      px={4}
+      px={navPadding}
       boxShadow="md"
-      gap={4}
+      bg={whiteColor}
+      position={{ base: "fixed", md: "static" }}
+      top={0}
+      left={0}
+      right={0}
+      w="full"
+      zIndex={100}
     >
-      <HStack spacing={4}>
+      <IconButton
+        display={{ base: "flex", lg: "none" }}
+        icon={<HamburgerIcon color={whiteColor} boxSize="25px" />}
+        onClick={toggleSidebar}
+        aria-label="Open menu"
+        size="md"
+        mr={2}
+        bg={primaryColor}
+        _hover={{ bg: primaryColor }}
+      />
+      <HStack spacing={4} justifyContent="flex-end" flex={1}>
         {user && (
           <>
             {userPhoto ? (
               <Image
                 borderRadius="full"
-                boxSize="2.5rem"
+                boxSize={iconSize}
                 src={userPhoto}
                 alt="Profile photo"
               />
             ) : (
               <Icon
                 as={BsPersonCircle}
-                boxSize="2.5rem"
+                boxSize={iconSize}
                 color="rgba(0, 0, 0, 0.3)"
               />
             )}
-            <Text color={signUpLoginBg} fontWeight={600}>
-              {user.email}
-            </Text>
-            <Button onClick={handleClick}>Logout</Button>
+            {!isMobile && (
+              <Text color={primaryColor} fontWeight={600}>
+                {user.email}
+              </Text>
+            )}
+            <Button onClick={handleLogoutClick}>Logout</Button>
           </>
         )}
         {!user && (
@@ -72,20 +93,6 @@ const Navbar = () => {
             <Button onClick={() => navigate("/login")}>Login</Button>
           </>
         )}
-
-        <IconButton
-          icon={
-            colorMode === "light" ? (
-              <BsMoonFill color="#0B6B78" />
-            ) : (
-              <BsSunFill />
-            )
-          }
-          onClick={toggleColorMode}
-          aria-label="Toggle dark mode"
-          mr={4}
-        />
-        {/* Placeholder for the calendar component integration */}
       </HStack>
     </Flex>
   );

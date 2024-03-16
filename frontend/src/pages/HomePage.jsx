@@ -46,7 +46,7 @@ const HomePage = ({ user }) => {
           </Text>
           <SearchBar />
         </Box>
-        <Flex direction={{ base: "column", md: "row" }} pb={5} height="100%">
+        <Flex direction={{ base: "column", md: "row" }} pb={5} >
           <Box p={8} flex="3" minW={{ md: "74%" }}>
             <Text fontSize="xl" mb={4} color={primaryColor} fontWeight="bold">
               The Most Popular Tours

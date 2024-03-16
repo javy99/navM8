@@ -7,18 +7,18 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: {
     type: String,
-    required: true,
+    required: [true, "Your username is required"],
     unique: true,
     minlength: 3,
   },
   email: {
     type: String,
-    required: true,
+    required: [true, "Your email address is required"],
     unique: true,
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Your password is required"],
   },
   // new entry
   firstName: String,
@@ -31,7 +31,10 @@ const userSchema = new Schema({
   languagesSpoken: [String],
   interests: [String],
   bio: String,
-  
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 // Signup static method

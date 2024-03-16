@@ -22,19 +22,6 @@ const App = () => {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          {/* <Route
-          path="/"
-          element={user ? <HomePage user={user} /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/signup"
-          element={!user ? <Signup /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/login"
-          element={!user ? <Login /> : <Navigate to="/" />}
-        /> */}
-
           <Route path="/" element={<HomePage user={user} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />

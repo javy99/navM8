@@ -1,9 +1,9 @@
-require("dotenv").config();
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/user");
+require("dotenv").config();
+const { MONGODB_URL, BACKEND_PORT } = process.env;
 
 // express app
 const app = express();
@@ -25,9 +25,9 @@ app.use((error, req, res, next) => {
 
 // connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(MONGODB_URL)
   .then(() => {
-    app.listen(process.env.BACKEND_PORT, () => {
+    app.listen(BACKEND_PORT, () => {
       console.log(
         "Connected to MongoDB and listening on port",
         process.env.BACKEND_PORT

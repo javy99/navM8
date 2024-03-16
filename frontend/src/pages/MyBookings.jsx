@@ -1,35 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Flex,
-  FormControl,
-  FormLabel,
-  Icon,
   Image,
-  Input,
   VStack,
-  useToast,
-  IconButton,
-  Checkbox,
   Heading,
-  useColorModeValue,
   Text,
-  Divider,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { useAuthContext } from "../hooks/useAuthContext";
 import BookingCard from "../components/BookingCard";
 import Button from "../components/Button";
-import myBookingsBg from "../assets/mybookings-bg.jpg";
 import { useNavigate } from "react-router-dom";
+import myBookingsBg from "../assets/mybookings-bg.jpg";
 
 function MyBookings() {
   const { state } = useAuthContext();
   const { user } = state;
   const navigate = useNavigate();
-  const primaryColor = useColorModeValue("#0B6B78", "#D1F366");
-  const secondaryColor = useColorModeValue("#69490B", "#000");
+  const primaryColor = "#0B6B78";
+  const secondaryColor = "#69490B";
+  const whiteColor = "#FFFFFF";
+
+  const bookingCardWidth = useBreakpointValue({ base: "100%", md: "48%" });
+  const imageBoxSize = useBreakpointValue({ base: "100%", md: "50%" });
+  const contentPadding = useBreakpointValue({ base: "30px", md: "40px", lg: "50px"});
+  const flexDirection = useBreakpointValue({ base: "column", md: "row" });
 
   return (
     <Flex minHeight="100vh" direction={{ base: "column", md: "row" }}>
@@ -41,23 +39,23 @@ function MyBookings() {
             My Bookings
           </Heading>
           <Box
-            bg="white"
+            bg={whiteColor}
             borderRadius="20px"
             overflow="hidden"
             mx={12}
             border={`4px solid ${primaryColor}`}
           >
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" direction={flexDirection}>
               <Flex
                 flexDirection="column"
                 alignItems="flex-start"
                 justifyContent="center"
-                p="70px"
-                w="50%"
+                p={contentPadding}
+                w={imageBoxSize}
               >
                 <Text
                   fontSize="xl"
-                  fontWeight="bold"
+                  fontWeight="semibold"
                   color={secondaryColor}
                   mb={5}
                 >
@@ -69,7 +67,7 @@ function MyBookings() {
                 </Text>
                 <Button onClick={() => navigate("/")}>Start searching</Button>
               </Flex>
-              <Box w="50%">
+              <Box w={imageBoxSize}>
                 <Image
                   src={myBookingsBg}
                   alt="No bookings image"
@@ -85,11 +83,11 @@ function MyBookings() {
             <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
               Past Trips
             </Heading>
-            <Flex flexWrap="wrap" gap="4%" mx={12}>
-              <BookingCard width="48%" />
-              <BookingCard width="48%" />
-              <BookingCard width="48%" />
-              <BookingCard width="48%" />
+            <Flex flexWrap="wrap" justifyContent="space-between" mx={12}>
+              <BookingCard width={bookingCardWidth} />
+              <BookingCard width={bookingCardWidth} />
+              <BookingCard width={bookingCardWidth} />
+              <BookingCard width={bookingCardWidth} />
             </Flex>
           </Box>
         </VStack>

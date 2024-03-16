@@ -34,7 +34,7 @@ const SearchBar = () => {
       bg={useColorModeValue("white", "#1C1F37")}
       borderRadius="full"
       boxShadow="md"
-      maxW="container.md"
+      maxW="65%"
       mx="auto"
       mt={10}
     >

@@ -1,5 +1,5 @@
 const express = require("express");
-const requireAuth = require("../middleware/requireAuth");
+const requireAuth = require("../middlewares/requireAuth");
 
 // controller functions
 const {
@@ -9,6 +9,9 @@ const {
 } = require("../controllers/userController");
 
 const router = express.Router();
+
+// homepage route
+ 
 
 // signup route
 router.post("/signup", signupUser);
