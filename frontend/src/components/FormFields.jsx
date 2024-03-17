@@ -11,7 +11,7 @@ const FormField = ({
   label,
   name,
   type,
-  value,
+  value = "",
   onChange,
   options,
   isRequired = true,
@@ -93,7 +93,7 @@ const FormField = ({
           name={name}
           value={value}
           onChange={onChange}
-          {...formSelectStyle}
+          {...formInputStyle}
         />
       )}
     </FormControl>
