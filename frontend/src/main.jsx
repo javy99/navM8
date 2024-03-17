@@ -5,8 +5,8 @@ import App from "./App.jsx";
 import "./index.css";
 
 import { AuthContextProvider } from "./context/AuthContext";
-import { UserContextProvider } from "./context/UserContext";
 import { SidebarProvider } from "./context/SidebarContext";
+import { ProfilePhotoProvider } from "./context/ProfilePhotoContext";
 
 const theme = extendTheme({
   fonts: {
@@ -39,13 +39,13 @@ const root = createRoot(container); // Create a root.
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <UserContextProvider>
+      <ProfilePhotoProvider>
         <ChakraProvider theme={theme}>
           <SidebarProvider>
             <App />
           </SidebarProvider>
         </ChakraProvider>
-      </UserContextProvider>
+      </ProfilePhotoProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

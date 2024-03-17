@@ -7,33 +7,37 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: {
     type: String,
-    required: [true, "Your username is required"],
+    required: true,
     unique: true,
     minlength: 3,
   },
   email: {
     type: String,
-    required: [true, "Your email address is required"],
+    required: true,
     unique: true,
   },
   password: {
     type: String,
-    required: [true, "Your password is required"],
+    required: true,
   },
-  // new entry
-  firstName: String,
   lastName: String,
   phoneNumber: String,
   country: String,
   city: String,
   birthDate: Date,
   gender: String,
-  languagesSpoken: [String],
-  interests: [String],
+  languagesSpoken: {
+    type: [String],
+    default: undefined,
+  },
+  interests: {
+    type: [String],
+    default: undefined,
+  },
   bio: String,
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
 });
 

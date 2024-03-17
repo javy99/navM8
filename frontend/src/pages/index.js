@@ -1,0 +1,9 @@
+export { default as About } from './About';
+export { default as Favorites } from './Favorites';
+export { default as HomePage } from './HomePage';
+export { default as Login } from './Login';
+export { default as Messages } from './Messages';
+export { default as MyBookings } from './MyBookings';
+export { default as MyTours } from './MyTours';
+export { default as Profile } from './Profile';
+export { default as Signup } from './Signup';

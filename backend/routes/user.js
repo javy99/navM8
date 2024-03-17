@@ -11,7 +11,6 @@ const {
 const router = express.Router();
 
 // homepage route
- 
 
 // signup route
 router.post("/signup", signupUser);
@@ -21,5 +20,11 @@ router.post("/login", loginUser);
 
 // update profile route
 router.patch("/profile", requireAuth, updateProfile);
+
+// implement get user profile route
+router.get("/profile", requireAuth, (req, res) => {
+  res.json(req.user);
+});
+
 
 module.exports = router;

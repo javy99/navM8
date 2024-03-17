@@ -1,17 +1,21 @@
 import React from "react";
 import HomePage from "./pages/HomePage";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 
 import { useAuthContext } from "./hooks/useAuthContext";
-import Profile from "./pages/Profile";
-import Messages from "./pages/Messages";
-import MyBookings from "./pages/MyBookings";
-import About from "./pages/About";
-import Favorites from "./pages/Favorites";
-import MyTours from "./pages/MyTours";
-import { GlobalStyles } from "./components/GlobalStyles";
+
+import {
+  Profile,
+  Messages,
+  MyBookings,
+  Favorites,
+  MyTours,
+  About,
+} from "./pages";
+
+import { GlobalStyles } from "./components";
 
 const App = () => {
   const { state } = useAuthContext();

@@ -7,14 +7,15 @@ import {
   Image,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { BsPersonCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
 import Button from "./Button";
-import { BsPersonCircle } from "react-icons/bs";
-import { useUserProfilePhoto } from "../hooks/useUserProfilePhoto";
-import { IconButton } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+
+import { useProfilePhoto } from "../context/ProfilePhotoContext";
 import { useSidebarContext } from "../context/SidebarContext";
 
 const Navbar = () => {
@@ -22,7 +23,7 @@ const Navbar = () => {
   const { state } = useAuthContext();
   const { user } = state;
   const { toggleSidebar } = useSidebarContext();
-  const { photo: userPhoto } = useUserProfilePhoto();
+  const { photo } = useProfilePhoto();
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
@@ -65,11 +66,11 @@ const Navbar = () => {
       <HStack spacing={4} justifyContent="flex-end" flex={1}>
         {user && (
           <>
-            {userPhoto ? (
+            {photo ? (
               <Image
                 borderRadius="full"
                 boxSize={iconSize}
-                src={userPhoto}
+                src={photo}
                 alt="Profile photo"
               />
             ) : (

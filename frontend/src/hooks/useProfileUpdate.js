@@ -5,7 +5,6 @@ const useProfileUpdate = (user, toast) => {
 
   const updateProfile = async (userInfo) => {
     setIsLoading(true);
-    // URL for your profile update endpoint
     const updateProfileUrl = `${import.meta.env.VITE_API_URL}/auth/profile`;
 
     try {
@@ -19,7 +18,6 @@ const useProfileUpdate = (user, toast) => {
       });
 
       const data = await response.json();
-      console.log(userInfo);
 
       if (response.ok) {
         toast({
@@ -28,29 +26,30 @@ const useProfileUpdate = (user, toast) => {
           duration: 5000,
           isClosable: true,
         });
-        // console.log the updated info, like name surname, email, etc. all the updated fields
-        console.log(data);
       } else {
         throw new Error(
           data.error || "An error occurred while updating the profile."
         );
       }
     } catch (error) {
-      console.log("Error details:", error);
-      let errorMessage = "Error updating profile.";
       if (error.name === "TypeError" && error.message === "Failed to fetch") {
-        errorMessage =
-          "Failed to fetch: The request cannot be made. Possibly a network error or CORS issue.";
+        toast({
+          title: "Error updating profile.",
+          description:
+            "Failed to fetch: The request cannot be made. Possibly a network error or CORS issue.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       } else if (error.message) {
-        errorMessage += ` ${error.message}`;
+        toast({
+          title: "Error updating profile.",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       }
-      toast({
-        title: "Error updating profile.",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
     } finally {
       setIsLoading(false);
     }

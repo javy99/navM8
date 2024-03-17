@@ -1,7 +1,7 @@
 import React from "react";
 import { Global, css } from "@emotion/react";
 
-export const GlobalStyles = () => (
+const GlobalStyles = () => (
   <Global
     styles={css`
       @media (min-width: 480px) {
@@ -32,3 +32,5 @@ export const GlobalStyles = () => (
     `}
   />
 );
+
+export default GlobalStyles;
