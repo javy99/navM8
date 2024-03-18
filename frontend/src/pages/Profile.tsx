@@ -109,7 +109,9 @@ const Profile: React.FC = () => {
 
   const bgImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`;
 
-  const countryCode: string | undefined = getCode(userInfo.country);
+  const countryCode: string | undefined = userInfo.country
+    ? getCode(userInfo.country)
+    : undefined;
 
   /* =================== Responsive adjustments =================== */
   const iconSize = useBreakpointValue({
@@ -279,58 +281,64 @@ const Profile: React.FC = () => {
               />
             </Box>
 
-            <Flex
-              flexDirection="column"
-              alignItems="flex-start"
-              ml={{ md: 6 }}
-              mr={{ base: 3, sm: 0 }}
-            >
-              <Text
-                color={primaryColor}
-                fontWeight="bold"
-                fontSize={profileInfoFontSize}
-                mb={{ base: 1, md: 2 }}
+            {userInfo.country && userInfo.city && userInfo.birthDate && (
+              <Flex
+                flexDirection="column"
+                alignItems="flex-start"
+                ml={{ md: 6 }}
+                mr={{ base: 3, sm: 0 }}
               >
-                {userInfo.firstName} {userInfo.lastName}
-              </Text>
-              <Badge
-                bgColor="#0B6B781A"
-                color="#0B6B78B3"
-                p={{ base: 1.5, md: 2 }}
-                borderRadius="xl"
-                display="flex"
-                alignItems="center"
-                fontWeight="medium"
-                mb={2}
-              >
-                {countryCode && (
-                  <ReactCountryFlag
-                    countryCode={countryCode}
-                    svg
-                    style={{ width: "1.5em", height: "1.5em" }}
-                  />
-                )}
-                <Text textTransform="capitalize" ml={2}>
-                  {userInfo.country.length > 10
-                    ? countryCode
-                    : userInfo.country}
-                  , {userInfo.city}
+                <Text
+                  color={primaryColor}
+                  fontWeight="bold"
+                  fontSize={profileInfoFontSize}
+                  mb={{ base: 1, md: 2 }}
+                >
+                  {userInfo.firstName} {userInfo.lastName}
                 </Text>
-              </Badge>
-              <Text color={secondaryColor} fontSize="sm" fontWeight="semibold">
-                {new Date().getFullYear() -
-                  new Date(userInfo.birthDate).getFullYear() -
-                  (new Date().getMonth() <
-                    new Date(userInfo.birthDate).getMonth() ||
-                  (new Date().getMonth() ===
-                    new Date(userInfo.birthDate).getMonth() &&
-                    new Date().getDate() <
-                      new Date(userInfo.birthDate).getDate())
-                    ? 1
-                    : 0)}{" "}
-                y.o.
-              </Text>
-            </Flex>
+                <Badge
+                  bgColor="#0B6B781A"
+                  color="#0B6B78B3"
+                  p={{ base: 1.5, md: 2 }}
+                  borderRadius="xl"
+                  display="flex"
+                  alignItems="center"
+                  fontWeight="medium"
+                  mb={2}
+                >
+                  {countryCode && (
+                    <ReactCountryFlag
+                      countryCode={countryCode}
+                      svg
+                      style={{ width: "1.5em", height: "1.5em" }}
+                    />
+                  )}
+                  <Text textTransform="capitalize" ml={2}>
+                    {userInfo.country && userInfo.country.length > 10
+                      ? countryCode
+                      : userInfo.country}
+                    , {userInfo.city}
+                  </Text>
+                </Badge>
+                <Text
+                  color={secondaryColor}
+                  fontSize="sm"
+                  fontWeight="semibold"
+                >
+                  {new Date().getFullYear() -
+                    new Date(userInfo.birthDate).getFullYear() -
+                    (new Date().getMonth() <
+                      new Date(userInfo.birthDate).getMonth() ||
+                    (new Date().getMonth() ===
+                      new Date(userInfo.birthDate).getMonth() &&
+                      new Date().getDate() <
+                        new Date(userInfo.birthDate).getDate())
+                      ? 1
+                      : 0)}{" "}
+                  y.o.
+                </Text>
+              </Flex>
+            )}
             <Box display={{ base: "none", md: "block" }} bg="#0000001A">
               <Divider orientation="vertical" />
             </Box>
