@@ -19,6 +19,7 @@ interface Props {
     >
   ) => void;
   isRequired?: boolean;
+  disabled?: boolean;
 }
 
 const FormField: React.FC<Props> = ({
@@ -29,6 +30,7 @@ const FormField: React.FC<Props> = ({
   onChange,
   options = [],
   isRequired = true,
+  disabled,
 }) => {
   const formFontSize = useBreakpointValue({
     base: "sm",
@@ -84,6 +86,7 @@ const FormField: React.FC<Props> = ({
           name={name}
           value={value}
           onChange={onChange}
+          disabled={disabled}
           {...formSelectStyle}
         >
           {options.map((option) => (
@@ -98,6 +101,7 @@ const FormField: React.FC<Props> = ({
           name={name}
           value={value}
           onChange={onChange}
+          disabled={disabled}
           {...formInputStyle}
         />
       ) : (
@@ -107,6 +111,7 @@ const FormField: React.FC<Props> = ({
           name={name}
           value={value}
           onChange={onChange}
+          disabled={disabled}
           {...formInputStyle}
         />
       )}

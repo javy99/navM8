@@ -37,6 +37,16 @@ const customTheme = extendTheme({
     lg: "62em",
     xl: "80em",
   },
+  styles: {
+    global: {
+      "[aria-disabled=true], [data-disabled], :disabled": {
+        bg: "gray.100 !important",
+        color: "gray.500 !important",
+        opacity: "0.8 !important",
+        borderColor: "gray.200 !important",
+      },
+    },
+  },
 });
 
 // Use createRoot API for React 18+

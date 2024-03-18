@@ -52,8 +52,11 @@ const Sidebar: React.FC<Props> = ({ user }) => {
   const commonStyles: BoxProps = {
     bg: primaryColor,
     color: whiteColor,
-    p: 6,
     position: "sticky",
+    pt: 4,
+    pb: 6,
+    pr: 6,
+    pl: 6,
     top: 0,
     left: 0,
     h: "100vh",
@@ -192,6 +195,10 @@ const Sidebar: React.FC<Props> = ({ user }) => {
         display={{ base: "none", lg: "block" }}
         {...commonStyles}
         minWidth="250px"
+        pb={6}
+        pl={6}
+        pr={6}
+        pt={4}
         width={{
           md: "250px",
           lg: "270px",

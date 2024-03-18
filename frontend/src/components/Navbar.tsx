@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
   return (
     <Flex
       as="nav"
-      height="70px"
+      height="60px"
       alignItems="center"
       px={navPadding}
       boxShadow="md"
