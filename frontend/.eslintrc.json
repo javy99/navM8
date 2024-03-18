@@ -1,3 +1,42 @@
 {
-    "extends": "react-app"
-}
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": [
+      "react",
+      "@typescript-eslint",
+      "react-hooks"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "project": "./tsconfig.json"
+    },
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
+      "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  }
+  
