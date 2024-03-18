@@ -53,8 +53,8 @@ const Profile: React.FC = () => {
   const { photo, handlePhotoChange, handlePhotoRemoval } = usePhotoManager();
   const { updateProfile /*isLoading*/ } = useProfileUpdate(user, toast);
 
-  const [isFormChanged, setIsFormChanged] = useState<boolean>(false);
-
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [initialUserInfo, setInitialUserInfo] = useState<User | null>(null);
   const [userInfo, setUserInfo] = useState<User>({
     firstName: "",
     lastName: "",
@@ -88,9 +88,6 @@ const Profile: React.FC = () => {
             ? new Date(data.birthDate).toISOString().split("T")[0]
             : "";
           setUserInfo({ ...data, birthDate: formattedBirthDate });
-
-          // After setting user info, reset form change tracking
-          setIsFormChanged(false);
         } catch (error) {
           console.error("Failed to fetch user profile", error);
           toast({
@@ -169,7 +166,6 @@ const Profile: React.FC = () => {
     }
 
     setUserInfo(newValues);
-    setIsFormChanged(true);
   };
 
   const prepareDataForDatabase = (userInfo: User): User => {
@@ -189,11 +185,25 @@ const Profile: React.FC = () => {
   // Handle button click to open file input
   const handleButtonClick = () => inputFileRef.current?.click();
 
+  const handleEdit = () => {
+    setInitialUserInfo({ ...userInfo });
+    setIsEditMode(true);
+  };
+
+  const handleCancel = () => {
+    if (initialUserInfo) {
+      setUserInfo(initialUserInfo);
+      setInitialUserInfo(null);
+    }
+    setIsEditMode(false);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const dataToSubmit = prepareDataForDatabase(userInfo);
     await updateProfile(dataToSubmit);
-    setIsFormChanged(false);
+    setIsEditMode(false);
+    setInitialUserInfo(null);
   };
 
   return (
@@ -417,6 +427,7 @@ const Profile: React.FC = () => {
                 type="text"
                 value={userInfo.firstName}
                 onChange={handleUserInfoChange}
+                disabled={!isEditMode}
               />
 
               <FormField
@@ -425,6 +436,7 @@ const Profile: React.FC = () => {
                 type="text"
                 value={userInfo.lastName}
                 onChange={handleUserInfoChange}
+                disabled={!isEditMode}
               />
             </Flex>
             <Flex direction={formControlLayout} gap={inputGap}>
@@ -434,6 +446,7 @@ const Profile: React.FC = () => {
                 type="number"
                 value={userInfo.phoneNumber}
                 onChange={handleUserInfoChange}
+                disabled={!isEditMode}
               />
               <FormField
                 label="Email address"
@@ -441,6 +454,7 @@ const Profile: React.FC = () => {
                 type="email"
                 value={userInfo.email}
                 onChange={handleUserInfoChange}
+                disabled={!isEditMode}
               />
             </Flex>
             <Flex direction={formControlLayout} gap={inputGap}>
@@ -450,6 +464,7 @@ const Profile: React.FC = () => {
                 type="text"
                 value={userInfo.country}
                 onChange={handleUserInfoChange}
+                disabled={!isEditMode}
               />
               <FormField
                 label="City"
@@ -457,6 +472,7 @@ const Profile: React.FC = () => {
                 type="text"
                 value={userInfo.city}
                 onChange={handleUserInfoChange}
+                disabled={!isEditMode}
               />
             </Flex>
             <Flex direction={formControlLayout} gap={inputGap}>
@@ -466,6 +482,7 @@ const Profile: React.FC = () => {
                 type="date"
                 value={userInfo.birthDate}
                 onChange={handleUserInfoChange}
+                disabled={!isEditMode}
               />
               <FormField
                 label="Gender"
@@ -477,6 +494,7 @@ const Profile: React.FC = () => {
                   { value: "male", label: "Male" },
                   { value: "female", label: "Female" },
                 ]}
+                disabled={!isEditMode}
               />
             </Flex>
             <FormField
@@ -485,6 +503,7 @@ const Profile: React.FC = () => {
               type="text"
               value={userInfo.languagesSpoken}
               onChange={handleUserInfoChange}
+              disabled={!isEditMode}
             />
 
             <FormField
@@ -493,6 +512,7 @@ const Profile: React.FC = () => {
               type="text"
               value={userInfo.interests}
               onChange={handleUserInfoChange}
+              disabled={!isEditMode}
             />
 
             <FormField
@@ -501,6 +521,7 @@ const Profile: React.FC = () => {
               type="textarea"
               value={userInfo.bio}
               onChange={handleUserInfoChange}
+              disabled={!isEditMode}
             />
           </VStack>
           <Heading
@@ -529,6 +550,7 @@ const Profile: React.FC = () => {
                 value={userInfo.currentPassword}
                 onChange={handleUserInfoChange}
                 isRequired={false}
+                disabled={!isEditMode}
               />
               <FormField
                 label="New Password"
@@ -537,14 +559,24 @@ const Profile: React.FC = () => {
                 value={userInfo.newPassword}
                 onChange={handleUserInfoChange}
                 isRequired={false}
+                disabled={!isEditMode}
               />
             </Flex>
           </VStack>
 
           <Flex justifyContent="flex-end" gap={5} mt={6} px={vStackPaddingX}>
-            <Button type="submit" isDisabled={!isFormChanged}>
-              Save
-            </Button>
+            {isEditMode ? (
+              <>
+                <Button type="button" onClick={handleCancel}>
+                  Cancel
+                </Button>
+                <Button type="submit">Save</Button>
+              </>
+            ) : (
+              <Button type="button" onClick={handleEdit}>
+                Edit
+              </Button>
+            )}
           </Flex>
         </Box>
       </Flex>
