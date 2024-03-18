@@ -1,10 +1,17 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const validator = require("validator");
+import mongoose, { Document, Model, Schema as MongooseSchema } from "mongoose";
+import bcrypt from "bcrypt";
+import validator from "validator";
+import IUser from "../types/IUser";
+
+interface IUserModel extends Model<IUser> {
+  login(email: string, password: string): Promise<IUser>;
+  signup(username: string, email: string, password: string): Promise<IUser>;
+}
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const userSchema: MongooseSchema = new Schema({
+  // signup/login fields
   username: {
     type: String,
     required: true,
@@ -20,6 +27,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  // profile fields
   firstName: String,
   lastName: String,
   phoneNumber: String,
@@ -36,6 +44,11 @@ const userSchema = new Schema({
     default: undefined,
   },
   bio: String,
+  // tour fields
+  favoriteTours: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Tour",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -43,7 +56,11 @@ const userSchema = new Schema({
 });
 
 // Signup static method
-userSchema.statics.signup = async function (username, email, password) {
+userSchema.statics.signup = async function (
+  username: string,
+  email: string,
+  password: string
+): Promise<IUser> {
   // Basic validation
   if (!email || !password || !username) {
     throw Error("All fields must be filled");
@@ -72,7 +89,10 @@ userSchema.statics.signup = async function (username, email, password) {
 };
 
 // Login static method
-userSchema.statics.login = async function (email, password) {
+userSchema.statics.login = async function (
+  email: string,
+  password: string
+): Promise<IUser> {
   if (!email || !password) {
     throw Error("All fields must be filled");
   }
@@ -92,4 +112,7 @@ userSchema.statics.login = async function (email, password) {
   return user;
 };
 
-module.exports = mongoose.model("User", userSchema);
+export const User: IUserModel = mongoose.model<IUser, IUserModel>(
+  "User",
+  userSchema
+);

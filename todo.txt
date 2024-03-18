@@ -1,0 +1,12 @@
+TODO: Front-End
+    Profile Component: 
+        Input Fields:
+            1. Phone Number: import PhoneInput from 'react-phone-number-input', import 'react-phone-number-input' use it instead of the current input field
+            2. Country: can be also select element when we click we should see the countries list where we select it from there
+            3. City: can be also select element when we click we should see cities of that chosen Country
+
+TODO: Back-End
+    1. Adding Typescript and fixing arising errors
+    2. Creating Tour Schema and save form in my tours component.
+    3. Add it to database
+     

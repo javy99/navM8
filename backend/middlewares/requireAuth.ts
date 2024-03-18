@@ -1,7 +1,8 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
+import jwt, { Secret } from "jsonwebtoken";
+import { User } from "../models/userModel";
+import { Request, Response, NextFunction } from "express";
 
-const requireAuth = async (req, res, next) => {
+const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   // verify authentication
   const { authorization } = req.headers;
 
@@ -12,7 +13,13 @@ const requireAuth = async (req, res, next) => {
   const token = authorization.split(" ")[1];
 
   try {
-    const { _id } = jwt.verify(token, process.env.JWT_SECRET);
+    const JWT_SECRET = process.env.JWT_SECRET as Secret;
+
+    if (!JWT_SECRET) {
+      throw new Error("JWT secret is not defined.");
+    }
+
+    const { _id } = jwt.verify(token, JWT_SECRET) as { _id: string };
 
     const user = await User.findById(_id).select("-password");
     if (!user) {
@@ -27,4 +34,4 @@ const requireAuth = async (req, res, next) => {
   }
 };
 
-module.exports = requireAuth;
+export default requireAuth;
