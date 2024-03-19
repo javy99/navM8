@@ -6,7 +6,7 @@ import HeaderBgImage from '../assets/hero-bg6.jpg'
 import { Guide, User } from '../types'
 
 interface Props {
-  user: User | null;
+  user: User | null
 }
 
 const HomePage: React.FC<Props> = ({ user }) => {

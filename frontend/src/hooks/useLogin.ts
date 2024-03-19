@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuthContext } from './'
+import { useAuthContext } from '.'
 
 const useLogin = () => {
   const [error, setError] = useState<string | null>(null)
@@ -19,7 +19,7 @@ const useLogin = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ email, password }),
-        }
+        },
       )
       const json = await response.json()
 
@@ -30,8 +30,8 @@ const useLogin = () => {
       localStorage.setItem('user', JSON.stringify(json))
       dispatch({ type: 'LOGIN', payload: json })
       return true
-    } catch (error) {
-      if (error instanceof Error) setError(error.message)
+    } catch (catchError) {
+      if (catchError instanceof Error) setError(catchError.message)
       return false
     } finally {
       setIsLoading(false)

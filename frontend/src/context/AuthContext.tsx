@@ -2,26 +2,24 @@ import React, { createContext, useReducer, useEffect, Dispatch } from 'react'
 import { User, ChildrenProps } from '../types'
 
 interface AuthState {
-  user: User | null;
+  user: User | null
 }
 
 interface AuthAction {
-  type: string;
-  payload: User | null;
+  type: string
+  payload: User | null
 }
 
 export interface AuthContextType {
-  state: AuthState;
-  dispatch: Dispatch<AuthAction>;
+  state: AuthState
+  dispatch: Dispatch<AuthAction>
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-)
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const authReducer = (
   state: AuthState,
-  action: AuthAction
+  action: AuthAction,
 ): AuthState => {
   switch (action.type) {
     case 'LOGIN':
@@ -37,9 +35,7 @@ export const authReducer = (
   }
 }
 
-export const AuthContextProvider: React.FC<ChildrenProps> = ({
-  children,
-}) => {
+export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
   })

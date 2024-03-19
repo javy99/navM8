@@ -33,7 +33,7 @@ const usePhotoManager = () => {
       }
       event.target.value = ''
     },
-    [updatePhoto, toast]
+    [updatePhoto, toast],
   )
 
   const handlePhotoRemoval = useCallback(() => {

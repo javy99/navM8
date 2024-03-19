@@ -20,8 +20,8 @@ import { Button } from '../components'
 
 interface ErrorResponse {
   response: {
-    data: string;
-  };
+    data: string
+  }
 }
 
 const Signup: React.FC = () => {
@@ -36,7 +36,7 @@ const Signup: React.FC = () => {
   const navigate = useNavigate()
 
   const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault()
     try {
@@ -44,8 +44,8 @@ const Signup: React.FC = () => {
       if (success) {
         navigate('/')
       }
-    } catch (error) {
-      const errorResponse = error as ErrorResponse
+    } catch (catchError) {
+      const errorResponse = catchError as ErrorResponse
       console.error('Signup failed', errorResponse.response.data)
     }
   }

@@ -22,9 +22,9 @@ import {
   InputLeftElement,
   useTheme,
 } from '@chakra-ui/react'
+import { BsGeoAltFill } from 'react-icons/bs'
 import { Navbar, Sidebar, TourCard, Button } from '../components'
 import { useAuthContext } from '../hooks'
-import { BsGeoAltFill } from 'react-icons/bs'
 
 const MyTours: React.FC = () => {
   const { state } = useAuthContext()

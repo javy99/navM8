@@ -8,18 +8,18 @@ import {
 } from '@chakra-ui/react'
 
 interface Props {
-  label: string;
-  name: string;
-  type: string;
-  value: string | number | readonly string[] | undefined;
-  options?: { value: string; label: string }[];
+  label: string
+  name: string
+  type: string
+  value: string | number | readonly string[] | undefined
+  options?: { value: string; label: string }[]
   onChange: (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => void;
-  isRequired?: boolean;
-  disabled?: boolean;
+    >,
+  ) => void
+  isRequired?: boolean
+  disabled?: boolean
 }
 
 const FormField: React.FC<Props> = ({

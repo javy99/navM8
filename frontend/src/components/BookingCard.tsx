@@ -12,7 +12,7 @@ import {
 import { BsCalendar2 } from 'react-icons/bs'
 
 type Props = {
-  width: string | undefined;
+  width: string | undefined
 }
 
 const BookingCard: React.FC<Props> = ({ width }) => {

@@ -20,8 +20,8 @@ import { Button } from '../components'
 
 interface ErrorResponse {
   response: {
-    data: string;
-  };
+    data: string
+  }
 }
 
 const Login: React.FC = () => {
@@ -34,7 +34,7 @@ const Login: React.FC = () => {
   const primaryColor = theme.colors.primary
 
   const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault()
     try {
@@ -42,8 +42,8 @@ const Login: React.FC = () => {
       if (success) {
         navigate('/')
       }
-    } catch (error) {
-      const errorResponse = error as ErrorResponse
+    } catch (catchError) {
+      const errorResponse = catchError as ErrorResponse
       console.error('Login failed', errorResponse.response.data)
     }
   }
@@ -137,9 +137,7 @@ const Login: React.FC = () => {
                     <ChakraButton
                       h="1.75rem"
                       size="sm"
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }
+                      onClick={() => setShowPassword((prevState) => !prevState)}
                     >
                       {showPassword ? (
                         <ViewOffIcon color={primaryColor} />

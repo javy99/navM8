@@ -10,9 +10,9 @@ import {
   useTheme,
   ResponsiveValue,
 } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../hooks'
 import { Navbar, Sidebar, BookingCard, Button } from '../components'
-import { useNavigate } from 'react-router-dom'
 import myBookingsBg from '../assets/mybookings-bg.jpg'
 
 type FlexDirection =

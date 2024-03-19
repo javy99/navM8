@@ -23,8 +23,8 @@ import { useNavigate } from 'react-router-dom'
 import { User, Guide } from '../types'
 
 type Props = {
-  guide: Guide;
-  user: User | null;
+  guide: Guide
+  user: User | null
 }
 
 const Card: React.FC<Props> = ({ guide, user }) => {

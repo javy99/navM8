@@ -51,7 +51,7 @@ const Profile: React.FC = () => {
 
   // Use the usePhotoManager hook to get photo management functions
   const { photo, handlePhotoChange, handlePhotoRemoval } = usePhotoManager()
-  const { updateProfile /*isLoading*/ } = useProfileUpdate(user, toast)
+  const { updateProfile /* isLoading */ } = useProfileUpdate(user, toast)
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [initialUserInfo, setInitialUserInfo] = useState<User | null>(null)
@@ -80,7 +80,7 @@ const Profile: React.FC = () => {
               headers: {
                 Authorization: `Bearer ${user.token}`,
               },
-            }
+            },
           )
 
           const { data } = response
@@ -154,7 +154,7 @@ const Profile: React.FC = () => {
   const handleUserInfoChange = (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = event.target
     const newValues = { ...userInfo }
@@ -168,12 +168,12 @@ const Profile: React.FC = () => {
     setUserInfo(newValues)
   }
 
-  const prepareDataForDatabase = (userInfo: User): User => {
+  const prepareDataForDatabase = (userInfoToClean: User): User => {
     // Trim spaces for languagesSpoken and interests
-    const cleanedData = { ...userInfo }
+    const cleanedData = { ...userInfoToClean }
     if (cleanedData.languagesSpoken) {
       cleanedData.languagesSpoken = cleanedData.languagesSpoken.map((item) =>
-        item.trim()
+        item.trim(),
       )
     }
     if (cleanedData.interests) {

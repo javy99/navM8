@@ -4,10 +4,7 @@
     "noImplicitAny": false,
     "outDir": "dist",
     "sourceMap": true,
-    "target": "es6",
-    "strict": true,
-    "esModuleInterop": true,
-    "lib": ["es5", "es6", "dom", "ES2016.Array.Include"]
+    "target": "esnext",
   },
   "exclude": ["node_modules"]
 }

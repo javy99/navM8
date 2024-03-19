@@ -3,9 +3,9 @@ import { useAuthContext } from '../hooks'
 import { ChildrenProps } from '../types'
 
 interface ProfilePhotoContextType {
-  photo: string;
-  updatePhoto: (newPhoto: string) => void;
-  removePhoto: () => void;
+  photo: string
+  updatePhoto: (newPhoto: string) => void
+  removePhoto: () => void
 }
 
 const defaultContextValue: ProfilePhotoContextType = {

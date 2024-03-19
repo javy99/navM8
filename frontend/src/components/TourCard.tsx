@@ -1,15 +1,8 @@
-import {
-  Text,
-  VStack,
-  Icon,
-  Flex,
-  Image,
-  useTheme,
-} from '@chakra-ui/react'
+import { Text, VStack, Icon, Flex, Image, useTheme } from '@chakra-ui/react'
 import { BsPersonFill, BsCalendar2, BsGeoAltFill } from 'react-icons/bs'
 
 type Props = {
-  width: string | undefined;
+  width: string | undefined
 }
 
 const TourCard: React.FC<Props> = ({ width }) => {

@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState } from 'react'
 import { ChildrenProps } from '../types'
 
 interface SidebarContextType {
-  isSidebarOpen: boolean;
-  toggleSidebar: () => void;
+  isSidebarOpen: boolean
+  toggleSidebar: () => void
 }
 
 export const SidebarContext = createContext<SidebarContextType>({

@@ -30,7 +30,7 @@ const useProfileUpdate = (user: User | null, toast: CreateToastFnReturn) => {
         })
       } else {
         throw new Error(
-          data.error || 'An error occurred while updating the profile.'
+          data.error || 'An error occurred while updating the profile.',
         )
       }
     } catch (error) {

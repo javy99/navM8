@@ -19,7 +19,6 @@ import {
   BoxProps,
 } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
-import logo from '../assets/logo.svg'
 import {
   BsFillMapFill,
   BsBookmarkHeartFill,
@@ -29,18 +28,19 @@ import {
   BsFillInfoCircleFill,
   BsPersonCircle,
 } from 'react-icons/bs'
+import { IconType } from 'react-icons'
+import logo from '../assets/logo.svg'
 import { useSidebarContext } from '../context'
 import { User } from '../types'
-import { IconType } from 'react-icons'
 
 interface Props {
-  user: User | null;
+  user: User | null
 }
 
 interface NavLinkItem {
-  icon: IconType;
-  label: string;
-  to: string;
+  icon: IconType
+  label: string
+  to: string
 }
 
 const Sidebar: React.FC<Props> = ({ user }) => {
