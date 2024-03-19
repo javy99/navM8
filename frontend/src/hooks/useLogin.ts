@@ -1,44 +1,44 @@
-import { useState } from "react";
-import { useAuthContext } from "./";
+import { useState } from 'react'
+import { useAuthContext } from './'
 
 const useLogin = () => {
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { dispatch } = useAuthContext();
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { dispatch } = useAuthContext()
 
   const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
 
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/login`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({ email, password }),
         }
-      );
-      const json = await response.json();
+      )
+      const json = await response.json()
 
       if (!response.ok) {
-        throw new Error(json.error || "An error occurred during login");
+        throw new Error(json.error || 'An error occurred during login')
       }
 
-      localStorage.setItem("user", JSON.stringify(json));
-      dispatch({ type: "LOGIN", payload: json });
-      return true;
+      localStorage.setItem('user', JSON.stringify(json))
+      dispatch({ type: 'LOGIN', payload: json })
+      return true
     } catch (error) {
-      if (error instanceof Error) setError(error.message);
-      return false;
+      if (error instanceof Error) setError(error.message)
+      return false
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  return { isLoading, login, error };
-};
+  return { isLoading, login, error }
+}
 
-export default useLogin;
+export default useLogin

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Box,
   Flex,
@@ -11,54 +11,61 @@ import {
   InputGroup,
   InputRightElement,
   useTheme,
-} from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
-import AuthBgImage from "../assets/hero-bg5.jpg";
-import { useSignup } from "../hooks";
-import { Button } from "../components";
+} from '@chakra-ui/react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { useNavigate } from 'react-router-dom'
+import AuthBgImage from '../assets/hero-bg5.jpg'
+import { useSignup } from '../hooks'
+import { Button } from '../components'
+
+interface ErrorResponse {
+  response: {
+    data: string;
+  };
+}
 
 const Signup: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { error, isLoading, signup } = useSignup();
-  const [showPassword, setShowPassword] = useState(false);
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { error, isLoading, signup } = useSignup()
+  const [showPassword, setShowPassword] = useState(false)
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      const success = await signup(email, password, username);
+      const success = await signup(email, password, username)
       if (success) {
-        navigate("/");
+        navigate('/')
       }
-    } catch (error: any) {
-      console.error("Signup failed", error.response.data);
+    } catch (error) {
+      const errorResponse = error as ErrorResponse
+      console.error('Signup failed', errorResponse.response.data)
     }
-  };
+  }
 
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
       <Box position="relative" width="full">
-        <Flex direction={{ base: "column", md: "row" }} minHeight="100vh">
+        <Flex direction={{ base: 'column', md: 'row' }} minHeight="100vh">
           <Box
-            width={{ md: "50%" }}
-            display={{ base: "none", md: "block" }}
+            width={{ md: '50%' }}
+            display={{ base: 'none', md: 'block' }}
             position="relative"
             _before={{
               content: `""`,
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               left: 0,
-              height: "100%",
-              width: "100%",
-              backgroundColor: "black",
+              height: '100%',
+              width: '100%',
+              backgroundColor: 'black',
               opacity: 0.3,
               zIndex: 1,
             }}
@@ -74,17 +81,17 @@ const Signup: React.FC = () => {
           </Box>
 
           <Flex
-            width={{ base: "100%", md: "50%" }}
+            width={{ base: '100%', md: '50%' }}
             align="center"
             justify="center"
           >
             <form
               onSubmit={handleSubmit}
               style={{
-                width: "85%",
-                maxWidth: "md",
-                padding: "32px",
-                borderRadius: "lg",
+                width: '85%',
+                maxWidth: 'md',
+                padding: '32px',
+                borderRadius: 'lg',
               }}
             >
               <VStack
@@ -106,7 +113,7 @@ const Signup: React.FC = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   type="text"
                   focusBorderColor={primaryColor}
-                  sx={{ "::placeholder": { color: primaryColor } }}
+                  sx={{ '::placeholder': { color: primaryColor } }}
                 />
                 <Input
                   name="email"
@@ -117,7 +124,7 @@ const Signup: React.FC = () => {
                   type="email"
                   focusBorderColor={primaryColor}
                   sx={{
-                    "::placeholder": {
+                    '::placeholder': {
                       color: primaryColor,
                     },
                   }}
@@ -127,12 +134,12 @@ const Signup: React.FC = () => {
                     name="password"
                     color={primaryColor}
                     placeholder="Password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     focusBorderColor={primaryColor}
                     sx={{
-                      "::placeholder": {
+                      '::placeholder': {
                         color: primaryColor,
                       },
                     }}
@@ -166,7 +173,7 @@ const Signup: React.FC = () => {
         </Flex>
       </Box>
     </Flex>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { Flex, Text, Box, useTheme } from "@chakra-ui/react";
-import axios from "axios";
-import { Navbar, SearchBar, Sidebar, Card, BookingCard } from "../components";
-import HeaderBgImage from "../assets/hero-bg6.jpg";
-import { Guide, User } from "../types";
+import React, { useState, useEffect } from 'react'
+import { Flex, Text, Box, useTheme } from '@chakra-ui/react'
+import axios from 'axios'
+import { Navbar, SearchBar, Sidebar, Card, BookingCard } from '../components'
+import HeaderBgImage from '../assets/hero-bg6.jpg'
+import { Guide, User } from '../types'
 
 interface Props {
   user: User | null;
 }
 
 const HomePage: React.FC<Props> = ({ user }) => {
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const secondaryColor = theme.colors.secondary;
-  const [featuredGuides, setFeaturedGuides] = useState<Guide[]>([]);
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
+  const [featuredGuides, setFeaturedGuides] = useState<Guide[]>([])
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_SERVER_API_URL}/guides`)
       .then((response) => {
-        setFeaturedGuides(response.data);
+        setFeaturedGuides(response.data)
       })
       .catch((error) => {
-        console.error("Error fetching featured guides:", error);
-      });
-  }, []);
+        console.error('Error fetching featured guides:', error)
+      })
+  }, [])
 
   return (
-    <Flex minHeight="100vh" direction={{ base: "column", md: "row" }}>
+    <Flex minHeight="100vh" direction={{ base: 'column', md: 'row' }}>
       <Sidebar user={user} />
       <Flex direction="column" flex="1" overflowY="auto">
         <Navbar />
@@ -48,8 +48,8 @@ const HomePage: React.FC<Props> = ({ user }) => {
           </Text>
           <SearchBar />
         </Box>
-        <Flex direction={{ base: "column", md: "row" }} pb={5}>
-          <Box p={8} flex="3" minW={{ md: "74%" }}>
+        <Flex direction={{ base: 'column', md: 'row' }} pb={5}>
+          <Box p={8} flex="3" minW={{ md: '74%' }}>
             <Text fontSize="xl" mb={4} color={primaryColor} fontWeight="bold">
               The Most Popular Tours
             </Text>
@@ -64,13 +64,13 @@ const HomePage: React.FC<Props> = ({ user }) => {
           {user && (
             <>
               <Box
-                display={{ base: "none", md: "block" }}
-                minW={{ md: "2%" }}
+                display={{ base: 'none', md: 'block' }}
+                minW={{ md: '2%' }}
                 borderLeft="2px dashed"
                 borderColor={secondaryColor}
                 my={8}
               ></Box>
-              <Box flex="1" minW={{ md: "24%" }} py={8}>
+              <Box flex="1" minW={{ md: '24%' }} py={8}>
                 <Text
                   fontSize="xl"
                   fontWeight="bold"
@@ -89,7 +89,7 @@ const HomePage: React.FC<Props> = ({ user }) => {
         </Flex>
       </Flex>
     </Flex>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage

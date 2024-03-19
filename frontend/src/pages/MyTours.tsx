@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Box,
   Flex,
@@ -21,21 +21,21 @@ import {
   InputGroup,
   InputLeftElement,
   useTheme,
-} from "@chakra-ui/react";
-import { Navbar, Sidebar, TourCard, Button } from "../components";
-import { useAuthContext } from "../hooks";
-import { BsGeoAltFill } from "react-icons/bs";
+} from '@chakra-ui/react'
+import { Navbar, Sidebar, TourCard, Button } from '../components'
+import { useAuthContext } from '../hooks'
+import { BsGeoAltFill } from 'react-icons/bs'
 
 const MyTours: React.FC = () => {
-  const { state } = useAuthContext();
-  const { user } = state;
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const secondaryColor = theme.colors.secondary;
+  const { state } = useAuthContext()
+  const { user } = state
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
 
   return (
-    <Flex minHeight="100vh" direction={{ base: "column", md: "row" }}>
+    <Flex minHeight="100vh" direction={{ base: 'column', md: 'row' }}>
       <Sidebar user={user} />
       <Flex direction="column" flex="1" overflowY="auto">
         <Navbar />
@@ -89,10 +89,9 @@ const MyTours: React.FC = () => {
             <FormControl mt={4} isRequired>
               <FormLabel>Destination / City</FormLabel>
               <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<Icon as={BsGeoAltFill} />}
-                />
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={BsGeoAltFill} />
+                </InputLeftElement>
                 <Input placeholder="Enter destination" />
               </InputGroup>
             </FormControl>
@@ -151,7 +150,7 @@ const MyTours: React.FC = () => {
         </ModalContent>
       </Modal>
     </Flex>
-  );
-};
+  )
+}
 
-export default MyTours;
+export default MyTours

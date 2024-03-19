@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Box,
   Flex,
@@ -9,43 +9,43 @@ import {
   useBreakpointValue,
   useTheme,
   ResponsiveValue,
-} from "@chakra-ui/react";
-import { useAuthContext } from "../hooks";
-import { Navbar, Sidebar, BookingCard, Button } from "../components";
-import { useNavigate } from "react-router-dom";
-import myBookingsBg from "../assets/mybookings-bg.jpg";
+} from '@chakra-ui/react'
+import { useAuthContext } from '../hooks'
+import { Navbar, Sidebar, BookingCard, Button } from '../components'
+import { useNavigate } from 'react-router-dom'
+import myBookingsBg from '../assets/mybookings-bg.jpg'
 
 type FlexDirection =
-  | "row"
-  | "column"
-  | "row-reverse"
-  | "column-reverse"
-  | undefined;
+  | 'row'
+  | 'column'
+  | 'row-reverse'
+  | 'column-reverse'
+  | undefined
 
 function MyBookings() {
-  const { state } = useAuthContext();
-  const { user } = state;
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const secondaryColor = theme.colors.secondary;
-  const whiteColor = theme.colors.white;
+  const { state } = useAuthContext()
+  const { user } = state
+  const navigate = useNavigate()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
+  const whiteColor = theme.colors.white
 
-  const bookingCardWidth = useBreakpointValue({ base: "100%", md: "48%" });
-  const imageBoxSize = useBreakpointValue({ base: "100%", md: "50%" });
+  const bookingCardWidth = useBreakpointValue({ base: '100%', md: '48%' })
+  const imageBoxSize = useBreakpointValue({ base: '100%', md: '50%' })
   const contentPadding = useBreakpointValue({
-    base: "30px",
-    md: "40px",
-    lg: "50px",
-  });
+    base: '30px',
+    md: '40px',
+    lg: '50px',
+  })
 
   const flexDirection: ResponsiveValue<FlexDirection> = useBreakpointValue({
-    base: "column",
-    md: "row",
-  });
+    base: 'column',
+    md: 'row',
+  })
 
   return (
-    <Flex minHeight="100vh" direction={{ base: "column", md: "row" }}>
+    <Flex minHeight="100vh" direction={{ base: 'column', md: 'row' }}>
       <Sidebar user={user} />
       <Flex direction="column" flex="1" overflowY="auto">
         <Navbar />
@@ -80,7 +80,7 @@ function MyBookings() {
                   Time to dust off your bags and start planning your next
                   adventure
                 </Text>
-                <Button onClick={() => navigate("/")}>Start searching</Button>
+                <Button onClick={() => navigate('/')}>Start searching</Button>
               </Flex>
               <Box w={imageBoxSize}>
                 <Image
@@ -108,7 +108,7 @@ function MyBookings() {
         </VStack>
       </Flex>
     </Flex>
-  );
+  )
 }
 
-export default MyBookings;
+export default MyBookings

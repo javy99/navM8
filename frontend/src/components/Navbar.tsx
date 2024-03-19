@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Flex,
   Text,
@@ -8,34 +8,34 @@ import {
   Image,
   useBreakpointValue,
   useTheme,
-} from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
-import { BsPersonCircle } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
-import Button from "./Button";
-import { useProfilePhoto, useSidebarContext } from "../context";
-import { useAuthContext, useLogout } from "../hooks";
+} from '@chakra-ui/react'
+import { HamburgerIcon } from '@chakra-ui/icons'
+import { BsPersonCircle } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
+import Button from './Button'
+import { useProfilePhoto, useSidebarContext } from '../context'
+import { useAuthContext, useLogout } from '../hooks'
 
 const Navbar: React.FC = () => {
-  const { logout } = useLogout();
-  const { state } = useAuthContext();
-  const { user } = state;
-  const { toggleSidebar } = useSidebarContext();
-  const { photo } = useProfilePhoto();
-  const navigate = useNavigate();
+  const { logout } = useLogout()
+  const { state } = useAuthContext()
+  const { user } = state
+  const { toggleSidebar } = useSidebarContext()
+  const { photo } = useProfilePhoto()
+  const navigate = useNavigate()
 
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const whiteColor = theme.colors.white;
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const whiteColor = theme.colors.white
 
   const handleLogoutClick = () => {
-    logout();
-    navigate("/");
-  };
+    logout()
+    navigate('/')
+  }
 
-  const navPadding = useBreakpointValue({ base: 2, md: 4 });
-  const iconSize = useBreakpointValue({ base: "2rem", md: "2.5rem" });
-  const isMobile = useBreakpointValue({ base: true, sm: false });
+  const navPadding = useBreakpointValue({ base: 2, md: 4 })
+  const iconSize = useBreakpointValue({ base: '2rem', md: '2.5rem' })
+  const isMobile = useBreakpointValue({ base: true, sm: false })
 
   return (
     <Flex
@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
       px={navPadding}
       boxShadow="md"
       bg={whiteColor}
-      position={{ base: "fixed", md: "static" }}
+      position={{ base: 'fixed', md: 'static' }}
       top={0}
       left={0}
       right={0}
@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
       zIndex={100}
     >
       <IconButton
-        display={{ base: "flex", lg: "none" }}
+        display={{ base: 'flex', lg: 'none' }}
         icon={<HamburgerIcon color={whiteColor} boxSize="25px" />}
         onClick={toggleSidebar}
         aria-label="Open menu"
@@ -89,13 +89,13 @@ const Navbar: React.FC = () => {
         )}
         {!user && (
           <>
-            <Button onClick={() => navigate("/signup")}>Sign Up</Button>
-            <Button onClick={() => navigate("/login")}>Login</Button>
+            <Button onClick={() => navigate('/signup')}>Sign Up</Button>
+            <Button onClick={() => navigate('/login')}>Login</Button>
           </>
         )}
       </HStack>
     </Flex>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

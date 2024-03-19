@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Box,
   Flex,
@@ -17,9 +17,9 @@ import {
   useBreakpointValue,
   useTheme,
   BoxProps,
-} from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.svg";
+} from '@chakra-ui/react'
+import { NavLink } from 'react-router-dom'
+import logo from '../assets/logo.svg'
 import {
   BsFillMapFill,
   BsBookmarkHeartFill,
@@ -28,10 +28,10 @@ import {
   BsFillHouseDoorFill,
   BsFillInfoCircleFill,
   BsPersonCircle,
-} from "react-icons/bs";
-import { useSidebarContext } from "../context";
-import { User } from "../types";
-import { IconType } from "react-icons";
+} from 'react-icons/bs'
+import { useSidebarContext } from '../context'
+import { User } from '../types'
+import { IconType } from 'react-icons'
 
 interface Props {
   user: User | null;
@@ -44,83 +44,83 @@ interface NavLinkItem {
 }
 
 const Sidebar: React.FC<Props> = ({ user }) => {
-  const { isSidebarOpen, toggleSidebar } = useSidebarContext();
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const whiteColor = theme.colors.white;
+  const { isSidebarOpen, toggleSidebar } = useSidebarContext()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const whiteColor = theme.colors.white
 
   const commonStyles: BoxProps = {
     bg: primaryColor,
     color: whiteColor,
-    position: "sticky",
+    position: 'sticky',
     pt: 4,
     pb: 6,
     pr: 6,
     pl: 6,
     top: 0,
     left: 0,
-    h: "100vh",
-    overflowY: "auto",
-  };
+    h: '100vh',
+    overflowY: 'auto',
+  }
 
   const links: NavLinkItem[] = user
     ? [
         {
           icon: BsFillHouseDoorFill,
-          label: "Home",
-          to: "/",
+          label: 'Home',
+          to: '/',
         },
         {
           icon: BsFillInfoCircleFill,
-          label: "About Us",
-          to: "/about",
+          label: 'About Us',
+          to: '/about',
         },
         {
           icon: BsPersonCircle,
-          label: "Profile",
-          to: "/profile",
+          label: 'Profile',
+          to: '/profile',
         },
         {
           icon: BsChatLeftFill,
-          label: "Messages",
-          to: "/messages",
+          label: 'Messages',
+          to: '/messages',
         },
         {
           icon: BsFillMapFill,
-          label: "My Bookings",
-          to: "/bookings",
+          label: 'My Bookings',
+          to: '/bookings',
         },
         {
           icon: BsBookmarkHeartFill,
-          label: "Favorites",
-          to: "/favorites",
+          label: 'Favorites',
+          to: '/favorites',
         },
         {
           icon: BsFillPinMapFill,
-          label: "My Tours",
-          to: "/mytours",
+          label: 'My Tours',
+          to: '/mytours',
         },
       ]
     : [
         {
           icon: BsFillHouseDoorFill,
-          label: "Home",
-          to: "/",
+          label: 'Home',
+          to: '/',
         },
         {
           icon: BsFillInfoCircleFill,
-          label: "About Us",
-          to: "/about",
+          label: 'About Us',
+          to: '/about',
         },
-      ];
+      ]
 
-  const isSmallScreen = useBreakpointValue({ base: true, lg: false });
+  const isSmallScreen = useBreakpointValue({ base: true, lg: false })
 
   const handleClick = () => {
     if (isSmallScreen) {
-      toggleSidebar();
+      toggleSidebar()
     }
-  };
+  }
 
   // Sidebar content component for reuse in both drawer and static sidebar
   const SidebarContent = () => (
@@ -136,7 +136,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
           <ListItem key={link.label}>
             <NavLink
               to={link.to}
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: 'none' }}
               onClick={handleClick}
             >
               {({ isActive }) => (
@@ -150,12 +150,12 @@ const Sidebar: React.FC<Props> = ({ user }) => {
                   _hover={{
                     bg: whiteColor,
                     color: primaryColor,
-                    fontWeight: "bold",
-                    boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
+                    fontWeight: 'bold',
+                    boxShadow: '0 4px 4px 0 rgba(0,0,0,0.25)',
                   }}
-                  bg={isActive ? whiteColor : "transparent"}
+                  bg={isActive ? whiteColor : 'transparent'}
                   color={isActive ? primaryColor : whiteColor}
-                  fontWeight={isActive ? "bold" : "normal"}
+                  fontWeight={isActive ? 'bold' : 'normal'}
                 >
                   <Icon
                     as={link.icon}
@@ -163,7 +163,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
                     w={{ base: 4, md: 5 }}
                     h={{ base: 4, md: 5 }}
                   />
-                  <Text fontSize={{ base: "sm", md: "md" }}>{link.label}</Text>
+                  <Text fontSize={{ base: 'sm', md: 'md' }}>{link.label}</Text>
                 </Flex>
               )}
             </NavLink>
@@ -171,14 +171,14 @@ const Sidebar: React.FC<Props> = ({ user }) => {
         ))}
       </List>
     </>
-  );
+  )
 
   return (
     <>
       <Drawer isOpen={isSidebarOpen} placement="left" onClose={toggleSidebar}>
         <DrawerOverlay />
         <DrawerContent
-          width={{ base: "75vw", sm: "60vw", md: "45vw", lg: "30vw" }}
+          width={{ base: '75vw', sm: '60vw', md: '45vw', lg: '30vw' }}
         >
           <DrawerCloseButton
             color={primaryColor}
@@ -192,7 +192,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
       </Drawer>
 
       <Box
-        display={{ base: "none", lg: "block" }}
+        display={{ base: 'none', lg: 'block' }}
         {...commonStyles}
         minWidth="250px"
         pb={6}
@@ -200,15 +200,15 @@ const Sidebar: React.FC<Props> = ({ user }) => {
         pr={6}
         pt={4}
         width={{
-          md: "250px",
-          lg: "270px",
-          xl: "280px",
+          md: '250px',
+          lg: '270px',
+          xl: '280px',
         }}
       >
         <SidebarContent />
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

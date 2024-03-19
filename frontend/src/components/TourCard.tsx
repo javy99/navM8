@@ -5,21 +5,21 @@ import {
   Flex,
   Image,
   useTheme,
-} from "@chakra-ui/react";
-import { BsPersonFill, BsCalendar2, BsGeoAltFill } from "react-icons/bs";
+} from '@chakra-ui/react'
+import { BsPersonFill, BsCalendar2, BsGeoAltFill } from 'react-icons/bs'
 
 type Props = {
   width: string | undefined;
-};
+}
 
 const TourCard: React.FC<Props> = ({ width }) => {
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const secondaryColor = theme.colors.secondary;
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
 
   const openCardDetails = () => {
     // navigate(`/guides/${guide.id}`);
-  };
+  }
 
   return (
     <Flex
@@ -30,8 +30,8 @@ const TourCard: React.FC<Props> = ({ width }) => {
       bg="#F6FBFC"
       transition="all 0.3s"
       _hover={{
-        transform: "translateY(-5px)",
-        boxShadow: "0 4px 4px 0 #69490b",
+        transform: 'translateY(-5px)',
+        boxShadow: '0 4px 4px 0 #69490b',
       }}
       cursor="pointer"
       onClick={openCardDetails}
@@ -75,7 +75,7 @@ const TourCard: React.FC<Props> = ({ width }) => {
         </Text>
       </Flex>
     </Flex>
-  );
-};
+  )
+}
 
-export default TourCard;
+export default TourCard

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build && nodemon dist/server.js",
     "build": "tsc",
-    "lint": "eslint . --ext .js,.ts"
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +36,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "typescript": "^5.4.2"
+    "typescript": "5.0.4",
+    "typescript-eslint": "^7.3.0"
   }
 }

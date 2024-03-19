@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Text,
   Flex,
@@ -7,23 +7,23 @@ import {
   Card as ChakraCard,
   VStack,
   useTheme,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 // import { useNavigate } from "react-router-dom";
-import { BsCalendar2 } from "react-icons/bs";
+import { BsCalendar2 } from 'react-icons/bs'
 
 type Props = {
   width: string | undefined;
-};
+}
 
 const BookingCard: React.FC<Props> = ({ width }) => {
   // const navigate = useNavigate();
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const secondaryColor = theme.colors.secondary;
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
 
   const openCardDetails = () => {
     // navigate(`/guides/${guide.id}`);
-  };
+  }
 
   return (
     <ChakraCard
@@ -33,8 +33,8 @@ const BookingCard: React.FC<Props> = ({ width }) => {
       bg="#F6FBFC"
       transition="all 0.3s"
       _hover={{
-        transform: "translateY(-5px)",
-        boxShadow: "0 4px 4px 0 #69490b",
+        transform: 'translateY(-5px)',
+        boxShadow: '0 4px 4px 0 #69490b',
       }}
       cursor="pointer"
       onClick={openCardDetails}
@@ -63,7 +63,7 @@ const BookingCard: React.FC<Props> = ({ width }) => {
         </Flex>
       </Flex>
     </ChakraCard>
-  );
-};
+  )
+}
 
-export default BookingCard;
+export default BookingCard

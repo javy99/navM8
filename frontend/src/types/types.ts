@@ -3,7 +3,6 @@ export interface User {
   token?: string;
   username?: string;
   email?: string;
-  password?: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -17,7 +16,6 @@ export interface User {
   createdAt?: Date;
   currentPassword?: string;
   newPassword?: string;
-  [key: string]: any;
 }
 
 export interface Guide {
@@ -31,4 +29,4 @@ export interface Guide {
   review: number;
 }
 
-export type ChildrenProps = { children: React.ReactNode };
+export type ChildrenProps = { children: React.ReactNode }

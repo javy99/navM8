@@ -1,23 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es6", // Compile to ECMAScript 6
-    "module": "commonjs", // Use commonjs module system
-    "outDir": "./dist", // Output compiled files to 'dist' folder
-    "rootDir": "./", // Root directory is the project folder
-    "strict": true, // Enable all strict type-checking options
-    "esModuleInterop": true, // Enables '__importDefault' helper for importing default exports
-    "skipLibCheck": true, // Skip type checking of declaration files (*.d.ts)
-    "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
-    "moduleResolution": "node", // Resolve modules using Node.js resolution strategy
-    "resolveJsonModule": true, // Allow importing '.json' files
-    "types": ["node"], // Specify type declaration files to be included
-    "typeRoots": ["./node_modules/@types", "./types"] // Look for type definitions in these folders
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "moduleResolution": "node"
   },
-  "include": [
-    "**/*.ts", // Include all TypeScript files in the project
-  ],
-  "exclude": [
-    "node_modules", // Exclude the node_modules folder
-    "dist" // Exclude the dist folder
-  ]
+  "include": ["**/*.ts"]
 }

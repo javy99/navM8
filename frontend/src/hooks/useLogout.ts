@@ -1,15 +1,15 @@
-import { useAuthContext } from ".";
+import { useAuthContext } from '.'
 
 const useLogout = () => {
-  const { dispatch } = useAuthContext();
+  const { dispatch } = useAuthContext()
 
   const logout = async () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user')
 
-    dispatch({ type: "LOGOUT", payload: null });
-  };
+    dispatch({ type: 'LOGOUT', payload: null })
+  }
 
-  return { logout };
-};
+  return { logout }
+}
 
-export default useLogout;
+export default useLogout

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Text,
   Flex,
@@ -11,39 +11,39 @@ import {
   CardFooter,
   VStack,
   useTheme,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 import {
   BsFillHeartFill,
   BsStarFill,
   BsTranslate,
   BsGeoAltFill,
   BsBookmarkHeartFill,
-} from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
-import { User, Guide } from "../types";
+} from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
+import { User, Guide } from '../types'
 
 type Props = {
   guide: Guide;
   user: User | null;
-};
+}
 
 const Card: React.FC<Props> = ({ guide, user }) => {
-  const [isFavorited, setIsFavorited] = useState(false);
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const secondaryColor = theme.colors.secondary;
+  const [isFavorited, setIsFavorited] = useState(false)
+  const navigate = useNavigate()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
 
-  const favoriteIconColor = isFavorited ? "#FF000F" : "gray.300";
+  const favoriteIconColor = isFavorited ? '#FF000F' : 'gray.300'
 
   const toggleFavorite = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.stopPropagation();
-    setIsFavorited(!isFavorited);
-  };
+    e.stopPropagation()
+    setIsFavorited(!isFavorited)
+  }
 
   const openCardDetails = () => {
-    navigate(`/guides/${guide.id}`);
-  };
+    navigate(`/guides/${guide.id}`)
+  }
 
   return (
     <ChakraCard
@@ -52,8 +52,8 @@ const Card: React.FC<Props> = ({ guide, user }) => {
       bg="#F6FBFC"
       transition="all 0.3s"
       _hover={{
-        transform: "translateY(-5px)",
-        boxShadow: "0 4px 4px 0 #69490b",
+        transform: 'translateY(-5px)',
+        boxShadow: '0 4px 4px 0 #69490b',
       }}
       position="relative"
       overflow="hidden"
@@ -92,13 +92,13 @@ const Card: React.FC<Props> = ({ guide, user }) => {
           <Flex align="center" fontSize="sm" mb={2}>
             <Icon as={BsTranslate} mr={3} color="#38A169" w={4} h={4} />
             <Text>
-              <b>Spoken Languages:</b> {guide.spokenLanguages.join(", ")}
+              <b>Spoken Languages:</b> {guide.spokenLanguages.join(', ')}
             </Text>
           </Flex>
           <Flex align="center" fontSize="sm" mb={2}>
             <Icon as={BsFillHeartFill} mr={3} color="#E53E3E" w={4} h={4} />
             <Text>
-              <b>Interests:</b> {guide.interests.join(", ")}
+              <b>Interests:</b> {guide.interests.join(', ')}
             </Text>
           </Flex>
           <Flex align="center" fontSize="sm">
@@ -117,7 +117,7 @@ const Card: React.FC<Props> = ({ guide, user }) => {
           size="sm"
           onClick={toggleFavorite}
           _hover={{
-            bg: "transparent",
+            bg: 'transparent',
           }}
           bg="transparent"
         >
@@ -130,7 +130,7 @@ const Card: React.FC<Props> = ({ guide, user }) => {
         </Button>
       )}
     </ChakraCard>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

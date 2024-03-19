@@ -1,6 +1,6 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useAuthContext } from "./hooks";
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useAuthContext } from './hooks'
 
 import {
   Profile,
@@ -12,11 +12,11 @@ import {
   HomePage,
   Signup,
   Login,
-} from "./pages";
+} from './pages'
 
 const App = () => {
-  const { state } = useAuthContext();
-  const { user } = state;
+  const { state } = useAuthContext()
+  const { user } = state
 
   return (
     <>
@@ -34,7 +34,7 @@ const App = () => {
         </Routes>
       </BrowserRouter>
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App

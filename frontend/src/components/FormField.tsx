@@ -5,7 +5,7 @@ import {
   Select,
   Textarea,
   useBreakpointValue,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
 interface Props {
   label: string;
@@ -26,61 +26,61 @@ const FormField: React.FC<Props> = ({
   label,
   name,
   type,
-  value = "",
+  value = '',
   onChange,
   options = [],
   isRequired = true,
   disabled,
 }) => {
   const formFontSize = useBreakpointValue({
-    base: "sm",
-    md: "md",
-    xxl: "lg",
-  });
+    base: 'sm',
+    md: 'md',
+    xxl: 'lg',
+  })
 
-  const formPaddingX = useBreakpointValue({ base: 4, md: 6 });
+  const formPaddingX = useBreakpointValue({ base: 4, md: 6 })
   const formInputHeight = useBreakpointValue({
-    base: "2.5rem",
-    xl: "3rem",
-  });
+    base: '2.5rem',
+    xl: '3rem',
+  })
 
   const formLabelStyle = {
-    color: "#000",
-    fontWeight: "bold",
+    color: '#000',
+    fontWeight: 'bold',
     fontSize: formFontSize,
-  };
+  }
 
   const formInputStyle = {
-    boxShadow: "inset 0 0 2px 2px rgba(0, 0, 0, 0.2)",
-    borderRadius: "0.9375rem",
+    boxShadow: 'inset 0 0 2px 2px rgba(0, 0, 0, 0.2)',
+    borderRadius: '0.9375rem',
     height: formInputHeight,
-    variant: "unstyled",
+    variant: 'unstyled',
     px: formPaddingX,
     _focus: {
-      borderBottom: "0.25rem solid #0B6B78",
+      borderBottom: '0.25rem solid #0B6B78',
     },
     fontSize: formFontSize,
-    cursor: "pointer",
-  };
+    cursor: 'pointer',
+  }
 
   const formSelectStyle = {
-    boxShadow: "inset 0 0 2px 2px rgba(0, 0, 0, 0.2)",
-    borderRadius: "0.9375rem",
-    variant: "styled",
+    boxShadow: 'inset 0 0 2px 2px rgba(0, 0, 0, 0.2)',
+    borderRadius: '0.9375rem',
+    variant: 'styled',
     height: formInputHeight,
     _focus: {
-      borderBottom: "0.25rem solid #0B6B78",
+      borderBottom: '0.25rem solid #0B6B78',
     },
     fontSize: formFontSize,
-    cursor: "pointer",
-  };
+    cursor: 'pointer',
+  }
 
   return (
     <FormControl isRequired={isRequired}>
       <FormLabel htmlFor={name} {...formLabelStyle}>
         {label}
       </FormLabel>
-      {type === "select" ? (
+      {type === 'select' ? (
         <Select
           id={name}
           name={name}
@@ -95,7 +95,7 @@ const FormField: React.FC<Props> = ({
             </option>
           ))}
         </Select>
-      ) : type === "textarea" ? (
+      ) : type === 'textarea' ? (
         <Textarea
           id={name}
           name={name}
@@ -116,7 +116,7 @@ const FormField: React.FC<Props> = ({
         />
       )}
     </FormControl>
-  );
-};
+  )
+}
 
-export default FormField;
+export default FormField

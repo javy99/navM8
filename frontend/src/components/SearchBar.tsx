@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Box,
   Input,
@@ -8,28 +8,28 @@ import {
   useDisclosure,
   Divider,
   useTheme,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 import {
   FaSearch,
   FaMapMarkerAlt,
   FaCalendarAlt,
   FaUserFriends,
-} from "react-icons/fa";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+} from 'react-icons/fa'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const SearchBar: React.FC = () => {
-  const [dates, setDates] = useState<[Date | null, Date | null]>([null, null]);
-  const { isOpen, onToggle } = useDisclosure();
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const whiteColor = theme.colors.white;
+  const [dates, setDates] = useState<[Date | null, Date | null]>([null, null])
+  const { isOpen, onToggle } = useDisclosure()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const whiteColor = theme.colors.white
 
   const formatDateRange = () => {
-    const [startDate, endDate] = dates;
-    if (!startDate || !endDate) return "Dates";
-    return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
-  };
+    const [startDate, endDate] = dates
+    if (!startDate || !endDate) return 'Dates'
+    return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+  }
 
   return (
     <Box
@@ -50,7 +50,7 @@ const SearchBar: React.FC = () => {
             pl={12}
             color="gray.600"
             sx={{
-              "::placeholder": {
+              '::placeholder': {
                 color: primaryColor,
               },
             }}
@@ -114,7 +114,7 @@ const SearchBar: React.FC = () => {
             pl={12}
             color="gray.600"
             sx={{
-              "::placeholder": {
+              '::placeholder': {
                 color: primaryColor,
               },
             }}
@@ -139,13 +139,13 @@ const SearchBar: React.FC = () => {
           _hover={{
             bg: primaryColor,
           }}
-          onClick={() => alert("Search functionality to be implemented")}
+          onClick={() => alert('Search functionality to be implemented')}
         >
           <FaSearch color={whiteColor} />
         </Button>
       </HStack>
     </Box>
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar

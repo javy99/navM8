@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Box,
   Flex,
@@ -15,7 +15,7 @@ import {
   useBreakpointValue,
   useTheme,
   ResponsiveValue,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 import {
   BsPersonCircle,
   BsStarFill,
@@ -23,52 +23,52 @@ import {
   BsStarHalf,
   BsTrashFill,
   BsCameraFill,
-} from "react-icons/bs";
-import axios from "axios";
-import ReactCountryFlag from "react-country-flag";
-import { getCode } from "country-list";
-import { Navbar, Sidebar, Button, FormField } from "../components";
-import { useAuthContext, useProfileUpdate, usePhotoManager } from "../hooks";
-import HeaderBgImage from "../assets/profile-bg.jpg";
-import { User } from "../types";
+} from 'react-icons/bs'
+import axios from 'axios'
+import ReactCountryFlag from 'react-country-flag'
+import { getCode } from 'country-list'
+import { Navbar, Sidebar, Button, FormField } from '../components'
+import { useAuthContext, useProfileUpdate, usePhotoManager } from '../hooks'
+import HeaderBgImage from '../assets/profile-bg.jpg'
+import { User } from '../types'
 
 type FlexDirection =
-  | "row"
-  | "column"
-  | "row-reverse"
-  | "column-reverse"
-  | undefined;
+  | 'row'
+  | 'column'
+  | 'row-reverse'
+  | 'column-reverse'
+  | undefined
 
 const Profile: React.FC = () => {
-  const { state } = useAuthContext();
-  const { user } = state;
-  const toast = useToast();
-  const inputFileRef = useRef<HTMLInputElement>(null);
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const secondaryColor = theme.colors.secondary;
-  const whiteColor = theme.colors.white;
+  const { state } = useAuthContext()
+  const { user } = state
+  const toast = useToast()
+  const inputFileRef = useRef<HTMLInputElement>(null)
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
+  const whiteColor = theme.colors.white
 
   // Use the usePhotoManager hook to get photo management functions
-  const { photo, handlePhotoChange, handlePhotoRemoval } = usePhotoManager();
-  const { updateProfile /*isLoading*/ } = useProfileUpdate(user, toast);
+  const { photo, handlePhotoChange, handlePhotoRemoval } = usePhotoManager()
+  const { updateProfile /*isLoading*/ } = useProfileUpdate(user, toast)
 
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const [initialUserInfo, setInitialUserInfo] = useState<User | null>(null);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false)
+  const [initialUserInfo, setInitialUserInfo] = useState<User | null>(null)
   const [userInfo, setUserInfo] = useState<User>({
-    firstName: "",
-    lastName: "",
-    country: "",
-    city: "",
+    firstName: '',
+    lastName: '',
+    country: '',
+    city: '',
     languagesSpoken: [],
     interests: [],
-    gender: "",
-    bio: "",
-    phoneNumber: "",
-    birthDate: "",
-    currentPassword: "",
-    newPassword: "",
-  });
+    gender: '',
+    bio: '',
+    phoneNumber: '',
+    birthDate: '',
+    currentPassword: '',
+    newPassword: '',
+  })
 
   useEffect(() => {
     if (user && user.token) {
@@ -81,140 +81,140 @@ const Profile: React.FC = () => {
                 Authorization: `Bearer ${user.token}`,
               },
             }
-          );
+          )
 
-          const { data } = response;
+          const { data } = response
           const formattedBirthDate = data.birthDate
-            ? new Date(data.birthDate).toISOString().split("T")[0]
-            : "";
-          setUserInfo({ ...data, birthDate: formattedBirthDate });
+            ? new Date(data.birthDate).toISOString().split('T')[0]
+            : ''
+          setUserInfo({ ...data, birthDate: formattedBirthDate })
         } catch (error) {
-          console.error("Failed to fetch user profile", error);
+          console.error('Failed to fetch user profile', error)
           toast({
-            title: "Failed to fetch user profile.",
-            description: "Please try again later.",
-            status: "error",
+            title: 'Failed to fetch user profile.',
+            description: 'Please try again later.',
+            status: 'error',
             duration: 5000,
             isClosable: true,
-          });
+          })
         }
-      };
+      }
 
-      fetchUserProfile();
+      fetchUserProfile()
     }
-  }, [user, toast]);
+  }, [user, toast])
 
-  const bgImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`;
+  const bgImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`
 
   const countryCode: string | undefined = userInfo.country
     ? getCode(userInfo.country)
-    : undefined;
+    : undefined
 
   /* =================== Responsive adjustments =================== */
   const iconSize = useBreakpointValue({
-    base: "100px",
-    md: "150px",
-    lg: "180px",
-  });
+    base: '100px',
+    md: '150px',
+    lg: '180px',
+  })
   const profileInfoFontSize = useBreakpointValue({
-    base: "md",
-    md: "lg",
-    lg: "xl",
-  });
+    base: 'md',
+    md: 'lg',
+    lg: 'xl',
+  })
   const profileContainerWidth = useBreakpointValue({
-    base: "90%",
-    md: "80%",
-    lg: "85%",
-    xl: "70%",
-  });
+    base: '90%',
+    md: '80%',
+    lg: '85%',
+    xl: '70%',
+  })
   const profileContainerPadding = useBreakpointValue({
     base: 3,
     sm: 3.5,
     md: 4,
     lg: 4,
-  });
+  })
   const profileContainerHeight = useBreakpointValue({
-    base: "auto",
-  });
-  const buttonSize = useBreakpointValue({ base: "xs", sm: "sm", md: "md" });
+    base: 'auto',
+  })
+  const buttonSize = useBreakpointValue({ base: 'xs', sm: 'sm', md: 'md' })
 
   const formControlLayout: ResponsiveValue<FlexDirection> = useBreakpointValue({
-    base: "column",
-    xl: "row",
-  });
+    base: 'column',
+    xl: 'row',
+  })
   const headingFontSize = useBreakpointValue({
-    base: "lg",
-    xl: "xl",
-    xxl: "2xl",
-  });
-  const vStackPaddingX = useBreakpointValue({ base: 4, md: 6, lg: 8 });
-  const vStackPaddingY = useBreakpointValue({ base: 3, md: 4, lg: 4 });
-  const inputGap = useBreakpointValue({ base: 6, lg: 8, xxl: 12 });
+    base: 'lg',
+    xl: 'xl',
+    xxl: '2xl',
+  })
+  const vStackPaddingX = useBreakpointValue({ base: 4, md: 6, lg: 8 })
+  const vStackPaddingY = useBreakpointValue({ base: 3, md: 4, lg: 4 })
+  const inputGap = useBreakpointValue({ base: 6, lg: 8, xxl: 12 })
 
   const handleUserInfoChange = (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = event.target;
-    let newValues = { ...userInfo };
+    const { name, value } = event.target
+    const newValues = { ...userInfo }
 
-    if (name === "languagesSpoken" || name === "interests") {
-      newValues[name] = value.split(",").map((item) => item);
+    if (name === 'languagesSpoken' || name === 'interests') {
+      newValues[name] = value.split(',').map((item) => item)
     } else {
-      newValues[name] = value;
+      newValues[name] = value
     }
 
-    setUserInfo(newValues);
-  };
+    setUserInfo(newValues)
+  }
 
   const prepareDataForDatabase = (userInfo: User): User => {
     // Trim spaces for languagesSpoken and interests
-    const cleanedData = { ...userInfo };
+    const cleanedData = { ...userInfo }
     if (cleanedData.languagesSpoken) {
       cleanedData.languagesSpoken = cleanedData.languagesSpoken.map((item) =>
         item.trim()
-      );
+      )
     }
     if (cleanedData.interests) {
-      cleanedData.interests = cleanedData.interests.map((item) => item.trim());
+      cleanedData.interests = cleanedData.interests.map((item) => item.trim())
     }
-    return cleanedData;
-  };
+    return cleanedData
+  }
 
   // Handle button click to open file input
-  const handleButtonClick = () => inputFileRef.current?.click();
+  const handleButtonClick = () => inputFileRef.current?.click()
 
   const handleEdit = () => {
-    setInitialUserInfo({ ...userInfo });
-    setIsEditMode(true);
-  };
+    setInitialUserInfo({ ...userInfo })
+    setIsEditMode(true)
+  }
 
   const handleCancel = () => {
     if (initialUserInfo) {
-      setUserInfo(initialUserInfo);
-      setInitialUserInfo(null);
+      setUserInfo(initialUserInfo)
+      setInitialUserInfo(null)
     }
-    setIsEditMode(false);
-  };
+    setIsEditMode(false)
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const dataToSubmit = prepareDataForDatabase(userInfo);
-    await updateProfile(dataToSubmit);
-    setIsEditMode(false);
-    setInitialUserInfo(null);
-  };
+    event.preventDefault()
+    const dataToSubmit = prepareDataForDatabase(userInfo)
+    await updateProfile(dataToSubmit)
+    setIsEditMode(false)
+    setInitialUserInfo(null)
+  }
 
   return (
-    <Flex direction={{ base: "column", lg: "row" }} minHeight="100vh">
+    <Flex direction={{ base: 'column', lg: 'row' }} minHeight="100vh">
       <Sidebar user={user} />
       <Flex direction="column" flex="1" overflowY="auto">
         <Navbar />
         <Box
           bgImage={bgImage}
           bgSize="cover"
-          minHeight={{ base: "14rem", md: "15rem", lg: "16rem", xl: "18rem" }}
+          minHeight={{ base: '14rem', md: '15rem', lg: '16rem', xl: '18rem' }}
           bgPosition="center"
           position="relative"
         >
@@ -265,7 +265,7 @@ const Profile: React.FC = () => {
                 onClick={handlePhotoRemoval}
                 size={buttonSize}
                 isRound
-                _hover={{ bg: "#FF0B0B" }}
+                _hover={{ bg: '#FF0B0B' }}
               />
 
               <Input
@@ -274,7 +274,7 @@ const Profile: React.FC = () => {
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
               />
 
               <IconButton
@@ -320,7 +320,7 @@ const Profile: React.FC = () => {
                     <ReactCountryFlag
                       countryCode={countryCode}
                       svg
-                      style={{ width: "1.5em", height: "1.5em" }}
+                      style={{ width: '1.5em', height: '1.5em' }}
                     />
                   )}
                   <Text textTransform="capitalize" ml={2}>
@@ -344,18 +344,18 @@ const Profile: React.FC = () => {
                       new Date().getDate() <
                         new Date(userInfo.birthDate).getDate())
                       ? 1
-                      : 0)}{" "}
+                      : 0)}{' '}
                   y.o.
                 </Text>
               </Flex>
             )}
-            <Box display={{ base: "none", md: "block" }} bg="#0000001A">
+            <Box display={{ base: 'none', md: 'block' }} bg="#0000001A">
               <Divider orientation="vertical" />
             </Box>
             <Flex
-              display={{ base: "none", sm: "flex" }}
+              display={{ base: 'none', sm: 'flex' }}
               flexDirection="column"
-              alignItems={{ sm: "flex-start" }}
+              alignItems={{ sm: 'flex-start' }}
               color={secondaryColor}
               fontSize="sm"
               mr={{ sm: 3 }}
@@ -388,12 +388,12 @@ const Profile: React.FC = () => {
           mx="auto"
           boxShadow="xl"
           mt={{
-            base: "6rem",
-            md: "8rem",
-            lg: "9rem",
+            base: '6rem',
+            md: '8rem',
+            lg: '9rem',
           }}
           mb="3.125rem"
-          w={{ base: "95%", lg: "85%" }}
+          w={{ base: '95%', lg: '85%' }}
           borderRadius="2rem"
           borderTopLeftRadius="2rem"
           borderTopRightRadius="2rem"
@@ -491,8 +491,8 @@ const Profile: React.FC = () => {
                 value={userInfo.gender}
                 onChange={handleUserInfoChange}
                 options={[
-                  { value: "male", label: "Male" },
-                  { value: "female", label: "Female" },
+                  { value: 'male', label: 'Male' },
+                  { value: 'female', label: 'Female' },
                 ]}
                 disabled={!isEditMode}
               />
@@ -581,7 +581,7 @@ const Profile: React.FC = () => {
         </Box>
       </Flex>
     </Flex>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile
