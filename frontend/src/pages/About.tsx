@@ -1,16 +1,16 @@
-import React from 'react'
-import { Flex, VStack, Heading, useTheme } from '@chakra-ui/react'
-import { Navbar, Sidebar } from '../components'
-import { useAuthContext } from '../hooks'
+import React from "react";
+import { Flex, VStack, Heading, useTheme } from "@chakra-ui/react";
+import { Navbar, Sidebar } from "../components";
+import { useAuthContext } from "../hooks";
 
 const About: React.FC = () => {
-  const { state } = useAuthContext()
-  const { user } = state
-  const theme = useTheme()
-  const primaryColor = theme.colors.primary
+  const { state } = useAuthContext();
+  const { user } = state;
+  const theme = useTheme();
+  const primaryColor = theme.colors.primary;
 
   return (
-    <Flex minHeight="100vh" direction={{ base: 'column', md: 'row' }}>
+    <Flex minHeight="100vh" direction={{ base: "column", md: "row" }}>
       <Sidebar user={user} />
       <Flex direction="column" flex="1" overflowY="auto">
         <Navbar />
@@ -21,7 +21,7 @@ const About: React.FC = () => {
         </VStack>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
-export default About
+export default About;

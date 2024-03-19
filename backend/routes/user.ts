@@ -1,18 +1,18 @@
-import * as express from 'express'
-import requireAuth from '../middlewares/requireAuth'
+import express from "express";
+import requireAuth from "../middlewares/requireAuth";
 import {
   loginUser,
   signupUser,
-  updateProfile
-} from '../controllers/userController'
+  updateProfile,
+} from "../controllers/userController";
 
-const router = express.Router()
+const router = express.Router();
 
-router.post('/signup', signupUser)
-router.post('/login', loginUser)
-router.patch('/profile', requireAuth, updateProfile)
-router.get('/profile', requireAuth, (req, res) => {
-  res.json(req.user)
-})
+router.post("/signup", signupUser);
+router.post("/login", loginUser);
+router.patch("/profile", requireAuth, updateProfile);
+router.get("/profile", requireAuth, (req, res) => {
+  res.json(req.user);
+});
 
-export { router as userRoutes }
+export { router as userRoutes };

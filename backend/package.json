@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build && nodemon dist/server.js",
-    "build": "tsc",
-    "lint": "eslint . --ext .ts"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -30,13 +29,6 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.11.28",
     "@types/validator": "^13.11.9",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "eslint": "^8.57.0",
-    "eslint-config-standard-with-typescript": "^43.0.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "typescript": "5.0.4",
-    "typescript-eslint": "^7.3.0"
+    "typescript": "5.0.4"
   }
 }
