@@ -1,3 +1,4 @@
+import { Country, City } from 'country-state-city'
 import mongoose, { Model, Schema as MongooseSchema } from 'mongoose'
 import * as bcrypt from 'bcrypt'
 import validator from 'validator'
@@ -35,24 +36,93 @@ const userSchema: MongooseSchema = new Schema({
     required: true,
     unique: true,
     minlength: 3,
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
+    validate: {
+      validator: (str: string) => validator.isEmail(str),
+      message: (props: { value: string }) =>
+        `${props.value} is not a valid email address!`,
+    },
   },
   password: {
     type: String,
     required: true,
+    minLength: 8,
+    validate: {
+      validator: (value) => {
+        return validator.isStrongPassword(value, {
+          minLength: 8,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1,
+        })
+      },
+      message: (props) => `${props.value} is not a strong enough password!`,
+    },
   },
   // profile fields
-  firstName: String,
-  lastName: String,
-  phoneNumber: String,
-  country: String,
-  city: String,
-  birthDate: Date,
-  gender: String,
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (value) => validator.isMobilePhone(value, 'any'),
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+  },
+  country: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (value: string) =>
+        Country.getAllCountries().some((country) => country.name === value),
+      message: (props: { value: string }) =>
+        `${props.value} is not a valid country!`,
+    },
+  },
+  city: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (value: string) {
+        const country = Country.getAllCountries().find(
+          (country) => country.name === this.get('country'),
+        )
+        if (country) {
+          return City.getCitiesOfCountry(country.isoCode).some(
+            (city) => city.name === value,
+          )
+        }
+        return false
+      },
+      message: (props: { value: string }) =>
+        `${props.value} is not a valid city!`,
+    },
+  },
+  birthDate: {
+    type: Date,
+    required: true,
+  },
+  gender: {
+    type: String,
+    required: true,
+    enum: ['male', 'female'],
+  },
   languagesSpoken: {
     type: [String],
     default: undefined,
@@ -61,7 +131,10 @@ const userSchema: MongooseSchema = new Schema({
     type: [String],
     default: undefined,
   },
-  bio: String,
+  bio: {
+    type: String,
+    minLength: 10,
+  },
   // tour fields
   favoriteTours: {
     type: [mongoose.Schema.Types.ObjectId],

@@ -23,6 +23,7 @@ import {
   BsStarHalf,
   BsTrashFill,
   BsCameraFill,
+  BsEnvelopeFill,
 } from 'react-icons/bs'
 import axios from 'axios'
 import ReactCountryFlag from 'react-country-flag'
@@ -450,6 +451,7 @@ const Profile: React.FC = () => {
               />
               <FormField
                 label="Email address"
+                icon={<Icon as={BsEnvelopeFill}/>}
                 name="email"
                 type="email"
                 value={userInfo.email}

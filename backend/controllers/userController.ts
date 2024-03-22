@@ -1,10 +1,14 @@
+import { Country, City } from 'country-state-city'
 import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import validator from 'validator'
 import { User } from '../models/userModel'
+import * as dotenv from 'dotenv'
 
-const createToken = (_id: string): string | Error => {
+dotenv.config()
+
+const createToken = (_id: string): string => {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined in the environment variables')
   }
@@ -82,6 +86,25 @@ const updateProfile = async (req: Request, res: Response): Promise<void> => {
     if (!user) {
       res.status(404).json({ error: 'User not found.' })
       return
+    }
+
+    // Validate country and city
+    if (country && !Country.getAllCountries().some((c) => c.name === country)) {
+      throw Error('Invalid country')
+    }
+
+    if (city) {
+      const countryObj = Country.getAllCountries().find(
+        (c) => c.name === country,
+      )
+      if (
+        !countryObj ||
+        !City.getCitiesOfCountry(countryObj.isoCode).some(
+          (c) => c.name === city,
+        )
+      ) {
+        throw Error('Invalid city')
+      }
     }
 
     // Update fields

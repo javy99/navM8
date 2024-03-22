@@ -1,3 +1,4 @@
+import { Country, City } from 'country-state-city'
 import mongoose, { Schema as MongooseSchema } from 'mongoose'
 
 const { Schema } = mongoose
@@ -10,21 +11,70 @@ const tourSchema: MongooseSchema = new Schema({
   country: {
     type: String,
     required: true,
+    validate: {
+      validator: (value: string) =>
+        Country.getAllCountries().some((country) => country.name === value),
+      message: (props: { value: string }) =>
+        `${props.value} is not a valid country!`,
+    },
+  },
+  city: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (value: string) {
+        const country = Country.getAllCountries().find(
+          (country) => country.name === this.get('country'),
+        )
+        if (country) {
+          return City.getCitiesOfCountry(country.isoCode).some(
+            (city) => city.name === value,
+          )
+        }
+        return false
+      },
+      message: (props: { value: string }) =>
+        `${props.value} is not a valid city!`,
+    },
   },
   maxPeople: {
-    type: Number,
-    required: true,
-  },
-  availability: {
     type: String,
     required: true,
   },
+  typeOfAvailability: {
+    type: String,
+    required: true,
+    enum: ['recurring', 'one-time'],
+  },
+  availability: {
+    type: String,
+    required: function () {
+      return this.typeOfAvailability === 'recurring'
+    },
+    validate: {
+      validator: function (value: string) {
+        if (this.typeOfAvailability === 'recurring') {
+          const validAvailabilities = ['weekdays', 'weekends', 'daily']
+          return validAvailabilities.includes(value)
+        }
+        return true
+      },
+      message: (props: { value: string }) =>
+        `${props.value} is not a valid recurring availability option.`,
+    },
+  },
+  date: {
+    type: String,
+    required: function () {
+      return this.typeOfAvailability === 'one-time'
+    },
+  },
   from: {
-    type: Date,
+    type: String,
     required: true,
   },
   to: {
-    type: Date,
+    type: String,
     required: true,
   },
   description: {
@@ -33,20 +83,24 @@ const tourSchema: MongooseSchema = new Schema({
   },
   photos: {
     type: [String],
-    required: false,
+    required: true,
+    validate: {
+      validator: function (value: string[]) {
+        return value.length > 0
+      },
+      message: 'At least one photo is required.',
+    },
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    // here do we use User email or token or we can access everything from the User model? answer: You can access everything from the User model. You can use the populate method to populate the author field with the user data. This will allow you to access the user's data when you query the tour model. For example, you can access the user's email, username, and other fields from the user model using the author field in the tour model.
+    required: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  // we also have upload photos fields so that the author can upload photos of the tour, but the question is: how to store photos since the author can upload multiple photos and it will be very huge in size if we store it in the database. Where to store it? I am now for example storing profile photo in localStorage. So the question is: What do you suggest here? Where to store it? And how to store it?
-  // answer: You can store the photos in a cloud storage service like AWS S3 or Google Cloud Storage. You can also use a service like Cloudinary which is specifically designed for storing and serving images. You can store the URL of the image in the database and then use that URL to display the image in your app.
 })
 
 const Tour = mongoose.model('Tour', tourSchema)
-export default { Tour }
+export default Tour

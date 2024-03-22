@@ -3,9 +3,10 @@ import { BsPersonFill, BsCalendar2, BsGeoAltFill } from 'react-icons/bs'
 
 type Props = {
   width: string | undefined
+  tour?: any
 }
 
-const TourCard: React.FC<Props> = ({ width }) => {
+const TourCard: React.FC<Props> = ({ width, tour }) => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
@@ -33,39 +34,36 @@ const TourCard: React.FC<Props> = ({ width }) => {
     >
       <VStack>
         <Image
-          src={`https://source.unsplash.com/100x100/?guide,$Tashkent,Uzbekistan`}
+          src={tour?.photos[0]}
           alt=""
-          width="100%"
+          width="45%"
           height="100%"
           objectFit="cover"
         />
       </VStack>
       <Flex flexDirection="column" pl={5} justifyContent="center" p={3}>
         <Text fontWeight="bold" fontSize="xl" mb={3} color={primaryColor}>
-          Tour name: Buddapest Gems
+          Tour name: {tour?.name}
         </Text>
         <Flex mb={3}>
           <Icon as={BsCalendar2} color="#EC502C" w={5} h={5} />
           <Text ml={2} color={secondaryColor}>
-            16 Jan - 25 Jan, 10:00 - 16:00
+            {tour?.from} - {tour?.to}
           </Text>
         </Flex>
         <Flex mb={3}>
           <Icon as={BsGeoAltFill} color="#EC502C" w={5} h={5} />
           <Text ml={2} color={secondaryColor}>
-            Budapest, Hungary
+            {tour?.destination}
           </Text>
         </Flex>
         <Flex mb={3}>
           <Icon as={BsPersonFill} color="#EC502C" w={5} h={5} />
           <Text ml={2} color={secondaryColor}>
-            4 people
+            {tour?.maxPeople} people
           </Text>
         </Flex>
-        <Text mb={3}>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum,
-          consectetur.
-        </Text>
+        <Text mb={3}>{tour?.description}</Text>
       </Flex>
     </Flex>
   )
