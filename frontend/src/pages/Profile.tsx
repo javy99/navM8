@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import {
   Box,
   Flex,
@@ -6,7 +6,6 @@ import {
   Image,
   Input,
   VStack,
-  useToast,
   IconButton,
   Text,
   Badge,
@@ -25,13 +24,10 @@ import {
   BsCameraFill,
   BsEnvelopeFill,
 } from 'react-icons/bs'
-import axios from 'axios'
 import ReactCountryFlag from 'react-country-flag'
-import { getCode } from 'country-list'
 import { Button, FormField } from '../components'
-import { useAuthContext, useProfileUpdate, usePhotoManager } from '../hooks'
+import { useAuthContext, usePhotoManager, useProfileUpdate } from '../hooks'
 import HeaderBgImage from '../assets/profile-bg.jpg'
-import { User } from '../types'
 import PageLayout from './PageLayout'
 
 type FlexDirection =
@@ -44,73 +40,26 @@ type FlexDirection =
 const Profile: React.FC = () => {
   const { state } = useAuthContext()
   const { user } = state
-  const toast = useToast()
-  const inputFileRef = useRef<HTMLInputElement>(null)
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
   const whiteColor = theme.colors.white
 
-  // Use the usePhotoManager hook to get photo management functions
+  const {
+    userInfo,
+    isEditMode,
+    handleUserInfoChange,
+    handleEdit,
+    handleCancel,
+    handleSubmit,
+    inputFileRef,
+    handleButtonClick,
+    countryCode,
+  } = useProfileUpdate()
+
   const { photo, handlePhotoChange, handlePhotoRemoval } = usePhotoManager()
-  const { updateProfile /* isLoading */ } = useProfileUpdate(user, toast)
-
-  const [isEditMode, setIsEditMode] = useState<boolean>(false)
-  const [initialUserInfo, setInitialUserInfo] = useState<User | null>(null)
-  const [userInfo, setUserInfo] = useState<User>({
-    firstName: '',
-    lastName: '',
-    country: '',
-    city: '',
-    languagesSpoken: [],
-    interests: [],
-    gender: '',
-    bio: '',
-    phoneNumber: '',
-    birthDate: '',
-    currentPassword: '',
-    newPassword: '',
-  })
-
-  useEffect(() => {
-    if (user && user.token) {
-      const fetchUserProfile = async () => {
-        try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/auth/profile`,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
-            },
-          )
-
-          const { data } = response
-          const formattedBirthDate = data.birthDate
-            ? new Date(data.birthDate).toISOString().split('T')[0]
-            : ''
-          setUserInfo({ ...data, birthDate: formattedBirthDate })
-        } catch (error) {
-          console.error('Failed to fetch user profile', error)
-          toast({
-            title: 'Failed to fetch user profile.',
-            description: 'Please try again later.',
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-          })
-        }
-      }
-
-      fetchUserProfile()
-    }
-  }, [user, toast])
 
   const bgImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`
-
-  const countryCode: string | undefined = userInfo.country
-    ? getCode(userInfo.country)
-    : undefined
 
   /* =================== Responsive adjustments =================== */
   const iconSize = useBreakpointValue({
@@ -153,60 +102,7 @@ const Profile: React.FC = () => {
   const vStackPaddingY = useBreakpointValue({ base: 3, md: 4, lg: 4 })
   const inputGap = useBreakpointValue({ base: 6, lg: 8, xxl: 12 })
 
-  const handleUserInfoChange = (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const { name, value } = event.target
-    const newValues = { ...userInfo }
-
-    if (name === 'languagesSpoken' || name === 'interests') {
-      newValues[name] = value.split(',').map((item) => item)
-    } else {
-      newValues[name] = value
-    }
-
-    setUserInfo(newValues)
-  }
-
-  const prepareDataForDatabase = (userInfoToClean: User): User => {
-    // Trim spaces for languagesSpoken and interests
-    const cleanedData = { ...userInfoToClean }
-    if (cleanedData.languagesSpoken) {
-      cleanedData.languagesSpoken = cleanedData.languagesSpoken.map((item) =>
-        item.trim(),
-      )
-    }
-    if (cleanedData.interests) {
-      cleanedData.interests = cleanedData.interests.map((item) => item.trim())
-    }
-    return cleanedData
-  }
-
-  // Handle button click to open file input
-  const handleButtonClick = () => inputFileRef.current?.click()
-
-  const handleEdit = () => {
-    setInitialUserInfo({ ...userInfo })
-    setIsEditMode(true)
-  }
-
-  const handleCancel = () => {
-    if (initialUserInfo) {
-      setUserInfo(initialUserInfo)
-      setInitialUserInfo(null)
-    }
-    setIsEditMode(false)
-  }
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const dataToSubmit = prepareDataForDatabase(userInfo)
-    await updateProfile(dataToSubmit)
-    setIsEditMode(false)
-    setInitialUserInfo(null)
-  }
+  /* =================== Responsive adjustments =================== */
 
   return (
     <PageLayout user={user}>
