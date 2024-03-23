@@ -5,13 +5,11 @@ import { getCode } from 'country-list'
 import useAuthContext from './useAuthContext'
 import { useToast } from '@chakra-ui/react'
 
-const useProfileUpdate = () => {
+const useProfile = () => {
   const { state } = useAuthContext()
   const { user } = state
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
   const toast = useToast()
-
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const inputFileRef = useRef<HTMLInputElement>(null)
 
@@ -32,35 +30,42 @@ const useProfileUpdate = () => {
   })
 
   useEffect(() => {
-    if (user && user.token) {
-      const fetchUserProfile = async () => {
-        try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/auth/profile`,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
-            },
-          )
-
-          const { data } = response
-          const formattedBirthDate = data.birthDate
-            ? new Date(data.birthDate).toISOString().split('T')[0]
-            : ''
-          setUserInfo({ ...data, birthDate: formattedBirthDate })
-        } catch (error) {
-          console.error('Failed to fetch user profile', error)
-          toast({
-            title: 'Failed to fetch user profile.',
-            description: 'Please try again later.',
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-          })
+    const fetchUserProfile = async () => {
+      setIsLoading(true)
+      try {
+        if (!user || !user.token) {
+          throw new Error('User or user token is not available.')
         }
-      }
 
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/auth/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          },
+        )
+
+        const { data } = response
+        const formattedBirthDate = data.birthDate
+          ? new Date(data.birthDate).toISOString().split('T')[0]
+          : ''
+        setUserInfo({ ...data, birthDate: formattedBirthDate })
+      } catch (error) {
+        console.error('Failed to fetch user profile', error)
+        toast({
+          title: 'Failed to fetch user profile.',
+          description: 'Please try again later.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (user && user.token) {
       fetchUserProfile()
     }
   }, [user, toast])
@@ -181,4 +186,4 @@ const useProfileUpdate = () => {
   }
 }
 
-export default useProfileUpdate
+export default useProfile
