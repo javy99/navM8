@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useAuthContext } from './hooks'
 
 import {
   Profile,
@@ -15,14 +14,11 @@ import {
 } from './pages'
 
 const App = () => {
-  const { state } = useAuthContext()
-  const { user } = state
-
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage user={user} />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />

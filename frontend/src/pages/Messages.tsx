@@ -1,19 +1,22 @@
 import React from 'react'
-import { Flex } from '@chakra-ui/react'
-import { Navbar, Sidebar } from '../components'
 import { useAuthContext } from '../hooks'
+import PageLayout from './PageLayout'
+import { Heading, VStack, useTheme } from '@chakra-ui/react'
 
-function Messages() {
+const Messages: React.FC = () => {
   const { state } = useAuthContext()
   const { user } = state
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
 
   return (
-    <Flex minHeight="100vh" direction={{ base: 'column', md: 'row' }}>
-      <Sidebar user={user} />
-      <Flex direction="column" flex="1" overflowY="auto">
-        <Navbar />
-      </Flex>
-    </Flex>
+    <PageLayout user={user}>
+      <VStack align="stretch" p={8}>
+        <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
+          Messages
+        </Heading>
+      </VStack>
+    </PageLayout>
   )
 }
 

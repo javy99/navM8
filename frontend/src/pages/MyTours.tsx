@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   Box,
   Flex,
@@ -15,196 +15,29 @@ import {
   useTheme,
   useBreakpointValue,
   ResponsiveValue,
-  useToast,
   Spinner,
 } from '@chakra-ui/react'
-// import { BsGeoAltFill } from 'react-icons/bs'
-import { Navbar, Sidebar, TourCard, Button, FormField } from '../components'
-import { useAuthContext } from '../hooks'
-import axios from 'axios'
-
-interface Tour {
-  _id?: string
-  name: string
-  country: string
-  city: string
-  maxPeople: string
-  typeOfAvailability: string
-  availability: string
-  date: string
-  from: string
-  to: string
-  description: string
-  photos: File[] | null
-}
+import { TourCard, Button, FormField } from '../components'
+import { useAuthContext, useMyTours } from '../hooks'
+import PageLayout from './PageLayout'
 
 const MyTours: React.FC = () => {
-  const toast = useToast()
-  const { state } = useAuthContext()
-  const { user } = state
+  const {
+    isLoading,
+    tours,
+    myTourInfo,
+    selectedFiles,
+    handleInputChange,
+    handleRemoveFile,
+    handleSubmit,
+  } = useMyTours()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [tours, setTours] = useState<Tour[]>([])
 
-  const [myTourInfo, setMyTourInfo] = useState<Tour>({
-    name: '',
-    country: '',
-    city: '',
-    maxPeople: '',
-    typeOfAvailability: '',
-    availability: '',
-    date: '',
-    from: '',
-    to: '',
-    description: '',
-    photos: null,
-  })
-
-  useEffect(() => {
-    const fetchTours = async () => {
-      setIsLoading(true)
-      if (!user?.token) {
-        setIsLoading(false)
-        return // Exit the function if there's no token
-      }
-      // Proceed with fetching tours if the token exists
-      setIsLoading(true)
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/auth/mytours`,
-          {
-            headers: { Authorization: `Bearer ${user.token}` },
-          },
-        )
-        setTours(response.data)
-      } catch (error) {
-        console.error('Error fetching tours:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchTours()
-  }, [user?.token]) // Fetch tours only once when component mounts
-
-  const handleInputChange = (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const target = event.target as HTMLInputElement
-    const { name, type } = target
-
-    if (type === 'file') {
-      const newFiles = target.files ? Array.from(target.files) : []
-      const updatedFiles = [...selectedFiles, ...newFiles]
-
-      setSelectedFiles(updatedFiles)
-
-      console.log('Immediately selected files:', updatedFiles)
-      setMyTourInfo((prevForm) => ({
-        ...prevForm,
-        [name]: updatedFiles,
-      }))
-    } else {
-      const value = target.value || ''
-      setMyTourInfo((prevForm) => ({
-        ...prevForm,
-        [name]: value,
-      }))
-    }
-  }
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault() // Prevent default form submission behavior
-
-    const formData = new FormData()
-    Object.entries(myTourInfo).forEach(([key, value]) => {
-      if (key === 'photos' && Array.isArray(value)) {
-        value.forEach((file: File) => {
-          formData.append('photos', file)
-        })
-      } else {
-        formData.append(key, value ?? '')
-      }
-    })
-
-    // Log FormData contents using Array.from()
-    const entries = Array.from(formData.entries())
-    entries.forEach(([key, value]) => {
-      console.log(`${key}:`, value, typeof value)
-    })
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/mytours`, // Adjust URL to your endpoint
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        },
-      )
-      console.log('Tour created successfully:', response.data)
-
-      // Assuming response.data contains the new tour details
-      const newTour = response.data
-      // Update the tours state to include the new tour
-      setTours((prevTours) => [...prevTours, newTour])
-
-      toast({
-        title: 'Tour Created',
-        description: 'Your tour has been successfully created.',
-        status: 'success',
-        duration: 5000, // Optional duration in milliseconds
-        isClosable: true,
-      })
-      onClose()
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error response:', error.response)
-        toast({
-          title: 'Error',
-          description:
-            'An error occurred while creating the tour. Please try again later.',
-          status: 'error',
-          duration: 5000, // Optional duration in milliseconds
-          isClosable: true,
-        })
-      } else {
-        console.error('An unexpected error occurred:', error)
-        toast({
-          title: 'Error',
-          description: 'An unexpected error occurred. Please try again later.',
-          status: 'error',
-          duration: 5000, // Optional duration in milliseconds
-          isClosable: true,
-        })
-      }
-    }
-  }
-
-  const handleRemoveFile = (indexToRemove, inputName) => {
-    setSelectedFiles((prevFiles) =>
-      prevFiles.filter((_, index) => index !== indexToRemove),
-    )
-    setMyTourInfo((prevInfo) => ({
-      ...prevInfo,
-      photos: prevInfo.photos
-        ? prevInfo.photos.filter((_, index) => index !== indexToRemove)
-        : null,
-    }))
-
-    // Reset the input file element value
-    const inputElement = document.querySelector(
-      `input[name="${inputName}"]`,
-    ) as HTMLInputElement
-    if (inputElement) inputElement.value = ''
-  }
+  const { state } = useAuthContext()
+  const { user } = state
 
   type FlexDirection =
     | 'row'
@@ -222,64 +55,48 @@ const MyTours: React.FC = () => {
   })
 
   return (
-    <Flex minHeight="100vh" direction={{ base: 'column', md: 'row' }}>
-      <Sidebar user={user} />
-      <Flex direction="column" flex="1" overflowY="auto">
-        <Navbar />
-        {isLoading ? (
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            minHeight="100vh"
-          >
-            <Spinner
-              size="xl"
-              color={primaryColor}
-              thickness="5px"
-              speed="1s"
-            />
-          </Box>
-        ) : (
-          <VStack align="stretch" p={8}>
-            <Flex alignItems="center" justifyContent="space-between" mb={4}>
-              <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
-                Offered Tours
-              </Heading>
-              <Button onClick={onOpen}>Add Tour</Button>
-            </Flex>
-            <Flex gap="5%" wrap={'wrap'}>
-              {tours.map((tour) => (
-                <TourCard width="45%" tour={tour} key={tour._id} />
-              ))}
-            </Flex>
-            <Box
-              width="100%"
-              borderTop={`2px dashed ${secondaryColor}`}
-              my={6}
-            />
-            <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
-              Upcoming Tours
+    <PageLayout user={user}>
+      {isLoading ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          minHeight="100vh"
+        >
+          <Spinner size="xl" color={primaryColor} thickness="5px" speed="1s" />
+        </Box>
+      ) : (
+        <VStack align="stretch" p={8}>
+          <Flex alignItems="center" justifyContent="space-between" mb={4}>
+            <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
+              Offered Tours
             </Heading>
-            <Flex gap="5%">
-              <TourCard width="45%" />
-              <TourCard width="45%" />
-            </Flex>
-            <Box
-              width="100%"
-              borderTop={`2px dashed ${secondaryColor}`}
-              my={6}
-            />
-            <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
-              Past Tours
-            </Heading>
-            <Flex gap="5%">
-              <TourCard width="45%" />
-              <TourCard width="45%" />
-            </Flex>
-          </VStack>
-        )}
-      </Flex>
+            <Button onClick={onOpen}>Add Tour</Button>
+          </Flex>
+          <Flex gap="5%" wrap={'wrap'}>
+            {tours.map((tour) => (
+              <TourCard width="45%" tour={tour} key={tour._id} />
+            ))}
+          </Flex>
+          <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
+          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
+            Upcoming Tours
+          </Heading>
+          <Flex gap="5%">
+            <TourCard width="45%" />
+            <TourCard width="45%" />
+          </Flex>
+          <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
+          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
+            Past Tours
+          </Heading>
+          <Flex gap="5%">
+            <TourCard width="45%" />
+            <TourCard width="45%" />
+          </Flex>
+        </VStack>
+      )}
+
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
         <ModalOverlay bg="rgba(0,0,0,0.7)" />
         <ModalContent
@@ -437,7 +254,7 @@ const MyTours: React.FC = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Flex>
+    </PageLayout>
   )
 }
 

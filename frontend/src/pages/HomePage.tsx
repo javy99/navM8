@@ -3,13 +3,13 @@ import { Flex, Text, Box, useTheme } from '@chakra-ui/react'
 import axios from 'axios'
 import { Navbar, SearchBar, Sidebar, Card, BookingCard } from '../components'
 import HeaderBgImage from '../assets/hero-bg6.jpg'
-import { Guide, User } from '../types'
+import { Guide } from '../types'
+import { useAuthContext } from '../hooks'
 
-interface Props {
-  user: User | null
-}
+const HomePage: React.FC = () => {
+  const { state } = useAuthContext()
+  const { user } = state
 
-const HomePage: React.FC<Props> = ({ user }) => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
