@@ -31,6 +31,8 @@ const MyTours: React.FC = () => {
   const {
     isLoading,
     tours,
+    upcomingTours,
+    pastTours,
     myTourInfo,
     selectedFiles,
     handleInputChange,
@@ -86,20 +88,38 @@ const MyTours: React.FC = () => {
             ))}
           </Flex>
           <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
-          <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
+          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
             Upcoming Tours
           </Heading>
-          <Flex>
-            {/* <TourCard width="45%" />
-            <TourCard width="45%" /> */}
+          <Flex
+            wrap={'wrap'}
+            gap={{ base: 4, md: 6, lg: 8 }}
+            mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
+          >
+            {upcomingTours.map((tour) => (
+              <TourCard
+                width={{ base: '100%', '2xl': '48%' }}
+                tour={tour}
+                key={tour._id}
+              />
+            ))}
           </Flex>
           <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
-          <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
+          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
             Past Tours
           </Heading>
-          <Flex>
-            {/* <TourCard width="45%" />
-            <TourCard width="45%" /> */}
+          <Flex
+            wrap={'wrap'}
+            gap={{ base: 4, md: 6, lg: 8 }}
+            mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
+          >
+            {pastTours.map((tour) => (
+              <TourCard
+                width={{ base: '100%', '2xl': '48%' }}
+                tour={tour}
+                key={tour._id}
+              />
+            ))}
           </Flex>
         </VStack>
       )}

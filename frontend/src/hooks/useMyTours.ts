@@ -26,6 +26,8 @@ const useMyTours = (onClose) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [myTourInfo, setMyTourInfo] = useState<Tour>(initialTourInfo)
+  const [upcomingTours, setUpcomingTours] = useState<Tour[]>([])
+  const [pastTours, setPastTours] = useState<Tour[]>([])
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -38,7 +40,17 @@ const useMyTours = (onClose) => {
             headers: { Authorization: `Bearer ${user.token}` },
           },
         )
-        setTours(response.data)
+        const allTours = response.data
+        const now = new Date()
+        const today = now.toISOString().split('T')[0]
+        const upcoming = allTours.filter(
+          (tour) => tour.date && tour.date >= today,
+        )
+        const past = allTours.filter((tour) => tour.date && tour.date < today)
+
+        setTours(allTours)
+        setUpcomingTours(upcoming)
+        setPastTours(past)
       } catch (error) {
         toast({
           title: 'Failed to fetch tours.',
@@ -165,6 +177,8 @@ const useMyTours = (onClose) => {
 
   return {
     tours,
+    upcomingTours,
+    pastTours,
     isLoading,
     selectedFiles,
     myTourInfo,
