@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Box,
   Flex,
@@ -9,6 +8,7 @@ import {
   useBreakpointValue,
   useTheme,
   ResponsiveValue,
+  // Spinner,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../hooks'
@@ -47,7 +47,7 @@ const MyBookings: React.FC = () => {
 
   return (
     <PageLayout user={user}>
-      <VStack align="stretch" p={8}>
+      <VStack align="stretch" p={8} mt={{ base: 12, md: 0 }}>
         <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
           My Bookings
         </Heading>

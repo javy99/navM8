@@ -18,6 +18,21 @@ export interface User {
   newPassword?: string
 }
 
+export interface Tour {
+  _id?: string
+  name: string
+  country: string
+  city: string
+  maxPeople: string
+  typeOfAvailability: string
+  availability: string
+  date: string
+  from: string
+  to: string
+  description: string
+  photos: (File | string)[]
+}
+
 export interface Guide {
   id: string
   name: string

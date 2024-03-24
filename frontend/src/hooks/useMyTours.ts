@@ -1,44 +1,31 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useAuthContext } from '.'
-import { useToast, useDisclosure } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
+import { Tour } from '../types'
 
-interface Tour {
-  _id?: string
-  name: string
-  country: string
-  city: string
-  maxPeople: string
-  typeOfAvailability: string
-  availability: string
-  date: string
-  from: string
-  to: string
-  description: string
-  photos: File[] | null
+const initialTourInfo = {
+  name: '',
+  country: '',
+  city: '',
+  maxPeople: '',
+  typeOfAvailability: '',
+  availability: '',
+  date: '',
+  from: '',
+  to: '',
+  description: '',
+  photos: [],
 }
 
-const useMyTours = () => {
+const useMyTours = (onClose) => {
   const toast = useToast()
-  const { onClose } = useDisclosure()
   const { state } = useAuthContext()
   const { user } = state
   const [tours, setTours] = useState<Tour[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [myTourInfo, setMyTourInfo] = useState<Tour>({
-    name: '',
-    country: '',
-    city: '',
-    maxPeople: '',
-    typeOfAvailability: '',
-    availability: '',
-    date: '',
-    from: '',
-    to: '',
-    description: '',
-    photos: null,
-  })
+  const [myTourInfo, setMyTourInfo] = useState<Tour>(initialTourInfo)
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -53,7 +40,13 @@ const useMyTours = () => {
         )
         setTours(response.data)
       } catch (error) {
-        console.error('Error fetching tours:', error)
+        toast({
+          title: 'Failed to fetch tours.',
+          description: 'Please try again later.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
       } finally {
         setIsLoading(false)
       }
@@ -76,7 +69,6 @@ const useMyTours = () => {
 
       setSelectedFiles(updatedFiles)
 
-      console.log('Immediately selected files:', updatedFiles)
       setMyTourInfo((prevForm) => ({
         ...prevForm,
         [name]: updatedFiles,
@@ -91,7 +83,7 @@ const useMyTours = () => {
   }
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault() // Prevent default form submission behavior
+    event.preventDefault()
 
     const formData = new FormData()
     Object.entries(myTourInfo).forEach(([key, value]) => {
@@ -112,7 +104,7 @@ const useMyTours = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/mytours`, // Adjust URL to your endpoint
+        `${import.meta.env.VITE_API_URL}/auth/mytours`,
         formData,
         {
           headers: {
@@ -122,39 +114,43 @@ const useMyTours = () => {
       )
       console.log('Tour created successfully:', response.data)
 
-      // Assuming response.data contains the new tour details
       const newTour = response.data
-      // Update the tours state to include the new tour
       setTours((prevTours) => [...prevTours, newTour])
 
       toast({
-        title: 'Tour Created',
+        title: 'Tour Created successfully.',
         description: 'Your tour has been successfully created.',
         status: 'success',
         duration: 5000,
         isClosable: true,
       })
+      setMyTourInfo(initialTourInfo)
+      setSelectedFiles([])
+
       onClose()
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('Axios error response:', error.response)
+        const message =
+          error.response?.data?.error ||
+          'An error occurred while creating tour.'
+
         toast({
-          title: 'Error',
-          description:
-            'An error occurred while creating the tour. Please try again later.',
+          title: 'Error creating tour.',
+          description: message,
           status: 'error',
-          duration: 5000, 
+          duration: 5000,
           isClosable: true,
         })
       } else {
-        console.error('An unexpected error occurred:', error)
-        toast({
-          title: 'Error',
-          description: 'An unexpected error occurred. Please try again later.',
-          status: 'error',
-          duration: 5000, 
-          isClosable: true,
-        })
+        if (error instanceof Error) {
+          toast({
+            title: 'Error creating tour.',
+            description: error.message,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+        }
       }
     }
   }

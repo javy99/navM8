@@ -68,6 +68,29 @@ const tourSchema: MongooseSchema = new Schema({
     required: function () {
       return this.typeOfAvailability === 'one-time'
     },
+    // validate: {
+    //   validator: function (value: Date) {
+    //     const today = new Date()
+    //     today.setHours(0, 0, 0, 0)
+    //     return value >= today
+    //   },
+    //   message: 'The date cannot be in the past.',
+    // },
+    validate: {
+      validator: function (value: string) {
+        const inputDate = new Date(value)
+        inputDate.setHours(0, 0, 0, 0) // Resets hours for the date comparison
+
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+
+        const tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+
+        return inputDate >= tomorrow
+      },
+      message: 'The date must be from tomorrow onwards.',
+    },
   },
   from: {
     type: String,
@@ -79,6 +102,7 @@ const tourSchema: MongooseSchema = new Schema({
   },
   description: {
     type: String,
+    minLength: 10,
     required: true,
   },
   photos: {

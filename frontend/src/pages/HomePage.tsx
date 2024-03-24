@@ -36,6 +36,7 @@ const HomePage: React.FC = () => {
         color="white"
         py={20}
         px={4}
+        mt={{ base: 12, md: 0 }}
         textAlign="center"
       >
         <Text fontSize="3xl" fontWeight="bold" mb={4}>

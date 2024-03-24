@@ -22,6 +22,12 @@ import { useAuthContext, useMyTours } from '../hooks'
 import PageLayout from './PageLayout'
 
 const MyTours: React.FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const secondaryColor = theme.colors.secondary
+  const { state } = useAuthContext()
+  const { user } = state
   const {
     isLoading,
     tours,
@@ -30,14 +36,7 @@ const MyTours: React.FC = () => {
     handleInputChange,
     handleRemoveFile,
     handleSubmit,
-  } = useMyTours()
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const theme = useTheme()
-  const primaryColor = theme.colors.primary
-  const secondaryColor = theme.colors.secondary
-
-  const { state } = useAuthContext()
-  const { user } = state
+  } = useMyTours(onClose)
 
   type FlexDirection =
     | 'row'
@@ -66,33 +65,41 @@ const MyTours: React.FC = () => {
           <Spinner size="xl" color={primaryColor} thickness="5px" speed="1s" />
         </Box>
       ) : (
-        <VStack align="stretch" p={8}>
+        <VStack align="stretch" p={8} mt={{ base: 12, md: 0 }}>
           <Flex alignItems="center" justifyContent="space-between" mb={4}>
             <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
               Offered Tours
             </Heading>
             <Button onClick={onOpen}>Add Tour</Button>
           </Flex>
-          <Flex gap="5%" wrap={'wrap'}>
+          <Flex
+            wrap={'wrap'}
+            gap={{ base: 4, md: 6, lg: 8 }}
+            mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
+          >
             {tours.map((tour) => (
-              <TourCard width="45%" tour={tour} key={tour._id} />
+              <TourCard
+                width={{ base: '100%', '2xl': '48%' }}
+                tour={tour}
+                key={tour._id}
+              />
             ))}
           </Flex>
           <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
-          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
+          <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
             Upcoming Tours
           </Heading>
-          <Flex gap="5%">
-            <TourCard width="45%" />
-            <TourCard width="45%" />
+          <Flex>
+            {/* <TourCard width="45%" />
+            <TourCard width="45%" /> */}
           </Flex>
           <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
-          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
+          <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
             Past Tours
           </Heading>
-          <Flex gap="5%">
-            <TourCard width="45%" />
-            <TourCard width="45%" />
+          <Flex>
+            {/* <TourCard width="45%" />
+            <TourCard width="45%" /> */}
           </Flex>
         </VStack>
       )}
@@ -127,7 +134,6 @@ const MyTours: React.FC = () => {
                 type="text"
                 value={myTourInfo.name}
                 onChange={handleInputChange}
-                isRequired={true}
               />
 
               <Flex direction={formControlLayout} gap={inputGap}>
@@ -137,7 +143,6 @@ const MyTours: React.FC = () => {
                   type="text"
                   value={myTourInfo.country}
                   onChange={handleInputChange}
-                  isRequired={true}
                 />
                 <FormField
                   label="City"
@@ -145,7 +150,6 @@ const MyTours: React.FC = () => {
                   type="text"
                   value={myTourInfo.city}
                   onChange={handleInputChange}
-                  isRequired={true}
                 />
               </Flex>
 
@@ -163,7 +167,6 @@ const MyTours: React.FC = () => {
                       label: `${i + 1} ${i + 1 === 1 ? 'Person' : 'People'}`,
                     })),
                   ]}
-                  // disabled={!isEditMode}
                 />
                 <FormField
                   label="Type of Availability"
@@ -214,7 +217,6 @@ const MyTours: React.FC = () => {
                   type="time"
                   value={myTourInfo.from}
                   onChange={handleInputChange}
-                  // disabled={!isEditMode}
                 />
                 <FormField
                   label="To"
@@ -222,10 +224,8 @@ const MyTours: React.FC = () => {
                   type="time"
                   value={myTourInfo.to}
                   onChange={handleInputChange}
-                  // disabled={!isEditMode}
                 />
               </Flex>
-
               <FormField
                 label="Description"
                 name="description"
@@ -233,7 +233,6 @@ const MyTours: React.FC = () => {
                 value={myTourInfo.description}
                 onChange={handleInputChange}
               />
-
               <FormField
                 label="Upload Photos"
                 name="photos"
@@ -245,7 +244,6 @@ const MyTours: React.FC = () => {
               />
             </VStack>
           </ModalBody>
-
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
               Save

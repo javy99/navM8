@@ -18,7 +18,7 @@ import { BsCameraFill, BsXCircleFill } from 'react-icons/bs'
 import Button from './Button'
 
 interface Props {
-  label: string
+  label?: string
   name: string
   type: string
   value?: string | number | readonly string[] | undefined
@@ -34,6 +34,9 @@ interface Props {
   multiple?: boolean
   selectedFiles?: File[]
   onRemoveFile?: (index: number, name: string) => void | undefined
+  sx?: any
+  placeholder?: string
+  color?: string
 }
 
 const FormField: React.FC<Props> = ({
@@ -49,6 +52,9 @@ const FormField: React.FC<Props> = ({
   multiple,
   selectedFiles,
   onRemoveFile,
+  sx,
+  placeholder,
+  color,
 }) => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary
@@ -211,6 +217,9 @@ const FormField: React.FC<Props> = ({
             value={value}
             disabled={disabled}
             onChange={onChange}
+            sx={sx}
+            placeholder={placeholder}
+            color={color}
             {...formInputStyle}
           />
         </InputGroup>

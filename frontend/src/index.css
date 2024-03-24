@@ -12,5 +12,19 @@
 ::-webkit-scrollbar-thumb {
   background: #fff;
   border: 1px solid #0b6b78; /* Border color and width */
+}
 
+.swiper-pagination-bullet {
+  background: #fff;
+  border: 2px solid #0b6b78;
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+}
+
+/* Style the active bullet */
+.swiper-pagination-bullet-active {
+  background: #0b6b78;
+}
+.swiper-pagination-bullet:hover {
+  transform: scale(1.2);
 }

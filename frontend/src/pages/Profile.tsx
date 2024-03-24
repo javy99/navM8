@@ -125,6 +125,8 @@ const Profile: React.FC = () => {
             minHeight={{ base: '14rem', md: '15rem', lg: '16rem', xl: '18rem' }}
             bgPosition="center"
             position="relative"
+            mt={{ base: 12, md: 0 }}
+
           >
             <Flex
               alignItems="center"

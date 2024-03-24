@@ -52,7 +52,6 @@ const useProfile = () => {
           : ''
         setUserInfo({ ...data, birthDate: formattedBirthDate })
       } catch (error) {
-        console.error('Failed to fetch user profile', error)
         toast({
           title: 'Failed to fetch user profile.',
           description: 'Please try again later.',
@@ -75,7 +74,6 @@ const useProfile = () => {
     : undefined
 
   const updateProfile = async (userInfo: User) => {
-    setIsLoading(true)
     const updateProfileUrl = `${import.meta.env.VITE_API_URL}/auth/profile`
 
     try {
@@ -84,7 +82,7 @@ const useProfile = () => {
           Authorization: `Bearer ${user?.token}`,
         },
       })
-
+      setIsEditMode(false)
       toast({
         title: 'Profile updated successfully.',
         status: 'success',
@@ -93,9 +91,11 @@ const useProfile = () => {
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        setIsEditMode(true)
+
         const message =
           error.response?.data?.error ||
-          'An error occurred while updating the profile.'
+          'An error occurred while updating profile.'
         toast({
           title: 'Error updating profile.',
           description: message,
@@ -112,8 +112,6 @@ const useProfile = () => {
           isClosable: true,
         })
       }
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -168,7 +166,6 @@ const useProfile = () => {
     event.preventDefault()
     const dataToSubmit = prepareDataForDatabase(userInfo)
     await updateProfile(dataToSubmit)
-    setIsEditMode(false)
     setInitialUserInfo(null)
   }
 

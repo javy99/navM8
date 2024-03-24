@@ -1,8 +1,32 @@
-import { Text, VStack, Icon, Flex, Image, useTheme } from '@chakra-ui/react'
-import { BsPersonFill, BsCalendar2, BsGeoAltFill } from 'react-icons/bs'
+import {
+  Text,
+  Box,
+  Stack,
+  Image,
+  useTheme,
+  Card,
+  CardBody,
+  Heading,
+  Flex,
+  Icon,
+} from '@chakra-ui/react'
+import { BsPersonFill, BsGeoAltFill, BsCalendar4 } from 'react-icons/bs'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
+
+type ResponsiveWidth = {
+  base?: string
+  sm?: string
+  md?: string
+  lg?: string
+  xl?: string
+  [key: string]: string | undefined
+}
 
 type Props = {
-  width: string | undefined
+  width: string | ResponsiveWidth | undefined
   tour?: any
 }
 
@@ -16,56 +40,79 @@ const TourCard: React.FC<Props> = ({ width, tour }) => {
   }
 
   return (
-    <Flex
-      flexDirection="row"
-      borderRadius="20px"
+    <Card
+      direction={{ base: 'column', sm: 'row' }}
       overflow="hidden"
+      variant="outline"
+      borderRadius="20px"
       width={width}
       bg="#F6FBFC"
-      transition="all 0.3s"
-      _hover={{
-        transform: 'translateY(-5px)',
-        boxShadow: '0 4px 4px 0 #69490b',
-      }}
+      boxShadow="0 4px 4px 0 #69490b"
       cursor="pointer"
       onClick={openCardDetails}
-      boxShadow="0 4px 4px 0 #69490b"
-      mb={6}
     >
-      <VStack>
-        <Image
-          src={tour?.photos[0]}
-          alt=""
-          width="45%"
-          height="100%"
+      {tour.photos.length > 0 && (
+        <Box
+          maxW={{ base: '100%', sm: '200px' }}
+          overflow="hidden"
           objectFit="cover"
-        />
-      </VStack>
-      <Flex flexDirection="column" pl={5} justifyContent="center" p={3}>
-        <Text fontWeight="bold" fontSize="xl" mb={3} color={primaryColor}>
-          Tour name: {tour?.name}
-        </Text>
-        <Flex mb={3}>
-          <Icon as={BsCalendar2} color="#EC502C" w={5} h={5} />
-          <Text ml={2} color={secondaryColor}>
-            {tour?.from} - {tour?.to}
-          </Text>
-        </Flex>
-        <Flex mb={3}>
-          <Icon as={BsGeoAltFill} color="#EC502C" w={5} h={5} />
-          <Text ml={2} color={secondaryColor}>
-            {tour?.destination}
-          </Text>
-        </Flex>
-        <Flex mb={3}>
-          <Icon as={BsPersonFill} color="#EC502C" w={5} h={5} />
-          <Text ml={2} color={secondaryColor}>
-            {tour?.maxPeople} people
-          </Text>
-        </Flex>
-        <Text mb={3}>{tour?.description}</Text>
-      </Flex>
-    </Flex>
+        >
+          <Swiper
+            modules={[Pagination]}
+            spaceBetween={50}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          >
+            {tour.photos.map((photo, index) => (
+              <SwiperSlide key={index}>
+                <Image
+                  src={photo}
+                  alt={`tour-${index + 1}`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </Box>
+      )}
+      <Stack>
+        <CardBody>
+          <Heading size="md" color={primaryColor}>
+            {tour.name}
+          </Heading>
+
+          <Text py={3}>{tour.description}</Text>
+          <Flex alignItems="center">
+            <Icon as={BsCalendar4} color="#EC502C" w={5} h={5} />
+            <Text ml={2} color={secondaryColor}>
+              {tour.typeOfAvailability === 'recurring' ? (
+                <>
+                  {tour.availability === 'daily' ? 'Daily' : ''}
+                  {tour.availability === 'weekends' ? 'Weekends' : ''}
+                  {tour.availability === 'weekdays' ? 'Weekdays' : ''}
+                </>
+              ) : (
+                new Date(tour.date).toLocaleDateString()
+              )}
+              , {tour.from} - {tour.to}
+            </Text>
+          </Flex>
+          <Flex py={3}>
+            <Icon as={BsGeoAltFill} color="#EC502C" w={5} h={5} />
+            <Text ml={2} color={secondaryColor}>
+              {tour.country}, {tour.city}
+            </Text>
+          </Flex>
+          <Flex>
+            <Icon as={BsPersonFill} color={primaryColor} w={5} h={5} />
+            <Text ml={2} color={secondaryColor}>
+              {tour.maxPeople} people
+            </Text>
+          </Flex>
+        </CardBody>
+      </Stack>
+    </Card>
   )
 }
 

@@ -27,7 +27,7 @@ const Favorites: React.FC = () => {
 
   return (
     <PageLayout user={user}>
-      <VStack align="stretch" p={8}>
+      <VStack align="stretch" mt={{ base: 12, md: 0 }} p={8}>
         <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
           Favorites
         </Heading>
