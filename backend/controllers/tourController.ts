@@ -16,12 +16,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-async function uploadImageToCloudinary(filePath: string): Promise<string> {
+async function uploadTourImageToCloudinary(filePath: string): Promise<string> {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       folder: 'tourPhotos',
     })
-    return result.secure_url // URL of the uploaded image
+    return result.secure_url 
   } catch (error) {
     console.error('Cloudinary Upload Error:', error)
     throw new Error(`Failed to upload image: ${error.message}`)
@@ -46,7 +46,7 @@ const createTour = async (req: MulterRequest, res: Response) => {
     // Check if `req.files` exists and has files
     const files = req.files ?? []
     const imageUrls = await Promise.all(
-      files.map((file) => uploadImageToCloudinary(file.path)),
+      files.map((file) => uploadTourImageToCloudinary(file.path)),
     )
 
     const tour = new Tour({

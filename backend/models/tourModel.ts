@@ -68,18 +68,10 @@ const tourSchema: MongooseSchema = new Schema({
     required: function () {
       return this.typeOfAvailability === 'one-time'
     },
-    // validate: {
-    //   validator: function (value: Date) {
-    //     const today = new Date()
-    //     today.setHours(0, 0, 0, 0)
-    //     return value >= today
-    //   },
-    //   message: 'The date cannot be in the past.',
-    // },
     validate: {
       validator: function (value: string) {
         const inputDate = new Date(value)
-        inputDate.setHours(0, 0, 0, 0) // Resets hours for the date comparison
+        inputDate.setHours(0, 0, 0, 0)
 
         const today = new Date()
         today.setHours(0, 0, 0, 0)

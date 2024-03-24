@@ -1,54 +1,65 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useAuthContext } from '../hooks'
 import { ChildrenProps } from '../types'
+import { useProfilePhotoService } from '../services'
+import { useAuthContext } from '../hooks'
 
 interface ProfilePhotoContextType {
-  photo: string
-  updatePhoto: (newPhoto: string) => void
-  removePhoto: () => void
+  photo: string | null
+  updatePhoto: (file: File | null) => Promise<void>
+  removePhoto: () => Promise<void>
 }
 
 const defaultContextValue: ProfilePhotoContextType = {
-  photo: '',
-  updatePhoto: () => {},
-  removePhoto: () => {},
+  photo: null,
+  updatePhoto: async () => {},
+  removePhoto: async () => {},
 }
 
 export const ProfilePhotoContext =
   createContext<ProfilePhotoContextType>(defaultContextValue)
 
 export const ProfilePhotoProvider: React.FC<ChildrenProps> = ({ children }) => {
+  const { fetchProfilePhoto, updateProfilePhoto, removeProfilePhoto } =
+    useProfilePhotoService()
   const { state } = useAuthContext()
   const { user } = state
-
-  const [photo, setPhoto] = useState<string>('')
-
-  useEffect(() => {
-    const currentPhoto =
-      localStorage.getItem(`userProfilePhoto_${user?.id}`) || ''
-    setPhoto(currentPhoto)
-  }, [user?.id]) // React to changes in user.id
+  const [photo, setPhoto] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user?.id) {
-      if (photo) {
-        localStorage.setItem(`userProfilePhoto_${user.id}`, photo)
-      } else {
-        localStorage.removeItem(`userProfilePhoto_${user.id}`)
-      }
+    if (user && user.token) {
+      fetchProfilePhoto()
+        .then((photoUrl) => {
+          setPhoto(photoUrl)
+        })
+        .catch((error) => {
+          console.error('Error fetching profile photo:', error)
+        })
     }
-  }, [photo, user?.id])
+  }, [user, photo])
 
-  const updatePhoto = (newPhoto: string) => {
-    if (newPhoto) {
-      setPhoto(newPhoto)
-    } else {
-      console.error('Cannot update photo: new photo is empty')
+  const updatePhoto = async (file: File | null) => {
+    try {
+      let photoUrl
+      if (file) {
+        photoUrl = await updateProfilePhoto(file)
+      } else {
+        await removeProfilePhoto()
+        photoUrl = null
+      }
+      setPhoto(photoUrl)
+    } catch (error) {
+      console.error('Error updating/removing profile photo:', error)
+      throw error
     }
   }
 
-  const removePhoto = () => {
-    setPhoto('')
+  const removePhoto = async () => {
+    try {
+      await removeProfilePhoto()
+      setPhoto(null)
+    } catch (error) {
+      console.error('Error removing profile photo:', error)
+    }
   }
 
   return (

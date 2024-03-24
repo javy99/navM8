@@ -126,7 +126,6 @@ const Profile: React.FC = () => {
             bgPosition="center"
             position="relative"
             mt={{ base: 12, md: 0 }}
-
           >
             <Flex
               alignItems="center"

@@ -8,6 +8,7 @@ export default interface IUser extends Document {
   username: string
   email: string
   password: string
+  profilePictureURL?: string
   firstName?: string
   lastName?: string
   phoneNumber?: string
@@ -67,6 +68,11 @@ const userSchema: MongooseSchema = new Schema({
     },
   },
   // profile fields
+  // profile picture
+
+  profilePictureURL: {
+    type: String,
+  },
   firstName: {
     type: String,
     required: true,

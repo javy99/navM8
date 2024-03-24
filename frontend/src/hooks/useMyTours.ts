@@ -124,7 +124,6 @@ const useMyTours = (onClose) => {
           },
         },
       )
-      console.log('Tour created successfully:', response.data)
 
       const newTour = response.data
       setTours((prevTours) => [...prevTours, newTour])
