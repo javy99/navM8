@@ -31,7 +31,6 @@ export interface IUserModel extends Model<IUser> {
 const { Schema } = mongoose
 
 const userSchema: MongooseSchema = new Schema({
-  // signup/login fields
   username: {
     type: String,
     required: true,
@@ -67,25 +66,19 @@ const userSchema: MongooseSchema = new Schema({
       message: (props) => `${props.value} is not a strong enough password!`,
     },
   },
-  // profile fields
-  // profile picture
-
   profilePictureURL: {
     type: String,
   },
   firstName: {
     type: String,
-    required: true,
     trim: true,
   },
   lastName: {
     type: String,
-    required: true,
     trim: true,
   },
   phoneNumber: {
     type: String,
-    required: true,
     validate: {
       validator: (value) => validator.isMobilePhone(value, 'any'),
       message: (props) => `${props.value} is not a valid phone number!`,
@@ -93,7 +86,6 @@ const userSchema: MongooseSchema = new Schema({
   },
   country: {
     type: String,
-    required: true,
     validate: {
       validator: (value: string) =>
         Country.getAllCountries().some((country) => country.name === value),
@@ -103,7 +95,6 @@ const userSchema: MongooseSchema = new Schema({
   },
   city: {
     type: String,
-    required: true,
     validate: {
       validator: function (value: string) {
         const country = Country.getAllCountries().find(
@@ -122,11 +113,9 @@ const userSchema: MongooseSchema = new Schema({
   },
   birthDate: {
     type: Date,
-    required: true,
   },
   gender: {
     type: String,
-    required: true,
     enum: ['male', 'female'],
   },
   languagesSpoken: {
@@ -141,7 +130,6 @@ const userSchema: MongooseSchema = new Schema({
     type: String,
     minLength: 10,
   },
-  // tour fields
   favoriteTours: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Tour',
@@ -158,7 +146,6 @@ userSchema.statics.signup = async function (
   email: string,
   password: string,
 ): Promise<IUser> {
-  // Basic validation
   if (!email || !password || !username) {
     throw Error('All fields must be filled')
   }

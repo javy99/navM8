@@ -70,16 +70,19 @@ const tourSchema: MongooseSchema = new Schema({
     },
     validate: {
       validator: function (value: string) {
-        const inputDate = new Date(value)
-        inputDate.setHours(0, 0, 0, 0)
+        if (this.typeOfAvailability === 'one-time') {
+          const inputDate = new Date(value)
+          inputDate.setHours(0, 0, 0, 0)
 
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
 
-        const tomorrow = new Date(today)
-        tomorrow.setDate(tomorrow.getDate() + 1)
+          const tomorrow = new Date(today)
+          tomorrow.setDate(tomorrow.getDate() + 1)
 
-        return inputDate >= tomorrow
+          return inputDate >= tomorrow
+        }
+        return true
       },
       message: 'The date must be from tomorrow onwards.',
     },

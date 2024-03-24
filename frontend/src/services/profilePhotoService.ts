@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useAuthContext } from '../hooks'
 
-const useProfilePhotoService = () => {
+const profilePhotoService = () => {
   const { state } = useAuthContext()
   const { user } = state
 
@@ -79,4 +79,4 @@ const useProfilePhotoService = () => {
   return { fetchProfilePhoto, updateProfilePhoto, removeProfilePhoto }
 }
 
-export default useProfilePhotoService
+export default profilePhotoService

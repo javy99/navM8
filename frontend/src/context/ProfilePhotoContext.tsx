@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { ChildrenProps } from '../types'
-import { useProfilePhotoService } from '../services'
+import { profilePhotoService } from '../services'
 import { useAuthContext } from '../hooks'
 
 interface ProfilePhotoContextType {
@@ -20,7 +20,7 @@ export const ProfilePhotoContext =
 
 export const ProfilePhotoProvider: React.FC<ChildrenProps> = ({ children }) => {
   const { fetchProfilePhoto, updateProfilePhoto, removeProfilePhoto } =
-    useProfilePhotoService()
+    profilePhotoService()
   const { state } = useAuthContext()
   const { user } = state
   const [photo, setPhoto] = useState<string | null>(null)

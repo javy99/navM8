@@ -4,6 +4,7 @@ import axios from 'axios'
 import { getCode } from 'country-list'
 import useAuthContext from './useAuthContext'
 import { useToast } from '@chakra-ui/react'
+import { fetchUserProfile, updateUserProfile } from '../services'
 
 const useProfile = () => {
   const { state } = useAuthContext()
@@ -12,7 +13,6 @@ const useProfile = () => {
   const toast = useToast()
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const inputFileRef = useRef<HTMLInputElement>(null)
-
   const [initialUserInfo, setInitialUserInfo] = useState<User | null>(null)
   const [userInfo, setUserInfo] = useState<User>({
     firstName: '',
@@ -30,23 +30,14 @@ const useProfile = () => {
   })
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchData = async () => {
       setIsLoading(true)
       try {
         if (!user || !user.token) {
           throw new Error('User or user token is not available.')
         }
 
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/auth/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          },
-        )
-
-        const { data } = response
+        const data = await fetchUserProfile(user.token)
         const formattedBirthDate = data.birthDate
           ? new Date(data.birthDate).toISOString().split('T')[0]
           : ''
@@ -65,7 +56,7 @@ const useProfile = () => {
     }
 
     if (user && user.token) {
-      fetchUserProfile()
+      fetchData()
     }
   }, [user, toast])
 
@@ -74,14 +65,11 @@ const useProfile = () => {
     : undefined
 
   const updateProfile = async (userInfo: User) => {
-    const updateProfileUrl = `${import.meta.env.VITE_API_URL}/auth/profile`
-
     try {
-      await axios.patch(updateProfileUrl, userInfo, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
+      if (!user || !user.token) {
+        throw new Error('User or user token is not available.')
+      }
+      await updateUserProfile(user.token, userInfo)
       setIsEditMode(false)
       toast({
         title: 'Profile updated successfully.',

@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useAuthContext } from '.'
 import { useToast } from '@chakra-ui/react'
 import { Tour } from '../types'
+import { fetchMyTours, createTour } from '../services'
 
 const initialTourInfo = {
   name: '',
@@ -34,13 +35,7 @@ const useMyTours = (onClose) => {
       if (!user?.token) return
       setIsLoading(true)
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/auth/mytours`,
-          {
-            headers: { Authorization: `Bearer ${user.token}` },
-          },
-        )
-        const allTours = response.data
+        const allTours = await fetchMyTours(user.token)
         const now = new Date()
         const today = now.toISOString().split('T')[0]
         const upcoming = allTours.filter(
@@ -85,6 +80,8 @@ const useMyTours = (onClose) => {
         ...prevForm,
         [name]: updatedFiles,
       }))
+
+      target.value = ''
     } else {
       const value = target.value || ''
       setMyTourInfo((prevForm) => ({
@@ -115,17 +112,22 @@ const useMyTours = (onClose) => {
     })
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/mytours`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        },
-      )
+      if (!user?.token) {
+        throw new Error('User token is not available.')
+      }
 
-      const newTour = response.data
+      const formData = new FormData()
+      Object.entries(myTourInfo).forEach(([key, value]) => {
+        if (key === 'photos' && Array.isArray(value)) {
+          value.forEach((file: File) => {
+            formData.append('photos', file)
+          })
+        } else {
+          formData.append(key, value ?? '')
+        }
+      })
+
+      const newTour = await createTour(formData, user.token)
       setTours((prevTours) => [...prevTours, newTour])
 
       toast({
@@ -170,7 +172,7 @@ const useMyTours = (onClose) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index))
     setMyTourInfo((prev) => ({
       ...prev,
-      photos: prev.photos?.filter((_, i) => i !== index) || null,
+      photos: prev.photos?.filter((_, i) => i !== index) || [],
     }))
   }
 

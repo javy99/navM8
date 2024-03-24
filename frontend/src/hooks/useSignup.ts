@@ -1,5 +1,7 @@
+// useSignup.ts
 import { useState } from 'react'
 import { useAuthContext } from '.'
+import { signupService } from '../services'
 
 const useSignup = () => {
   const [error, setError] = useState<string | null>(null)
@@ -11,21 +13,7 @@ const useSignup = () => {
     setError(null)
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/signup`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password, username }),
-        },
-      )
-      const json = await response.json()
-
-      if (!response.ok) {
-        throw new Error(json.error || 'An error occurred during signup')
-      }
+      const json = await signupService(email, password, username)
 
       localStorage.setItem('user', JSON.stringify(json))
       dispatch({ type: 'LOGIN', payload: json })
