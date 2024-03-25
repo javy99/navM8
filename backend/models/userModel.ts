@@ -1,7 +1,7 @@
-import { Country, City } from 'country-state-city'
 import mongoose, { Model, Schema as MongooseSchema } from 'mongoose'
 import * as bcrypt from 'bcrypt'
 import validator from 'validator'
+import { Country, City } from 'country-state-city'
 
 export default interface IUser extends Document {
   _id: mongoose.Schema.Types.ObjectId
@@ -197,5 +197,4 @@ userSchema.statics.login = async function (
 }
 
 const User: IUserModel = mongoose.model<IUser, IUserModel>('User', userSchema)
-
 export { User, IUser }

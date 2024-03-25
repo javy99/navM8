@@ -12,7 +12,7 @@ const profilePhotoService = () => {
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/auth/profile/photo`,
+        `${import.meta.env.VITE_API_URL}/user/photo`,
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -41,7 +41,7 @@ const profilePhotoService = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/profile/photo`,
+        `${import.meta.env.VITE_API_URL}/user/photo`,
         formData,
         {
           headers: {
@@ -59,7 +59,7 @@ const profilePhotoService = () => {
 
   const removeProfilePhoto = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/auth/profile/photo`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/user/photo`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },

@@ -1,11 +1,11 @@
+import * as jwt from 'jsonwebtoken'
+import * as bcrypt from 'bcrypt'
+import * as dotenv from 'dotenv'
+import validator from 'validator'
 import { v2 as cloudinary } from 'cloudinary'
 import { Country, City } from 'country-state-city'
 import { Request, Response } from 'express'
-import * as jwt from 'jsonwebtoken'
-import * as bcrypt from 'bcrypt'
-import validator from 'validator'
-import { User } from '../models/userModel'
-import * as dotenv from 'dotenv'
+import { User } from '../models'
 
 dotenv.config()
 
@@ -64,7 +64,7 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-// update user
+// Profile
 const updateProfile = async (req: Request, res: Response): Promise<void> => {
   const {
     firstName,
@@ -95,7 +95,6 @@ const updateProfile = async (req: Request, res: Response): Promise<void> => {
       return
     }
 
-    // Validate country and city
     if (country && !Country.getAllCountries().some((c) => c.name === country)) {
       throw Error('Invalid country')
     }
@@ -114,7 +113,6 @@ const updateProfile = async (req: Request, res: Response): Promise<void> => {
       }
     }
 
-    // Update fields
     user.firstName = firstName || user.firstName
     user.lastName = lastName || user.lastName
     user.phoneNumber = phoneNumber || user.phoneNumber
@@ -127,7 +125,6 @@ const updateProfile = async (req: Request, res: Response): Promise<void> => {
     user.interests = interests || user.interests
     user.bio = bio || user.bio
 
-    // Optional: Change password
     if (currentPassword && newPassword) {
       const match = await bcrypt.compare(currentPassword, user.password)
       if (!match) throw Error('Current password is incorrect')
@@ -150,51 +147,30 @@ const updateProfile = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-// const uploadProfilePhoto = async (req: Request, res: Response) => {
-//   if (!req.file) {
-//     return res.status(400).json({ error: 'No file uploaded.' })
-//   }
+const getProfile = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(404).json({ error: 'User not found.' })
+    }
+    res.json(req.user)
+  } catch (error) {
+    console.error('Error fetching user profile:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
 
-//   if (!req.user?._id) {
-//     return res.status(400).json({ error: 'User authentication failed.' })
-//   }
-
-//   try {
-//     const result = await cloudinary.uploader.upload(req.file.path, {
-//       folder: 'userProfilePhotos',
-//     })
-
-//     const updatedUser = await User.findByIdAndUpdate(
-//       req.user._id,
-//       {
-//         profilePictureURL: result.secure_url,
-//       },
-//       { new: true },
-//     )
-
-//     res.json({
-//       message: 'Profile photo uploaded successfully',
-//       profilePictureURL: result.secure_url,
-//     })
-//   } catch (error) {
-//     console.error('Error uploading profile photo:', error)
-//     res.status(500).json({ error: 'Internal server error' })
-//   }
-// }
-
+// Profile Photo
 const uploadProfilePhoto = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded.' })
   }
 
-  // Example of additional checks for file type and size
   const fileType = req.file.mimetype
   const fileSize = req.file.size
   if (
     !['image/jpeg', 'image/png'].includes(fileType) ||
     fileSize > 1024 * 1024 * 5
   ) {
-    // 5MB limit
     return res.status(400).json({ error: 'Invalid file type or size.' })
   }
 
@@ -205,12 +181,9 @@ const uploadProfilePhoto = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: 'userProfilePhotos',
-      // Ensure the uploaded files are not public if sensitive
       secure: true,
       resource_type: 'image',
     })
-
-    // Ensure file from req.file.path is deleted if temporary
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
@@ -228,7 +201,7 @@ const uploadProfilePhoto = async (req, res) => {
   }
 }
 
-const getProfilePhoto = async (req, res) => {
+const getProfilePhoto = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user._id)
     if (!user) {
@@ -253,7 +226,6 @@ const deleteProfilePhoto = async (req, res) => {
     const fileName = urlParts[urlParts.length - 1]
     const publicId = `userProfilePhotos/${fileName.split('.')[0]}`
 
-    // Properly handle the promise
     const result = await cloudinary.uploader.destroy(publicId)
     if (result.result !== 'ok') {
       throw new Error('Failed to delete image from Cloudinary.')
@@ -273,6 +245,7 @@ export {
   signupUser,
   loginUser,
   updateProfile,
+  getProfile,
   uploadProfilePhoto,
   getProfilePhoto,
   deleteProfilePhoto,

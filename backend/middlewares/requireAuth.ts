@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import { Secret } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
-import { User } from '../models/userModel'
+import { User } from '../models'
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   // verify authentication

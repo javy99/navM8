@@ -1,10 +1,9 @@
 import * as express from 'express'
-import { Request, Response } from 'express'
-
 import * as cors from 'cors'
 import * as dotenv from 'dotenv'
 import mongoose from 'mongoose'
-import userRoutes from './routes/user'
+import { Request, Response } from 'express'
+import { authRouter, profileRouter, myToursRouter } from './routes'
 
 interface CustomError extends Error {
   status?: number
@@ -21,7 +20,9 @@ app.use(express.json({ limit: '50mb' }))
 app.use(cors())
 
 // routes
-app.use('/api/auth', userRoutes)
+app.use('/api/auth', authRouter)
+app.use('/api/user', profileRouter)
+app.use('/api/mytours', myToursRouter)
 
 // Error handling middleware
 app.use((error: CustomError, req: Request, res: Response) => {
