@@ -50,6 +50,11 @@ const TourCard: React.FC<Props> = ({ width, tour }) => {
       boxShadow="0 4px 4px 0 #69490b"
       cursor="pointer"
       onClick={openCardDetails}
+      transition="all 0.3s"
+      _hover={{
+        transform: 'translateY(-5px)',
+        boxShadow: '0 4px 4px 0 #69490b',
+      }}
     >
       {tour.photos.length > 0 && (
         <Box
