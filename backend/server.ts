@@ -2,8 +2,18 @@ import * as express from 'express'
 import * as cors from 'cors'
 import * as dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import { Server as SocketIOServer } from 'socket.io'
+import * as http from 'http'
 import { Request, Response } from 'express'
-import { authRouter, profileRouter, myToursRouter } from './routes'
+import {
+  authRouter,
+  userRouter,
+  myToursRouter,
+  chatRouter,
+  messageRouter,
+} from './routes'
+import { notFound, errorHandler } from './middlewares'
+import 'colors'
 
 interface CustomError extends Error {
   status?: number
@@ -19,10 +29,65 @@ const app = express()
 app.use(express.json({ limit: '50mb' }))
 app.use(cors())
 
+// Initialize HTTP server from Express app
+const server = http.createServer(app)
+
+// Initialize socket.io and bind it to the HTTP server
+const io = new SocketIOServer(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: 'http://localhost:3001',
+  },
+})
+
+// socket.io connection event
+io.on('connection', (socket) => {
+  console.log('a user connected:', socket.id)
+
+  // More event handlers can be added here
+  socket.on('setup', (userData) => {
+    socket.join(userData._id)
+    socket.emit('connected')
+
+    socket.on('disconnect', () => {
+      console.log('USER DISCONNECTED')
+      socket.leave(userData._id)
+    })
+  })
+
+  socket.on('join chat', (room) => {
+    socket.join(room)
+    console.log('User Joined Room:', room)
+  })
+  
+  socket.on('typing', ({ chatId }) =>
+    socket.to(chatId).emit('typing', { chatId }),
+  )
+  socket.on('stop typing', ({ chatId }) =>
+    socket.to(chatId).emit('stop typing', { chatId }),
+  )
+
+  socket.on('new message', (newMessageReceived) => {
+    let chat = newMessageReceived.chat
+
+    if (!chat.users) return console.log('Chat.users not defined')
+
+    chat.users.forEach((user) => {
+      if (user._id == newMessageReceived.sender._id) return
+
+      socket.in(user._id).emit('message received', newMessageReceived)
+    })
+  })
+})
+
 // routes
 app.use('/api/auth', authRouter)
-app.use('/api/user', profileRouter)
+app.use('/api/users', userRouter)
 app.use('/api/mytours', myToursRouter)
+app.use('/api/chat', chatRouter)
+app.use('/api/message', messageRouter)
+app.use(notFound)
+app.use(errorHandler)
 
 // Error handling middleware
 app.use((error: CustomError, req: Request, res: Response) => {
@@ -36,10 +101,10 @@ if (MONGODB_URL) {
   mongoose
     .connect(MONGODB_URL)
     .then(() => {
-      app.listen(BACKEND_PORT, () => {
+      server.listen(BACKEND_PORT, () => {
         console.log(
-          'Connected to MongoDB and listening on port',
-          process.env.BACKEND_PORT,
+          `Connected to MongoDB and listening on port ${BACKEND_PORT} :)`.red
+            .bold,
         )
       })
     })

@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { User } from '../types'
 
-export const fetchUserProfile = async (token: string) => {
+export const fetchUserProfile = async (token: string, id: string) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/user`,
+      `${import.meta.env.VITE_API_URL}/api/users/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -17,10 +17,14 @@ export const fetchUserProfile = async (token: string) => {
   }
 }
 
-export const updateUserProfile = async (token: string, userInfo: User) => {
+export const updateUserProfile = async (
+  token: string,
+  id: string,
+  userInfo: User,
+) => {
   try {
     await axios.patch(
-      `${import.meta.env.VITE_API_URL}/user`,
+      `${import.meta.env.VITE_API_URL}/api/users/${id}`,
       userInfo,
       {
         headers: {

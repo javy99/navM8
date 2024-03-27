@@ -1,4 +1,3 @@
-import * as jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import * as dotenv from 'dotenv'
 import validator from 'validator'
@@ -14,55 +13,6 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
-
-const createToken = (_id: string): string => {
-  if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET is not defined in the environment variables')
-  }
-  return jwt.sign({ _id }, process.env.JWT_SECRET, {
-    expiresIn: '3d',
-  })
-}
-
-// login user
-const loginUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body
-
-  try {
-    const user = await User.login(email, password)
-
-    // create token
-    const token = createToken(user._id.toString())
-
-    res.status(200).json({ email, token, id: user._id })
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(400).json({ error: error.message })
-    } else {
-      res.status(400).json({ error: 'An unknown error occurred' })
-    }
-  }
-}
-
-// signup user
-const signupUser = async (req: Request, res: Response): Promise<void> => {
-  const { username, email, password } = req.body
-
-  try {
-    const user = await User.signup(username, email, password)
-
-    // create token
-    const token = createToken(user._id.toString())
-
-    res.status(200).json({ email, token, id: user._id })
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(400).json({ error: error.message })
-    } else {
-      res.status(400).json({ error: 'An unexpected error occurred' })
-    }
-  }
-}
 
 // Profile
 const updateProfile = async (req: Request, res: Response): Promise<void> => {
@@ -241,12 +191,37 @@ const deleteProfilePhoto = async (req, res) => {
   }
 }
 
+// Search users
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const search = req.query.search
+
+    let queryObj = {}
+
+    if (search) {
+      queryObj = {
+        $or: [
+          { email: new RegExp(search.toString(), 'i') },
+          { firstName: new RegExp(search.toString(), 'i') },
+          // { lastName: new RegExp(search.toString(), 'i') },
+        ],
+      }
+    }
+
+    const users = await User.find(queryObj)
+
+    res.json(users)
+  } catch (error) {
+    console.error('Error fetching all users:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export {
-  signupUser,
-  loginUser,
   updateProfile,
   getProfile,
   uploadProfilePhoto,
   getProfilePhoto,
   deleteProfilePhoto,
+  getAllUsers,
 }

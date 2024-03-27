@@ -12,6 +12,7 @@ import {
   Text,
   Box,
   Flex,
+  InputRightElement,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { BsCameraFill, BsXCircleFill } from 'react-icons/bs'
@@ -37,6 +38,10 @@ interface Props {
   sx?: any
   placeholder?: string
   color?: string
+  mb?: number
+  buttonLabel?: string
+  onButtonClick?: () => void
+  isLoading?: boolean
 }
 
 const FormField: React.FC<Props> = ({
@@ -55,6 +60,10 @@ const FormField: React.FC<Props> = ({
   sx,
   placeholder,
   color,
+  mb,
+  buttonLabel,
+  onButtonClick,
+  isLoading,
 }) => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary
@@ -118,7 +127,7 @@ const FormField: React.FC<Props> = ({
   }
 
   return (
-    <FormControl isRequired={isRequired}>
+    <FormControl isRequired={isRequired} mb={mb}>
       <FormLabel htmlFor={name} {...formLabelStyle}>
         {label}
       </FormLabel>
@@ -197,6 +206,26 @@ const FormField: React.FC<Props> = ({
               </Flex>
             ))}
           </Box>
+        </InputGroup>
+      ) : type === 'inputButton' ? (
+        <InputGroup display="flex" alignItems="center">
+          <Input
+            id={name}
+            name={name}
+            type="text"
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            sx={sx}
+            placeholder={placeholder}
+            color={color}
+            {...formInputStyle}
+          />
+          <InputRightElement width="auto" mr={1} mt={1}>
+            <Button isLoading={isLoading} onClick={onButtonClick}>
+              {buttonLabel}
+            </Button>
+          </InputRightElement>
         </InputGroup>
       ) : (
         <InputGroup display="flex" alignItems="center">

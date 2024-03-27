@@ -1,3 +1,5 @@
 export { default as authRouter } from './authRoutes'
-export { default as profileRouter } from './profileRoutes'
+export { default as userRouter } from './userRoutes'
 export { default as myToursRouter } from './myToursRoutes'
+export { default as chatRouter } from './chatRoutes'
+export { default as messageRouter } from './messageRoutes'

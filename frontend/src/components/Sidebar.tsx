@@ -32,6 +32,9 @@ import { IconType } from 'react-icons'
 import logo from '../assets/logo.svg'
 import { useSidebarContext } from '../context'
 import { User } from '../types'
+import { useAuthContext } from '../hooks'
+import ReactNotificationBadge from 'react-notification-badge'
+import { Effect } from 'react-notification-badge'
 
 interface Props {
   user: User | null
@@ -46,6 +49,7 @@ interface NavLinkItem {
 const Sidebar: React.FC<Props> = ({ user }) => {
   const { isSidebarOpen, toggleSidebar } = useSidebarContext()
   const theme = useTheme()
+  const { notification } = useAuthContext()
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
 
@@ -83,7 +87,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
         {
           icon: BsChatLeftFill,
           label: 'Messages',
-          to: '/messages',
+          to: '/chat',
         },
         {
           icon: BsFillMapFill,
@@ -141,7 +145,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
             >
               {({ isActive }) => (
                 <Flex
-                  align="center"
+                  alignItems="center"
                   py={2}
                   px={4}
                   borderRadius="xl"
@@ -164,6 +168,13 @@ const Sidebar: React.FC<Props> = ({ user }) => {
                     h={{ base: 4, md: 5 }}
                   />
                   <Text fontSize={{ base: 'sm', md: 'md' }}>{link.label}</Text>
+
+                  {link.label === 'Messages' && notification.length > 0 && (
+                    <ReactNotificationBadge
+                      count={notification.length}
+                      effect={Effect.SCALE}
+                    />
+                  )}
                 </Flex>
               )}
             </NavLink>

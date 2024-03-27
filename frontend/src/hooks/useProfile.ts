@@ -33,11 +33,11 @@ const useProfile = () => {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        if (!user || !user.token) {
+        if (!user || !user.token || !user._id) {
           throw new Error('User or user token is not available.')
         }
 
-        const data = await fetchUserProfile(user.token)
+        const data = await fetchUserProfile(user.token, user._id)
         const formattedBirthDate = data.birthDate
           ? new Date(data.birthDate).toISOString().split('T')[0]
           : ''
@@ -55,7 +55,7 @@ const useProfile = () => {
       }
     }
 
-    if (user && user.token) {
+    if (user && user.token && user._id) {
       fetchData()
     }
   }, [user, toast])
@@ -66,10 +66,10 @@ const useProfile = () => {
 
   const updateProfile = async (userInfo: User) => {
     try {
-      if (!user || !user.token) {
+      if (!user || !user.token || !user._id) {
         throw new Error('User or user token is not available.')
       }
-      await updateUserProfile(user.token, userInfo)
+      await updateUserProfile(user.token, user._id, userInfo)
       setIsEditMode(false)
       toast({
         title: 'Profile updated successfully.',

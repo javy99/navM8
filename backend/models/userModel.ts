@@ -30,115 +30,116 @@ export interface IUserModel extends Model<IUser> {
 
 const { Schema } = mongoose
 
-const userSchema: MongooseSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    minlength: 3,
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    validate: {
-      validator: (str: string) => validator.isEmail(str),
-      message: (props: { value: string }) =>
-        `${props.value} is not a valid email address!`,
+const userSchema: MongooseSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      minlength: 3,
+      trim: true,
     },
-  },
-  password: {
-    type: String,
-    required: true,
-    minLength: 8,
-    validate: {
-      validator: (value) => {
-        return validator.isStrongPassword(value, {
-          minLength: 8,
-          minLowercase: 1,
-          minUppercase: 1,
-          minNumbers: 1,
-          minSymbols: 1,
-        })
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      validate: {
+        validator: (str: string) => validator.isEmail(str),
+        message: (props: { value: string }) =>
+          `${props.value} is not a valid email address!`,
       },
-      message: (props) => `${props.value} is not a strong enough password!`,
     },
-  },
-  profilePictureURL: {
-    type: String,
-  },
-  firstName: {
-    type: String,
-    trim: true,
-  },
-  lastName: {
-    type: String,
-    trim: true,
-  },
-  phoneNumber: {
-    type: String,
-    validate: {
-      validator: (value) => validator.isMobilePhone(value, 'any'),
-      message: (props) => `${props.value} is not a valid phone number!`,
+    password: {
+      type: String,
+      required: true,
+      minLength: 8,
+      validate: {
+        validator: (value) => {
+          return validator.isStrongPassword(value, {
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1,
+          })
+        },
+        message: (props) => `${props.value} is not a strong enough password!`,
+      },
     },
-  },
-  country: {
-    type: String,
-    validate: {
-      validator: (value: string) =>
-        Country.getAllCountries().some((country) => country.name === value),
-      message: (props: { value: string }) =>
-        `${props.value} is not a valid country!`,
+    profilePictureURL: {
+      type: String,
     },
-  },
-  city: {
-    type: String,
-    validate: {
-      validator: function (value: string) {
-        const country = Country.getAllCountries().find(
-          (country) => country.name === this.get('country'),
-        )
-        if (country) {
-          return City.getCitiesOfCountry(country.isoCode).some(
-            (city) => city.name === value,
+    firstName: {
+      type: String,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      trim: true,
+    },
+    phoneNumber: {
+      type: String,
+      validate: {
+        validator: (value) => validator.isMobilePhone(value, 'any'),
+        message: (props) => `${props.value} is not a valid phone number!`,
+      },
+    },
+    country: {
+      type: String,
+      validate: {
+        validator: (value: string) =>
+          Country.getAllCountries().some((country) => country.name === value),
+        message: (props: { value: string }) =>
+          `${props.value} is not a valid country!`,
+      },
+    },
+    city: {
+      type: String,
+      validate: {
+        validator: function (value: string) {
+          const country = Country.getAllCountries().find(
+            (country) => country.name === this.get('country'),
           )
-        }
-        return false
+          if (country) {
+            return City.getCitiesOfCountry(country.isoCode).some(
+              (city) => city.name === value,
+            )
+          }
+          return false
+        },
+        message: (props: { value: string }) =>
+          `${props.value} is not a valid city!`,
       },
-      message: (props: { value: string }) =>
-        `${props.value} is not a valid city!`,
+    },
+    birthDate: {
+      type: Date,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+    },
+    languagesSpoken: {
+      type: [String],
+      default: undefined,
+    },
+    interests: {
+      type: [String],
+      default: undefined,
+    },
+    bio: {
+      type: String,
+      minLength: 10,
+    },
+    favoriteTours: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Tour',
     },
   },
-  birthDate: {
-    type: Date,
+  {
+    timestamps: true,
   },
-  gender: {
-    type: String,
-    enum: ['male', 'female'],
-  },
-  languagesSpoken: {
-    type: [String],
-    default: undefined,
-  },
-  interests: {
-    type: [String],
-    default: undefined,
-  },
-  bio: {
-    type: String,
-    minLength: 10,
-  },
-  favoriteTours: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Tour',
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-})
+)
 
 // Signup static method
 userSchema.statics.signup = async function (

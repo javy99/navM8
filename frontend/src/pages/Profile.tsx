@@ -23,7 +23,6 @@ import {
   BsStarHalf,
   BsTrashFill,
   BsCameraFill,
-  BsEnvelopeFill,
 } from 'react-icons/bs'
 import ReactCountryFlag from 'react-country-flag'
 import { Button, FormField } from '../components'
@@ -115,7 +114,16 @@ const Profile: React.FC = () => {
           justifyContent="center"
           minHeight="100vh"
         >
-          <Spinner size="xl" color={primaryColor} thickness="5px" speed="1s" />
+          <Spinner
+            size="xl"
+            color={primaryColor}
+            thickness="5px"
+            speed="1s"
+            w={20}
+            h={20}
+            alignSelf="center"
+            margin="auto"
+          />
         </Box>
       ) : (
         <>
@@ -359,7 +367,6 @@ const Profile: React.FC = () => {
                 />
                 <FormField
                   label="Email address"
-                  icon={<Icon as={BsEnvelopeFill} />}
                   name="email"
                   type="email"
                   value={userInfo.email}

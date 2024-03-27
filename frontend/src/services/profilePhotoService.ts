@@ -1,82 +1,77 @@
 import axios from 'axios'
-import { useAuthContext } from '../hooks'
 
-const profilePhotoService = () => {
-  const { state } = useAuthContext()
-  const { user } = state
-
-  const fetchProfilePhoto = async () => {
-    if (!user || !user.token) {
-      return null
-    }
-
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/photo`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
+const fetchProfilePhoto = async (token: string, id: string) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/users/${id}/photo`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
-      return response.data.profilePictureURL
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response && error.response.status === 404) {
-          return null
-        }
-        console.error('Error fetching profile photo:', error)
-        throw error
+      },
+    )
+    return response.data.profilePictureURL
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response && error.response.status === 404) {
+        return null
       }
-    }
-  }
-
-  const updateProfilePhoto = async (file: File | null) => {
-    if (file === null) {
-      return
-    }
-
-    const formData = new FormData()
-    formData.append('profilePictureURL', file)
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/user/photo`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        },
-      )
-
-      return response.data.profilePictureURL
-    } catch (error) {
-      console.error('Error updating profile photo:', error)
+      console.error('Error fetching profile photo:', error)
       throw error
     }
   }
-
-  const removeProfilePhoto = async () => {
-    try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/user/photo`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response && error.response.status === 404) {
-          console.log('No profile photo to remove.')
-          return
-        }
-        console.error('Error removing profile photo:', error)
-        throw error
-      }
-    }
-  }
-
-  return { fetchProfilePhoto, updateProfilePhoto, removeProfilePhoto }
 }
 
-export default profilePhotoService
+const updateProfilePhoto = async (
+  token: string,
+  id: string,
+  file: File | null,
+) => {
+  if (!file) {
+    throw new Error('No file provided to update profile photo.')
+  }
+
+  const formData = new FormData()
+  formData.append('profilePictureURL', file)
+
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/users/${id}/photo`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+
+    return response.data.profilePictureURL
+  } catch (error) {
+    console.error('Error updating profile photo:', error)
+    throw error
+  }
+}
+
+const removeProfilePhoto = async (token: string, id: string) => {
+  try {
+    await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/users/${id}/photo`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response && error.response.status === 404) {
+        console.log('No profile photo to remove.')
+        return
+      }
+      console.error('Error removing profile photo:', error)
+      throw error
+    }
+  }
+}
+
+export { fetchProfilePhoto, updateProfilePhoto, removeProfilePhoto }

@@ -64,7 +64,16 @@ const MyTours: React.FC = () => {
           justifyContent="center"
           minHeight="100vh"
         >
-          <Spinner size="xl" color={primaryColor} thickness="5px" speed="1s" />
+          <Spinner
+            size="xl"
+            color={primaryColor}
+            thickness="5px"
+            speed="1s"
+            w={20}
+            h={20}
+            alignSelf="center"
+            margin="auto"
+          />
         </Box>
       ) : (
         <VStack align="stretch" p={8} mt={{ base: 12, md: 0 }}>

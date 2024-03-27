@@ -1,9 +1,10 @@
 export interface User {
-  id?: string
+  _id?: string
   token?: string
   profilePictureURL?: string
   username?: string
   email?: string
+  password?: string
   firstName: string
   lastName: string
   phoneNumber: string
@@ -43,6 +44,22 @@ export interface Guide {
   interests: string[]
   spokenLanguages: string[]
   review: number
+}
+
+export interface Message {
+  _id: string
+  sender: User
+  chat: Chat
+  content: string
+}
+
+export interface Chat {
+  _id: string
+  chatName: string
+  isGroupChat: boolean
+  users: User[]
+  groupAdmin?: User
+  latestMessage?: Message
 }
 
 export type ChildrenProps = { children: React.ReactNode }

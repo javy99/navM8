@@ -7,6 +7,7 @@ import {
   AuthContextProvider,
   SidebarProvider,
   ProfilePhotoProvider,
+  ChatProvider,
 } from './context/index.js'
 
 const customTheme = extendTheme({
@@ -53,15 +54,17 @@ const customTheme = extendTheme({
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container) // Create a root.
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <ProfilePhotoProvider>
-        <ChakraProvider theme={customTheme}>
-          <SidebarProvider>
+  // <React.StrictMode>
+  <AuthContextProvider>
+    <ProfilePhotoProvider>
+      <ChakraProvider theme={customTheme}>
+        <SidebarProvider>
+          <ChatProvider>
             <App />
-          </SidebarProvider>
-        </ChakraProvider>
-      </ProfilePhotoProvider>
-    </AuthContextProvider>
-  </React.StrictMode>,
+          </ChatProvider>
+        </SidebarProvider>
+      </ChakraProvider>
+    </ProfilePhotoProvider>
+  </AuthContextProvider>,
+  // </React.StrictMode>,
 )
