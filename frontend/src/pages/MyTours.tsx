@@ -133,8 +133,8 @@ const MyTours: React.FC = () => {
         </VStack>
       )}
 
-      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
-        <ModalOverlay bg="rgba(0,0,0,0.7)" />
+      <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered={true}>
+        <ModalOverlay bg="rgba(0,0,0,0.5)" />
         <ModalContent
           borderBottom="16px solid"
           borderColor={primaryColor}
@@ -274,7 +274,7 @@ const MyTours: React.FC = () => {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+            <Button mr={3} onClick={handleSubmit}>
               Save
             </Button>
             <Button onClick={onClose}>Cancel</Button>

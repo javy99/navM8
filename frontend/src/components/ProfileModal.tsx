@@ -7,14 +7,15 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
   useDisclosure,
   IconButton,
   Text,
   Image,
   Avatar,
+  useTheme,
 } from '@chakra-ui/react'
 import { User } from '../types'
+import Button from './Button'
 
 interface Props {
   user: User
@@ -23,6 +24,9 @@ interface Props {
 
 const ProfileModal: React.FC<Props> = ({ user, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const whiteColor = theme.colors.white
 
   return (
     <>
@@ -34,15 +38,33 @@ const ProfileModal: React.FC<Props> = ({ user, children }) => {
           icon={<BsEyeFill />}
           onClick={onOpen}
           aria-label="View User Profile"
+          color={whiteColor}
+          bgColor={primaryColor}
+          _hover={{ bgColor: primaryColor }}
         />
       )}
-      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent h="410px">
-          <ModalHeader fontSize="20px" display="flex" justifyContent="center">
+      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered={true}>
+        <ModalOverlay bg="rgba(0,0,0,0.5)" />
+        <ModalContent
+          h="400px"
+          borderBottom="15px solid"
+          borderColor={primaryColor}
+          borderRadius="15px"
+          overflow="hidden"
+        >
+          <ModalHeader
+            fontSize="20px"
+            display="flex"
+            justifyContent="center"
+            bg="#F6FBFC"
+            boxShadow="xl"
+            color={primaryColor}
+            fontWeight="bold"
+            mb={5}
+          >
             {user.firstName} {user.lastName}
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color={primaryColor} size="lg" />
           <ModalBody
             display="flex"
             flexDir="column"
@@ -64,8 +86,8 @@ const ProfileModal: React.FC<Props> = ({ user, children }) => {
                 name={user.username}
               />
             )}
-            <Text fontSize={{ base: '20px', md: '25px' }}>
-              Email: {user.email}
+            <Text fontSize={{ base: '18px', md: '23px' }}>
+              <span style={{ fontWeight: '600' }}>Email:</span> {user.email}
             </Text>
           </ModalBody>
           <ModalFooter>

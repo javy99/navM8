@@ -19,7 +19,7 @@ const UserBadgeItem: React.FC<Props> = ({ handleFunction, user, admin }) => {
       mb={2}
       variant="solid"
       fontSize={12}
-      colorScheme="purple"
+      colorScheme="yellow"
       cursor="pointer"
       onClick={handleFunction}
       display="flex"

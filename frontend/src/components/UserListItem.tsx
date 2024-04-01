@@ -13,7 +13,6 @@ const UserListItem: React.FC<Props> = ({ user, handleFunction }) => {
       onClick={handleFunction}
       cursor="pointer"
       bg="#e8e8e8"
-      _hover={{ background: '38b2ac', color: 'white' }}
       w="100%"
       display="flex"
       alignItems="center"
@@ -21,7 +20,7 @@ const UserListItem: React.FC<Props> = ({ user, handleFunction }) => {
       px={3}
       py={2}
       mb={2}
-      borderRadius="lg"
+      borderRadius="0.9375rem"
     >
       <Avatar
         mr={2}

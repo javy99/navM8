@@ -118,7 +118,7 @@ const uploadProfilePhoto = async (req, res) => {
   const fileType = req.file.mimetype
   const fileSize = req.file.size
   if (
-    !['image/jpeg', 'image/png'].includes(fileType) ||
+    !['image/jpg', 'image/jpeg', 'image/png'].includes(fileType) ||
     fileSize > 1024 * 1024 * 5
   ) {
     return res.status(400).json({ error: 'Invalid file type or size.' })

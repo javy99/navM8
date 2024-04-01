@@ -1,5 +1,4 @@
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,14 +10,16 @@ import {
   useDisclosure,
   useToast,
   Box,
+  useTheme,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useAuthContext } from '../hooks'
 import FormField from './FormField'
-import axios from 'axios'
+import Button from './Button'
 import UserListItem from './UserListItem'
 import { User } from '../types'
 import UserBadgeItem from './UserBadgeItem'
+import { searchUsers, createGroupChat } from '../services'
 
 const GroupChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -27,6 +28,9 @@ const GroupChatModal = ({ children }) => {
   const [search, setSearch] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [loading, setLoading] = useState(false)
+
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
 
   const toast = useToast()
 
@@ -40,21 +44,12 @@ const GroupChatModal = ({ children }) => {
 
     try {
       setLoading(true)
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }
-
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/users?search=${query}`,
-        config,
-      )
+      const { data } = await searchUsers(query, user?.token)
       setLoading(false)
       setSearchResult(data)
     } catch (error) {
       toast({
-        title: 'Error Occured!',
+        title: 'Error Occurred!',
         description: 'Failed to Load the Search Results',
         status: 'error',
         duration: 5000,
@@ -77,21 +72,18 @@ const GroupChatModal = ({ children }) => {
     }
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/chat/group`,
-        {
-          name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((u) => u._id)),
-        },
-        config,
+      const { data } = await createGroupChat(
+        groupChatName,
+        selectedUsers.map((u) => u._id),
+        user?.token,
       )
 
       setChats([data, ...chats])
+      // Reset the input fields and selected users
+      setGroupChatName('')
+      setSelectedUsers([])
+      setSearch('')
+      setSearchResult([])
       onClose()
       toast({
         title: 'Group Chat Created!',
@@ -103,7 +95,7 @@ const GroupChatModal = ({ children }) => {
       onClose()
     } catch (error) {
       toast({
-        title: 'Error Occured!',
+        title: 'Error Occurred!',
         description: 'Failed to Create the Group Chat',
         status: 'error',
         duration: 5000,
@@ -137,14 +129,24 @@ const GroupChatModal = ({ children }) => {
   return (
     <>
       <span onClick={onOpen}>{children}</span>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader fontSize="35px" display="flex" justifyContent="center">
+      <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+        <ModalOverlay bg="rgba(0,0,0,0.5)" />
+        <ModalContent
+          borderBottom="15px solid"
+          borderColor={primaryColor}
+          borderRadius="15px"
+          overflow="hidden"
+        >
+          <ModalHeader
+            bg="#F6FBFC"
+            boxShadow="xl"
+            color={primaryColor}
+            fontWeight="bold"
+            mb={5}
+          >
             Create Group Chat
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color={primaryColor} size="lg" />
           <ModalBody display="flex" flexDir="column" alignItems="center">
             <FormField
               name="groupChatName"
@@ -153,7 +155,7 @@ const GroupChatModal = ({ children }) => {
               value={groupChatName}
               isRequired={false}
               onChange={(e) => setGroupChatName(e.target.value)}
-              mb={1}
+              mb={2}
             />
             <FormField
               name="search"
@@ -176,7 +178,7 @@ const GroupChatModal = ({ children }) => {
             </Box>
 
             {loading ? (
-              <Spinner />
+              <Spinner color={primaryColor} speed="1s" />
             ) : (
               searchResult
                 .slice(0, 4)
@@ -191,9 +193,10 @@ const GroupChatModal = ({ children }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmit}>
-              Close
+            <Button onClick={handleSubmit} mr={3}>
+              Create
             </Button>
+            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

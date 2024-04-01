@@ -52,7 +52,7 @@ const customTheme = extendTheme({
 
 // Use createRoot API for React 18+
 const container = document.getElementById('root') as HTMLElement
-const root = createRoot(container) // Create a root.
+const root = createRoot(container)
 root.render(
   // <React.StrictMode>
   <AuthContextProvider>

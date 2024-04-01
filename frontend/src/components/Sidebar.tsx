@@ -172,7 +172,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
                   {link.label === 'Messages' && notification.length > 0 && (
                     <ReactNotificationBadge
                       count={notification.length}
-                      effect={Effect.SCALE}
+                      effect={Effect.ROTATE_X}
                     />
                   )}
                 </Flex>

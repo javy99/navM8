@@ -7,22 +7,26 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
   useDisclosure,
-  //   FormControl,
-  //   Input,
+  useTheme,
   useToast,
   Box,
   IconButton,
   Spinner,
 } from '@chakra-ui/react'
-import axios from 'axios'
 import { useState } from 'react'
 import { useAuthContext } from '../hooks'
 import { User } from '../types'
 import UserBadgeItem from './UserBadgeItem'
 import UserListItem from './UserListItem'
 import FormField from './FormField'
+import Button from './Button'
+import {
+  searchUsers,
+  renameGroupChat,
+  addUserToGroup,
+  removeUserFromGroup,
+} from '../services'
 
 interface Props {
   fetchMessages: () => void
@@ -42,28 +46,20 @@ const UpdateGroupChatModal: React.FC<Props> = ({
   const [loading, setLoading] = useState(false)
   const [renameLoading, setRenameLoading] = useState(false)
   const toast = useToast()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary
+  const whiteColor = theme.colors.white
 
   const { selectedChat, setSelectedChat, state } = useAuthContext()
   const { user } = state
 
   const handleSearch = async (query) => {
     setSearch(query)
-    if (!query) {
-      return
-    }
+    if (!query) return
 
     try {
       setLoading(true)
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/users?search=${query}`,
-        config,
-      )
-      console.log(data)
+      const { data } = await searchUsers(query, user?.token)
       setLoading(false)
       setSearchResult(data)
     } catch (error) {
@@ -91,27 +87,35 @@ const UpdateGroupChatModal: React.FC<Props> = ({
       return
     }
 
+    if (!user?.token) {
+      toast({
+        title: 'Authentication Error',
+        description: 'You must be logged in to rename a chat.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom',
+      })
+      return
+    }
+
     try {
       setRenameLoading(true)
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/chat/rename`,
-        {
-          chatId: selectedChat._id,
-          chatName: groupChatName,
-        },
-        config,
+      const { data } = await renameGroupChat(
+        selectedChat._id,
+        groupChatName,
+        user?.token,
       )
-
-      console.log(data)
-
       setSelectedChat(data)
       setFetchAgain(!fetchAgain)
       setRenameLoading(false)
+      toast({
+        title: 'Chat renamed successfully',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -128,7 +132,7 @@ const UpdateGroupChatModal: React.FC<Props> = ({
     setGroupChatName('')
   }
 
-  const handleAddUser = async (user1) => {
+  const handleAddUser = async (userToAdd) => {
     if (!selectedChat) {
       toast({
         title: 'No chat selected!',
@@ -140,7 +144,7 @@ const UpdateGroupChatModal: React.FC<Props> = ({
       return
     }
 
-    if (selectedChat.users.find((u) => u._id === user1._id)) {
+    if (selectedChat.users.find((u) => u._id === userToAdd._id)) {
       toast({
         title: 'User Already in group!',
         status: 'error',
@@ -151,13 +155,14 @@ const UpdateGroupChatModal: React.FC<Props> = ({
       return
     }
 
-    if (!selectedChat || !user) {
+    if (!user?.token) {
       toast({
-        title: 'No chat or user information available!',
+        title: 'Authentication Error',
+        description: 'You must be logged in to add a user.',
         status: 'error',
         duration: 5000,
         isClosable: true,
-        position: 'bottom-left',
+        position: 'bottom',
       })
       return
     }
@@ -175,23 +180,22 @@ const UpdateGroupChatModal: React.FC<Props> = ({
 
     try {
       setLoading(true)
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/chat/groupadd`,
-        {
-          chatId: selectedChat._id,
-          userId: user1._id,
-        },
-        config,
+      const { data } = await addUserToGroup(
+        selectedChat._id,
+        userToAdd._id,
+        user.token,
       )
-
       setSelectedChat(data)
       setFetchAgain(!fetchAgain)
       setLoading(false)
+      toast({
+        title: 'User added successfully',
+        description: `${userToAdd.username} has been added to the chat.`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -208,8 +212,8 @@ const UpdateGroupChatModal: React.FC<Props> = ({
     setGroupChatName('')
   }
 
-  const handleRemove = async (user1: User) => {
-    if (!selectedChat || !user) {
+  const handleRemove = async (userToRemove: User) => {
+    if (!selectedChat) {
       toast({
         title: 'Operation failed!',
         description: 'No chat selected or user is not logged in.',
@@ -233,7 +237,22 @@ const UpdateGroupChatModal: React.FC<Props> = ({
       return
     }
 
-    if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
+    if (!user || !user.token) {
+      toast({
+        title: 'Authentication Error',
+        description: 'You must be logged in to remove a user.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom',
+      })
+      return
+    }
+
+    if (
+      selectedChat.groupAdmin._id !== user._id &&
+      userToRemove._id !== user._id
+    ) {
       toast({
         title: 'Only admins can remove someone!',
         status: 'error',
@@ -244,34 +263,40 @@ const UpdateGroupChatModal: React.FC<Props> = ({
       return
     }
 
+    if (!selectedChat._id || !userToRemove._id) {
+      toast({
+        title: 'Error',
+        description: 'Missing chat or user information.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom',
+      })
+      return
+    }
+
     try {
       setLoading(true)
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/chat/groupremove`,
-        {
-          chatId: selectedChat._id,
-          userId: user1._id,
-        },
-        config,
+      const { data } = await removeUserFromGroup(
+        selectedChat._id,
+        userToRemove._id,
+        user.token,
       )
 
-      user1._id === user._id ? setSelectedChat(null) : setSelectedChat(data)
+      userToRemove._id === user._id
+        ? setSelectedChat(null)
+        : setSelectedChat(data)
       setFetchAgain(!fetchAgain)
       fetchMessages()
       setLoading(false)
-
-      // toast ({
-      //     title: 'User removed from group chat!',
-      //     status: 'success',
-      //     duration: 5000,
-      //     isClosable: true,
-      //     position: 'bottom',
-      //     })
+      toast({
+        title: 'User removed successfully',
+        description: `${userToRemove.username} has been removed from the chat.`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -295,16 +320,30 @@ const UpdateGroupChatModal: React.FC<Props> = ({
         icon={<BsEyeFill />}
         onClick={onOpen}
         aria-label="View Group Chat"
+        color={whiteColor}
+        bgColor={primaryColor}
+        _hover={{ bgColor: primaryColor }}
       />
 
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader fontSize="35px" display="flex" justifyContent="center">
+      <Modal onClose={onClose} isOpen={isOpen} isCentered={true}>
+        <ModalOverlay bg="rgba(0,0,0,0.5)" />
+        <ModalContent
+          borderBottom="15px solid"
+          borderColor={primaryColor}
+          borderRadius="15px"
+          overflow="hidden"
+        >
+          <ModalHeader
+            bg="#F6FBFC"
+            boxShadow="xl"
+            color={primaryColor}
+            fontWeight="bold"
+            mb={5}
+          >
             {selectedChat ? selectedChat.chatName : 'Group Chat'}
           </ModalHeader>
 
-          <ModalCloseButton />
+          <ModalCloseButton color={primaryColor} size="lg" />
           <ModalBody display="flex" flexDir="column" alignItems="center">
             <Box w="100%" display="flex" flexWrap="wrap" pb={3}>
               {selectedChat &&
@@ -317,7 +356,6 @@ const UpdateGroupChatModal: React.FC<Props> = ({
                   />
                 ))}
             </Box>
-
             <FormField
               placeholder="Chat Name"
               isRequired={false}
@@ -330,24 +368,6 @@ const UpdateGroupChatModal: React.FC<Props> = ({
               mb={2}
               isLoading={renameLoading}
             />
-            {/* 
-            <FormControl display="flex">
-              <Input
-                placeholder="Chat Name"
-                mb={3}
-                value={groupChatName}
-                onChange={(e) => setGroupChatName(e.target.value)}
-              />
-              <Button
-                variant="solid"
-                colorScheme="teal"
-                ml={1}
-                isLoading={renameLoading}
-                onClick={handleRename}
-              >
-                Update
-              </Button>
-            </FormControl> */}
             <FormField
               placeholder="Add User to group"
               isRequired={false}
@@ -357,16 +377,8 @@ const UpdateGroupChatModal: React.FC<Props> = ({
               onChange={(e) => handleSearch(e.target.value)}
               mb={2}
             />
-            {/* <FormControl>
-              <Input
-                placeholder="Add User to group"
-                mb={1}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
-            </FormControl> */}
-
             {loading ? (
-              <Spinner size="lg" />
+              <Spinner size="lg" color={primaryColor} speed="1s" />
             ) : (
               searchResult?.map((user) => (
                 <UserListItem
@@ -378,10 +390,7 @@ const UpdateGroupChatModal: React.FC<Props> = ({
             )}
           </ModalBody>
           <ModalFooter>
-            <Button
-              onClick={() => user && handleRemove(user)}
-              colorScheme="red"
-            >
+            <Button onClick={() => user && handleRemove(user)}>
               Leave Group
             </Button>
           </ModalFooter>

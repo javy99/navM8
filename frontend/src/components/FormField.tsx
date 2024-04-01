@@ -12,11 +12,11 @@ import {
   Text,
   Box,
   Flex,
+  Button,
   InputRightElement,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { BsCameraFill, BsXCircleFill } from 'react-icons/bs'
-import Button from './Button'
 
 interface Props {
   label?: string
@@ -39,6 +39,8 @@ interface Props {
   placeholder?: string
   color?: string
   mb?: number
+  mr?: number
+  mt?: number
   buttonLabel?: string
   onButtonClick?: () => void
   isLoading?: boolean
@@ -61,6 +63,8 @@ const FormField: React.FC<Props> = ({
   placeholder,
   color,
   mb,
+  mr,
+  mt,
   buttonLabel,
   onButtonClick,
   isLoading,
@@ -127,7 +131,7 @@ const FormField: React.FC<Props> = ({
   }
 
   return (
-    <FormControl isRequired={isRequired} mb={mb}>
+    <FormControl isRequired={isRequired} mb={mb} mr={mr} mt={mt}>
       <FormLabel htmlFor={name} {...formLabelStyle}>
         {label}
       </FormLabel>
@@ -219,10 +223,26 @@ const FormField: React.FC<Props> = ({
             sx={sx}
             placeholder={placeholder}
             color={color}
-            {...formInputStyle}
+            _focus={{ border: 'none' }}
+            boxShadow={'inset 0 0 2px 2px rgba(0, 0, 0, 0.2)'}
+            borderRadius="0.9375rem"
+            fontSize={formFontSize}
+            cursor="pointer"
+            px={formPaddingX}
+            variant="unstyled"
+            height="3rem"
           />
           <InputRightElement width="auto" mr={1} mt={1}>
-            <Button isLoading={isLoading} onClick={onButtonClick}>
+            <Button
+              isLoading={isLoading}
+              onClick={onButtonClick}
+              backgroundColor={primaryColor}
+              color={whiteColor}
+              borderRadius="0.9375rem"
+              _hover={{
+                backgroundColor: primaryColor,
+              }}
+            >
               {buttonLabel}
             </Button>
           </InputRightElement>

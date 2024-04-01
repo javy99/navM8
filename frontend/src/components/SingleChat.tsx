@@ -9,18 +9,19 @@ import {
   useTheme,
   FormControl,
   Input,
+  Heading,
   // Avatar,
 } from '@chakra-ui/react'
 import { BsArrowLeft } from 'react-icons/bs'
 import UpdateGroupChatModal from './UpdateGroupChatModal'
 import { getSender, getSenderFull } from '../configs/ChatLogics'
 import ProfileModal from './ProfileModal'
-import axios from 'axios'
 import { Message } from '../types'
 import ScrollableChat from './ScrollableChat'
 import { io } from 'socket.io-client'
 import Lottie from 'react-lottie'
 import animationData from '../animations/typing.json'
+import { fetchMessages, sendMessage } from '../services'
 
 const ENDPOINT = import.meta.env.VITE_API_URL
 let socket, selectedChatCompare
@@ -59,25 +60,13 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
 
   const toast = useToast()
 
-  const fetchMessages = async () => {
-    if (!selectedChat || !user) return
+  const fetchMessagesHandler = async () => {
+    if (!selectedChat || !user || !selectedChat._id || !user.token) return
 
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-
       setLoading(true)
-
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/message/${selectedChat._id}`,
-        config,
-      )
-
-      setMessages(data)
+      const data = await fetchMessages(selectedChat._id, user.token)
+      setMessages(data.data)
       setLoading(false)
 
       socket.emit('join chat', selectedChat._id)
@@ -105,7 +94,7 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
   }, [])
 
   useEffect(() => {
-    fetchMessages()
+    fetchMessagesHandler()
 
     selectedChatCompare = selectedChat
 
@@ -150,26 +139,19 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
     }
   }, [notification, selectedChatCompare])
 
-  const sendMessage = async (e: any) => {
-    if (e.key === 'Enter' && newMessage) {
+  const sendMessageHandler = async (e: any) => {
+    if (e.key === 'Enter' && newMessage && selectedChat?._id && user?.token) {
       socket.emit('stop typing', selectedChat?._id)
       try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-
         setNewMessage('')
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/message`,
-          { content: newMessage, chatId: selectedChat?._id },
-          config,
+        const response = await sendMessage(
+          newMessage,
+          selectedChat._id,
+          user.token,
         )
-
-        socket.emit('new message', data)
-        setMessages([...messages, data])
+        const messageData: Message = response.data
+        socket.emit('new message', messageData)
+        setMessages((prevMessages) => [...prevMessages, messageData])
       } catch (error) {
         toast({
           title: 'Error Occurred!',
@@ -210,14 +192,16 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
     <>
       {selectedChat ? (
         <>
-          <Text
-            fontSize={{ base: '28px', md: '30px' }}
+          <Heading
+            as="h2"
+            size="md"
             pb={3}
             px={2}
             w="100%"
             display="flex"
             justifyContent={{ base: 'space-between' }}
             alignItems="center"
+            color={primaryColor}
           >
             <IconButton
               display={{ base: 'flex', md: 'none' }}
@@ -236,11 +220,11 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
                 <UpdateGroupChatModal
                   fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
-                  fetchMessages={fetchMessages}
+                  fetchMessages={fetchMessagesHandler}
                 />
               </>
             )}
-          </Text>
+          </Heading>
 
           <Box
             display="flex"
@@ -270,7 +254,7 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
               </div>
             )}
 
-            <FormControl onKeyDown={sendMessage} isRequired my={3}>
+            <FormControl onKeyDown={sendMessageHandler} isRequired my={3}>
               {isTyping ? (
                 <div>
                   <Lottie
