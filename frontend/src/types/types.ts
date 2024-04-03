@@ -33,17 +33,7 @@ export interface Tour {
   to: string
   description: string
   photos: (File | string)[]
-}
-
-export interface Guide {
-  id: string
-  name: string
-  city: string
-  country: string
-  description: string
-  interests: string[]
-  spokenLanguages: string[]
-  review: number
+  author: User
 }
 
 export interface Message {

@@ -8,7 +8,7 @@ import { Request, Response } from 'express'
 import {
   authRouter,
   userRouter,
-  myToursRouter,
+  toursRouter,
   chatRouter,
   messageRouter,
 } from './routes'
@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
     socket.join(room)
     console.log('User Joined Room:', room)
   })
-  
+
   socket.on('typing', ({ chatId }) =>
     socket.to(chatId).emit('typing', { chatId }),
   )
@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
 // routes
 app.use('/api/auth', authRouter)
 app.use('/api/users', userRouter)
-app.use('/api/mytours', myToursRouter)
+app.use('/api/tours', toursRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
 app.use(notFound)

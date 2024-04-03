@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Flex, Text, Box, useTheme } from '@chakra-ui/react'
-import axios from 'axios'
-import { SearchBar, Card, BookingCard } from '../components'
+import { Flex, Text, Box, useTheme, Spinner } from '@chakra-ui/react'
+import { SearchBar, BookingCard, TourCard } from '../components'
 import HeaderBgImage from '../assets/hero-bg6.jpg'
-import { Guide } from '../types'
+import { Tour } from '../types'
 import { useAuthContext } from '../hooks'
 import PageLayout from './PageLayout'
+import { getAllTours } from '../services/tourService'
 
 const HomePage: React.FC = () => {
   const { state } = useAuthContext()
@@ -14,73 +14,116 @@ const HomePage: React.FC = () => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
-  const [featuredGuides, setFeaturedGuides] = useState<Guide[]>([])
+  const [tours, setTours] = useState<Tour[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_SERVER_API_URL}/guides`)
-      .then((response) => {
-        setFeaturedGuides(response.data)
-      })
-      .catch((error) => {
-        console.error('Error fetching featured guides:', error)
-      })
-  }, [])
+    const fetchFeaturedGuides = async () => {
+      try {
+        setIsLoading(true)
+        if (!user || !user.token) return
+
+        const tours = await getAllTours(user?.token)
+        setTours(tours)
+      } catch (error) {
+        console.error('Failed to fetch guides:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFeaturedGuides()
+  }, [user?.token])
 
   return (
     <PageLayout user={user}>
-      <Box
-        bgImage={`linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`}
-        bgSize="cover"
-        bgPosition="center"
-        color="white"
-        py={20}
-        px={4}
-        mt={{ base: 12, md: 0 }}
-        textAlign="center"
-      >
-        <Text fontSize="3xl" fontWeight="bold" mb={4}>
-          Welcome to Your Next Adventure!
-        </Text>
-        <Text fontSize="lg">
-          Explore, Discover, and Plan Your Perfect Getaway
-        </Text>
-        <SearchBar />
-      </Box>
-      <Flex direction={{ base: 'column', md: 'row' }} pb={5}>
-        <Box p={8} flex="3" minW={{ md: '74%' }}>
-          <Text fontSize="xl" mb={4} color={primaryColor} fontWeight="bold">
-            The Most Popular Tours
-          </Text>
-          <Flex flexWrap="wrap" gap="32px">
-            {featuredGuides.map((guide) => (
-              <Box key={guide.id}>
-                <Card guide={guide} user={user} />
-              </Box>
-            ))}
-          </Flex>
+      {isLoading ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          minHeight="100vh"
+        >
+          <Spinner
+            size="xl"
+            color={primaryColor}
+            thickness="5px"
+            speed="1s"
+            w={20}
+            h={20}
+            alignSelf="center"
+            margin="auto"
+          />
         </Box>
-        {user && (
-          <>
-            <Box
-              display={{ base: 'none', md: 'block' }}
-              minW={{ md: '2%' }}
-              borderLeft="2px dashed"
-              borderColor={secondaryColor}
-              my={8}
-            ></Box>
-            <Box flex="1" minW={{ md: '24%' }} py={8}>
-              <Text fontSize="xl" fontWeight="bold" mb={4} color={primaryColor}>
-                My Bookings
+      ) : (
+        <>
+          <Box
+            bgImage={`linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${HeaderBgImage})`}
+            bgSize="cover"
+            bgPosition="center"
+            color="white"
+            py={20}
+            px={4}
+            mt={{ base: 12, md: 0 }}
+            textAlign="center"
+          >
+            <Text fontSize="3xl" fontWeight="bold" mb={4}>
+              Welcome to Your Next Adventure!
+            </Text>
+            <Text fontSize="lg">
+              Explore, Discover, and Plan Your Perfect Getaway
+            </Text>
+            <SearchBar />
+          </Box>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            pb={5}
+            overflow="hidden"
+          >
+            <Box p={8} flex="3" minW={{ md: '74%' }}>
+              <Text fontSize="xl" mb={4} color={primaryColor} fontWeight="bold">
+                The Most Popular Tours
               </Text>
-              <BookingCard width="330px" />
-              <BookingCard width="330px" />
-              <BookingCard width="330px" />
-              <BookingCard width="330px" />
+              <Flex wrap={'wrap'} gap={{ base: 6, '2xl': 10 }}>
+                {tours.map((tour) => (
+                  <TourCard tour={tour} key={tour._id} />
+                ))}
+              </Flex>
             </Box>
-          </>
-        )}
-      </Flex>
+            {user && (
+              <>
+                <Box
+                  display={{ base: 'none', xl: 'block' }}
+                  minW={{ md: '2%' }}
+                  borderLeft="2px dashed"
+                  borderColor={secondaryColor}
+                  my={8}
+                  pr={3}
+                />
+                <Box
+                  flex="1"
+                  minW="24%"
+                  py={8}
+                  display={{ base: 'none', xl: 'block' }}
+                >
+                  <Text
+                    fontSize="xl"
+                    fontWeight="bold"
+                    mb={4}
+                    color={primaryColor}
+                  >
+                    My Bookings
+                  </Text>
+                  <BookingCard width="auto" />
+                  <BookingCard width="auto" />
+                  <BookingCard width="auto" />
+                  <BookingCard width="auto" />
+                </Box>
+              </>
+            )}
+          </Flex>
+        </>
+      )}
     </PageLayout>
   )
 }

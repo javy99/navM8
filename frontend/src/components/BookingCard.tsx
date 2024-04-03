@@ -41,6 +41,7 @@ const BookingCard: React.FC<Props> = ({ width }) => {
       boxShadow="0 4px 4px 0 #69490b"
       p={3}
       mb={6}
+      mr={4}
     >
       <VStack>
         <Image
@@ -49,9 +50,14 @@ const BookingCard: React.FC<Props> = ({ width }) => {
           width="100%"
           objectFit="cover"
           borderRadius="xl"
+          display={{ base: 'none', '2xl': 'block' }}
         />
       </VStack>
-      <Flex flexDirection="column" pl={5} justifyContent="center">
+      <Flex
+        flexDirection="column"
+        pl={{ base: 'none', '2xl': 5 }}
+        justifyContent="center"
+      >
         <Text fontWeight="bold" fontSize="xl" mb={3} color={primaryColor}>
           {/* {guide.name} */}Skardu
         </Text>

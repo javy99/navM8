@@ -27,6 +27,16 @@ async function uploadTourImageToCloudinary(filePath: string): Promise<string> {
   }
 }
 
+const getAllTours = async (req: Request, res: Response) => {
+  try {
+    const tours = await Tour.find().populate('author').exec()
+    res.json(tours)
+  } catch (error) {
+    console.error('Error fetching tours:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 const createTour = async (req: MulterRequest, res: Response) => {
   try {
     const {
@@ -85,4 +95,4 @@ const getMyTours = async (req: Request, res: Response) => {
   }
 }
 
-export { createTour, getMyTours }
+export { getAllTours, createTour, getMyTours }

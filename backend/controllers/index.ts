@@ -5,8 +5,11 @@ export {
   uploadProfilePhoto,
   getProfilePhoto,
   deleteProfilePhoto,
+  addFavoriteTour,
+  deleteFavoriteTour
+  getFavoriteTours,
 } from './userControllers'
-export { createTour, getMyTours } from './tourControllers'
+export { getAllTours, createTour, getMyTours } from './tourControllers'
 export { signupUser, loginUser } from './authControllers'
 export {
   accessChat,

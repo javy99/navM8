@@ -217,6 +217,93 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 }
 
+// Add favorite tour
+const addFavoriteTour = async (req: Request, res: Response) => {
+  const userId = req.params.id
+  const { tourId } = req.body
+
+  try {
+    const user = await User.findById(userId)
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).send('User not found.')
+    }
+
+    // Check if the tour ID is already in the user's favoriteTours
+    if (user.favoriteTours.includes(tourId)) {
+      return res.status(400).send('Tour is already in favorites.')
+    }
+
+    // Add the tour ID to the user's favoriteTours array
+    user.favoriteTours.push(tourId)
+    await user.save() // Save the updated user document
+
+    res.status(200).json({
+      message: 'Tour added to favorites successfully.',
+      favoriteTours: user.favoriteTours,
+    })
+  } catch (error) {
+    console.error('Error adding tour to favorites:', error)
+    res.status(500).send('Error adding tour to favorites.')
+  }
+}
+
+// Delete favorite tour
+const deleteFavoriteTour = async (req: Request, res: Response) => {
+  const userId = req.params.id
+  const tourId = req.params.tourId // Assuming you're now capturing tourId from the URL
+
+  try {
+    // Directly remove the tourId from user's favoriteTours using $pull
+    const updateResult = await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: { favoriteTours: tourId },
+      },
+      { new: true },
+    ) // Return the updated document
+
+    // If the user was not found or the update did not modify any document
+    if (!updateResult) {
+      return res
+        .status(404)
+        .send('User not found or tour was not in favorites.')
+    }
+
+    res.status(200).json({
+      message: 'Tour removed from favorites successfully.',
+      favoriteTours: updateResult.favoriteTours,
+    })
+  } catch (error) {
+    console.error('Error removing tour from favorites:', error)
+    res.status(500).send('Error removing tour from favorites.')
+  }
+}
+
+const getFavoriteTours = async (req: Request, res: Response) => {
+  const userId = req.params.id
+
+  try {
+    const user = await User.findById(userId)
+      .populate('favoriteTours')
+      .populate({
+        path: 'favoriteTours',
+        populate: { path: 'author' },
+      })
+      .exec()
+
+    if (!user) {
+      return res.status(404).send('User not found.')
+    }
+
+    res.json(user.favoriteTours)
+  } catch (error) {
+    console.error('Error fetching favorite tours:', error)
+    res.status(500).send('Error fetching favorite tours.')
+  }
+}
+
 export {
   updateProfile,
   getProfile,
@@ -224,4 +311,7 @@ export {
   getProfilePhoto,
   deleteProfilePhoto,
   getAllUsers,
+  addFavoriteTour,
+  deleteFavoriteTour,
+  getFavoriteTours,
 }

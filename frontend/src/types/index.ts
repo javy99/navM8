@@ -1,6 +1,5 @@
 export type { User } from './types'
 export type { Tour } from './types'
-export type { Guide } from './types'
 export type { Chat } from './types'
 export type { Message } from './types'
 export type { ChildrenProps } from './types'

@@ -17,6 +17,20 @@ const initialTourInfo = {
   to: '',
   description: '',
   photos: [],
+  author: {
+    firstName: '',
+    lastName: '',
+    country: '',
+    city: '',
+    languagesSpoken: [],
+    interests: [],
+    gender: '',
+    bio: '',
+    phoneNumber: '',
+    birthDate: '',
+    currentPassword: '',
+    newPassword: '',
+  },
 }
 
 const useMyTours = (onClose) => {

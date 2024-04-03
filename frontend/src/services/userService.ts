@@ -43,3 +43,19 @@ export const updateUserProfile = async (
     }
   }
 }
+
+export const getAllUsers = async (token: string) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/users`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to fetch users.')
+  }
+}

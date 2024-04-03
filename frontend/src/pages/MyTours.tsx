@@ -17,7 +17,7 @@ import {
   ResponsiveValue,
   Spinner,
 } from '@chakra-ui/react'
-import { TourCard, Button, FormField } from '../components'
+import { MyTourCard, Button, FormField } from '../components'
 import { useAuthContext, useMyTours } from '../hooks'
 import PageLayout from './PageLayout'
 
@@ -89,7 +89,7 @@ const MyTours: React.FC = () => {
             mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
           >
             {tours.map((tour) => (
-              <TourCard
+              <MyTourCard
                 width={{ base: '100%', '2xl': '48%' }}
                 tour={tour}
                 key={tour._id}
@@ -106,7 +106,7 @@ const MyTours: React.FC = () => {
             mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
           >
             {upcomingTours.map((tour) => (
-              <TourCard
+              <MyTourCard
                 width={{ base: '100%', '2xl': '48%' }}
                 tour={tour}
                 key={tour._id}
@@ -123,7 +123,7 @@ const MyTours: React.FC = () => {
             mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
           >
             {pastTours.map((tour) => (
-              <TourCard
+              <MyTourCard
                 width={{ base: '100%', '2xl': '48%' }}
                 tour={tour}
                 key={tour._id}

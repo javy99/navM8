@@ -20,10 +20,10 @@ import {
   BsBookmarkHeartFill,
 } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
-import { User, Guide } from '../types'
+import { User } from '../types'
 
 type Props = {
-  guide: Guide
+  guide: any
   user: User | null
 }
 

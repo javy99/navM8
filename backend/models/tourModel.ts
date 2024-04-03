@@ -3,6 +3,21 @@ import { Country, City } from 'country-state-city'
 
 const { Schema } = mongoose
 
+interface ITour extends Document {
+  name: string
+  country: string
+  city: string
+  maxPeople: number
+  typeOfAvailability: 'recurring' | 'one-time'
+  availability?: string
+  date?: Date
+  from: Date
+  to: Date
+  description: string
+  photos: string[]
+  author: mongoose.Schema.Types.ObjectId
+}
+
 const tourSchema: MongooseSchema = new Schema(
   {
     name: {
@@ -122,5 +137,5 @@ const tourSchema: MongooseSchema = new Schema(
   },
 )
 
-const Tour = mongoose.model('Tour', tourSchema)
+const Tour = mongoose.model<ITour>('Tour', tourSchema)
 export default Tour

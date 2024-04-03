@@ -1,9 +1,23 @@
 import axios from 'axios'
 
+const getAllTours = async (token: string) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/tours`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
 const fetchMyTours = async (token: string) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/mytours`,
+      `${import.meta.env.VITE_API_URL}/api/tours/mytours`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },
@@ -17,7 +31,7 @@ const fetchMyTours = async (token: string) => {
 const createTour = async (formData: FormData, token: string) => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/mytours`,
+      `${import.meta.env.VITE_API_URL}/api/tours/mytours`,
       formData,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -29,4 +43,4 @@ const createTour = async (formData: FormData, token: string) => {
   }
 }
 
-export { fetchMyTours, createTour }
+export { getAllTours, fetchMyTours, createTour }
