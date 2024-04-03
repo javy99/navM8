@@ -5,7 +5,7 @@ import HeaderBgImage from '../assets/hero-bg6.jpg'
 import { Tour } from '../types'
 import { useAuthContext } from '../hooks'
 import PageLayout from './PageLayout'
-import { getAllTours } from '../services/tourService'
+import { getAllTours } from '../services'
 
 const HomePage: React.FC = () => {
   const { state } = useAuthContext()
@@ -75,11 +75,7 @@ const HomePage: React.FC = () => {
             </Text>
             <SearchBar />
           </Box>
-          <Flex
-            direction={{ base: 'column', md: 'row' }}
-            pb={5}
-            overflow="hidden"
-          >
+          <Flex direction={{ base: 'column', md: 'row' }} overflow="hidden">
             <Box p={8} flex="3" minW={{ md: '74%' }}>
               <Text fontSize="xl" mb={4} color={primaryColor} fontWeight="bold">
                 The Most Popular Tours

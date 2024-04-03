@@ -68,7 +68,7 @@ const Favorites: React.FC = () => {
           <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
             Favorites
           </Heading>
-          <Flex wrap={'wrap'} gap={{ base: 6, '2xl': 10 }}>
+          <Flex wrap={'wrap'} gap={{ base: 6, lg: 8, '2xl': 10 }}>
             {favoriteTours.map((tour) => (
               <TourCard
                 key={tour._id}

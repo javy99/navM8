@@ -8,8 +8,15 @@ export {
   getAllUsers,
   fetchUserProfile,
   updateUserProfile,
+  checkIsFavorite,
+  toggleFavorite,
 } from '../services/userService'
-export { fetchMyTours, createTour } from '../services/tourService'
+export {
+  fetchMyTours,
+  createTour,
+  getAllTours,
+  getTourById,
+} from '../services/tourService'
 export {
   searchUsers,
   createGroupChat,

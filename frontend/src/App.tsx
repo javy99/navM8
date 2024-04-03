@@ -11,6 +11,7 @@ import {
   HomePage,
   Signup,
   Login,
+  TourDetails,
 } from './pages'
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/bookings" element={<MyBookings />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/mytours" element={<MyTours />} />
+          <Route path="/:id" element={<TourDetails />} />
         </Routes>
       </BrowserRouter>
     </>

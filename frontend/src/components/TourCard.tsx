@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import {
   Text,
   Flex,
@@ -14,15 +13,14 @@ import {
   useTheme,
   Divider,
   Avatar,
+  useToast,
 } from '@chakra-ui/react'
 import {
   BsStarFill,
   BsGeoAltFill,
   BsBookmarkHeartFill,
-  BsPeopleFill,
-  BsClockFill,
   BsCalendar2Fill,
-  BsFillXCircleFill,
+  BsBookmarkXFill,
 } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -31,6 +29,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Tour } from '../types'
 import { useAuthContext } from '../hooks'
+import { checkIsFavorite, toggleFavorite } from '../services'
 
 type Props = {
   tour: Tour
@@ -43,86 +42,70 @@ const TourCard: React.FC<Props> = ({
   isFavoritePage = false,
   removeFromFavorites,
 }) => {
-  const [isFavorited, setIsFavorited] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
   const navigate = useNavigate()
   const theme = useTheme()
   const { state } = useAuthContext()
   const { user } = state
+  const toast = useToast()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
   const whiteColor = theme.colors.white
 
-  // Customize icon colors here
   const favoriteIconColor = '#FF000F'
   const notFavoriteIconColor = 'gray.300'
-  const removeIconColor = 'gray.500'
+  const removeIconColor = 'gray.700'
 
-  const actionIcon = isFavoritePage ? BsFillXCircleFill : BsBookmarkHeartFill
+  const actionIcon = isFavoritePage ? BsBookmarkXFill : BsBookmarkHeartFill
   const iconColor = isFavoritePage
     ? removeIconColor
-    : isFavorited
+    : isFavorite
       ? favoriteIconColor
       : notFavoriteIconColor
 
   useEffect(() => {
-    const checkIfFavorited = async () => {
-      if (user) {
-        try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/users/${user._id}/favoriteTours`,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
-            },
-          )
-          const favorites = response.data
-          const isFavorited = favorites.some(
-            (favoriteTour) => favoriteTour._id === tour._id,
-          )
-          setIsFavorited(isFavorited)
-        } catch (error) {
-          console.error("Couldn't fetch the favorite status", error)
-        }
-      }
+    if (!user || !user._id || !user.token || !tour._id) {
+      console.error('Missing required data')
+      return
     }
 
-    checkIfFavorited()
-  }, [tour._id, user])
+    checkIsFavorite(user._id, tour._id, user.token)
+      .then(setIsFavorite)
+      .catch((error) =>
+        console.error("Couldn't fetch the favorite status", error),
+      )
+  }, [tour, user])
 
-  const toggleFavorite = async (e) => {
+  const handleToggleFavorite = async (e) => {
     e.stopPropagation()
-    if (!user) return
 
-    let method = isFavorited ? 'delete' : 'post'
-    if (isFavoritePage) {
-      method = 'delete'
-    }
-
-    const url = isFavorited
-      ? `${import.meta.env.VITE_API_URL}/api/users/${user._id}/favoriteTours/${tour._id}`
-      : `${import.meta.env.VITE_API_URL}/api/users/${user._id}/favoriteTours`
+    if (!user || !user._id || !user.token || !tour._id) return
 
     try {
-      const config = {
-        method: method,
-        url: url,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        ...(method === 'post' && { data: { tourId: tour._id } }),
-      }
+      await toggleFavorite(
+        user._id,
+        tour._id,
+        isFavorite,
+        isFavoritePage,
+        user.token,
+      )
 
-      await axios(config)
-
-      if (isFavoritePage && method === 'delete') {
-        // Remove the tour from favorites immediately from the UI
-        if (removeFromFavorites) {
-          removeFromFavorites() // Call the prop function to remove the tour from favorites
-        }
+      if (isFavoritePage && removeFromFavorites) {
+        removeFromFavorites()
+        toast({
+          title: 'Removed from favorites',
+          status: 'info',
+          duration: 3000,
+          isClosable: true,
+        })
       } else {
-        setIsFavorited(!isFavorited)
+        setIsFavorite(!isFavorite)
+        toast({
+          title: isFavorite ? 'Removed from favorites' : 'Added to favorites',
+          status: isFavorite ? 'info' : 'success',
+          duration: 3000,
+          isClosable: true,
+        })
       }
     } catch (error) {
       console.error("Couldn't update the favorite status", error)
@@ -130,13 +113,17 @@ const TourCard: React.FC<Props> = ({
   }
 
   const openCardDetails = () => {
-    navigate(`/guides/${tour._id}`)
+    navigate(`/${tour._id}`)
   }
 
   return (
     <ChakraCard
       borderRadius="xl"
-      width={{ base: '100%', md: '48%', '2xl': '30%' }}
+      width={
+        isFavoritePage
+          ? { base: '100%', md: '48%', xl: '31%', '2xl': '23%' }
+          : { base: '100%', md: '48%', '2xl': '31%' }
+      }
       bg="#F6FBFC"
       transition="all 0.3s"
       _hover={{
@@ -188,13 +175,6 @@ const TourCard: React.FC<Props> = ({
       <CardFooter>
         <VStack align="stretch" w="100%">
           <Flex align="center" fontSize="sm" mb={2}>
-            <Icon as={BsPeopleFill} mr={3} color="#38A169" w={4} h={4} />
-            <Text>
-              <b>Max People:</b> {tour.maxPeople}{' '}
-              {parseInt(tour.maxPeople, 10) === 1 ? 'person' : 'people'}
-            </Text>
-          </Flex>
-          <Flex align="center" fontSize="sm" mb={2}>
             <Icon as={BsCalendar2Fill} mr={3} color="#E53E3E" w={4} h={4} />
             <Text>
               <b>Availability: </b>
@@ -207,13 +187,6 @@ const TourCard: React.FC<Props> = ({
               ) : (
                 new Date(tour.date).toLocaleDateString()
               )}
-            </Text>
-          </Flex>
-          <Flex align="center" fontSize="sm" mb={2}>
-            <Icon as={BsClockFill} mr={3} color="#E53E3E" w={4} h={4} />
-            <Text>
-              <b>Time: </b>
-              {tour.from} - {tour.to}
             </Text>
           </Flex>
           <Flex align="center" fontSize="sm" mb={2}>
@@ -251,7 +224,7 @@ const TourCard: React.FC<Props> = ({
               <Button
                 size="sm"
                 padding={0}
-                onClick={toggleFavorite}
+                onClick={handleToggleFavorite}
                 _hover={{
                   bg: 'transparent',
                 }}

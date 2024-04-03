@@ -41,7 +41,7 @@ const BookingCard: React.FC<Props> = ({ width }) => {
       boxShadow="0 4px 4px 0 #69490b"
       p={3}
       mb={6}
-      mr={4}
+      mr={{ base: 4, '2xl': 6 }}
     >
       <VStack>
         <Image

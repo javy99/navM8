@@ -6,10 +6,10 @@ export {
   getProfilePhoto,
   deleteProfilePhoto,
   addFavoriteTour,
-  deleteFavoriteTour
+  deleteFavoriteTour,
   getFavoriteTours,
 } from './userControllers'
-export { getAllTours, createTour, getMyTours } from './tourControllers'
+export { getAllTours, createTour, getMyTours, getTour } from './tourControllers'
 export { signupUser, loginUser } from './authControllers'
 export {
   accessChat,

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { User } from '../types'
 
-export const fetchUserProfile = async (token: string, id: string) => {
+const fetchUserProfile = async (token: string, id: string) => {
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/api/users/${id}`,
@@ -17,11 +17,7 @@ export const fetchUserProfile = async (token: string, id: string) => {
   }
 }
 
-export const updateUserProfile = async (
-  token: string,
-  id: string,
-  userInfo: User,
-) => {
+const updateUserProfile = async (token: string, id: string, userInfo: User) => {
   try {
     await axios.patch(
       `${import.meta.env.VITE_API_URL}/api/users/${id}`,
@@ -44,7 +40,7 @@ export const updateUserProfile = async (
   }
 }
 
-export const getAllUsers = async (token: string) => {
+const getAllUsers = async (token: string) => {
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/api/users`,
@@ -58,4 +54,65 @@ export const getAllUsers = async (token: string) => {
   } catch (error) {
     throw new Error('Failed to fetch users.')
   }
+}
+
+const checkIsFavorite = async (
+  userId: string,
+  tourId: string,
+  token: string,
+) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
+    return response.data.some(
+      (favoriteTour: any) => favoriteTour._id === tourId,
+    )
+  } catch (error) {
+    console.error("Couldn't fetch the favorite status", error)
+    throw error
+  }
+}
+
+const toggleFavorite = async (
+  userId: string,
+  tourId: string,
+  isFavorited: boolean,
+  isFavoritePage: boolean,
+  token: string,
+) => {
+  let method = isFavorited ? 'delete' : 'post'
+  if (isFavoritePage) {
+    method = 'delete'
+  }
+
+  const url = isFavorited
+    ? `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours/${tourId}`
+    : `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours`
+
+  try {
+    await axios({
+      method: method,
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      ...(method === 'post' && { data: { tourId: tourId } }),
+    })
+  } catch (error) {
+    console.error("Couldn't update the favorite status", error)
+    throw error
+  }
+}
+
+export {
+  getAllUsers,
+  fetchUserProfile,
+  updateUserProfile,
+  checkIsFavorite,
+  toggleFavorite,
 }

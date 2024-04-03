@@ -43,4 +43,18 @@ const createTour = async (formData: FormData, token: string) => {
   }
 }
 
-export { getAllTours, fetchMyTours, createTour }
+const getTourById = async (tourId: string, token: string) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/tours/${tourId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export { getAllTours, fetchMyTours, createTour, getTourById }

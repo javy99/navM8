@@ -95,4 +95,20 @@ const getMyTours = async (req: Request, res: Response) => {
   }
 }
 
-export { getAllTours, createTour, getMyTours }
+const getTour = async (req: Request, res: Response) => {
+  try {
+    const tour = await Tour.findById(req.params.id).populate('author').exec()
+
+    if (!tour) {
+      res.status(404).json({ error: 'Tour not found' })
+      return
+    }
+
+    res.json(tour)
+  } catch (error) {
+    console.error('Error fetching tour:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export { getAllTours, createTour, getMyTours, getTour }
