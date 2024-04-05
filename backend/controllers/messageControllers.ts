@@ -1,7 +1,5 @@
 import { Request, Response } from 'express'
-import Message, { IMessage } from '../models/messageModel'
-import { User } from '../models'
-import Chat from '../models/chatModel'
+import { User, Chat, IMessage, Message } from '../models'
 
 const sendMessage = async (req: Request, res: Response) => {
   const { content, chatId } = req.body

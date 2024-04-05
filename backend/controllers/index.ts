@@ -20,3 +20,10 @@ export {
   removeFromGroup,
 } from './chatControllers'
 export { sendMessage, getAllMessages } from './messageControllers'
+export {
+  createBooking,
+  getBookingsForUser,
+  getBookingsForTour,
+  updateBookingStatus,
+  deleteBooking,
+} from './bookingControllers'

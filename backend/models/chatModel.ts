@@ -1,6 +1,6 @@
 import mongoose, { Schema as MongooseSchema } from 'mongoose'
 
-export interface IChat {
+export default interface IChat {
   _id: string
   chatName: string
   isGroupChat: boolean
@@ -42,4 +42,4 @@ const chatSchema: MongooseSchema = new Schema(
 )
 
 const Chat = mongoose.model<IChat>('Chat', chatSchema)
-export default Chat
+export { IChat, Chat }

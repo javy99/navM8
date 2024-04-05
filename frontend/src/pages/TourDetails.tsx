@@ -36,6 +36,7 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { checkIsFavorite, toggleFavorite, getTourById } from '../services'
 import StarRating from '../components/StarRating'
+import { format } from 'date-fns'
 
 const reviews = [
   {
@@ -130,8 +131,6 @@ const TourDetails: React.FC = () => {
 
   const toast = useToast()
 
-  const [value, onChange] = useState<Value>(new Date())
-
   const [isFavorite, setIsFavorite] = useState(false)
   const theme = useTheme()
   const primaryColor = theme.colors.primary
@@ -139,6 +138,11 @@ const TourDetails: React.FC = () => {
   const whiteColor = theme.colors.white
   const [tourDetails, setTourDetails] = useState<Tour | undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [value, onChange] = useState<Value>(new Date())
+  const [isBooked, setIsBooked] = useState<boolean>(false)
+  const [bookingStatus, setBookingStatus] = useState<string | null>(null)
+  const [bookingDate, setBookingDate] = useState<string | null>(null)
+  const [currentTourBooking, setCurrentTourBooking] = useState<any>(null)
 
   const { id } = useParams()
 
@@ -175,6 +179,52 @@ const TourDetails: React.FC = () => {
     checkFavoriteStatus()
   }, [user, id])
 
+  useEffect(() => {
+    const fetchBookings = async () => {
+      setIsLoading(true)
+      try {
+        if (user && user.token && id) {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/bookings/mybookings`,
+            {
+              headers: { Authorization: `Bearer ${user.token}` },
+            },
+          )
+          const bookings = response.data
+
+          // Find a booking for the current tour
+          const tourBooking = bookings.find(
+            (booking) => booking.tour._id === id,
+          )
+          if (tourBooking) {
+            setIsBooked(true)
+            setBookingStatus(tourBooking.status)
+            setBookingDate(new Date(tourBooking.date).toLocaleDateString())
+            setCurrentTourBooking(tourBooking)
+          } else {
+            setIsBooked(false)
+            setBookingStatus(null)
+            setBookingDate(null)
+            setCurrentTourBooking(null)
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user bookings:', error)
+        toast({
+          title: 'Failed to fetch bookings',
+          description: 'Unable to verify if the tour has been booked.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchBookings()
+  }, [id, user, bookingStatus])
+
   const handleToggleFavorite = async () => {
     if (!user || !user._id || !user.token || !id) return
 
@@ -208,6 +258,110 @@ const TourDetails: React.FC = () => {
   const getSlidesPerView = () => {
     const photosCount = tourDetails?.photos?.length || 0
     return photosCount >= 3 ? 3 : photosCount
+  }
+
+  const handleBooking = async () => {
+    if (!user || !user.token || !id || !value) {
+      toast({
+        title: 'Please log in and select a date to book this tour.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+      return
+    }
+
+    const bookingDate = Array.isArray(value) ? value[0] : value
+    if (!bookingDate) {
+      toast({
+        title: 'Please select a date to book this tour.',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      })
+      return
+    }
+
+    const bookingDateISO = format(bookingDate, 'yyyy-MM-dd')
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/bookings`,
+        {
+          tourId: id,
+          date: bookingDateISO,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        },
+      )
+
+      setIsBooked(true)
+      setBookingStatus('PENDING')
+      setCurrentTourBooking(response.data.booking)
+
+      toast({
+        title: 'Booking successful!',
+        description: 'Your tour has been booked.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast({
+          title: error.response?.data?.error || 'An error occurred',
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        })
+      }
+    }
+  }
+
+  const handleCancelBooking = async (bookingId) => {
+    if (!user || !user.token || !id) {
+      toast({
+        title: 'Please log in to cancel this booking.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+      return
+    }
+
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        },
+      )
+
+      setIsBooked(false)
+      setBookingStatus(null)
+      setCurrentTourBooking(null)
+
+      toast({
+        title: 'Booking canceled successfully!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast({
+          title: error.response?.data?.error || 'An error occurred',
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        })
+      }
+    }
   }
 
   return (
@@ -452,9 +606,53 @@ const TourDetails: React.FC = () => {
                   value={value}
                   className="myCustomCalendarStyle"
                 />
-                <Button width="100%" mt={4}>
-                  Book
-                </Button>
+                {isBooked && bookingStatus ? (
+                  <Box width="100%">
+                    <Text
+                      color="red.500"
+                      mt={4}
+                      fontWeight="bold"
+                      textAlign="center"
+                    >
+                      {bookingStatus === 'COMPLETED' ? (
+                        <>
+                          This tour has been completed. You can book it again!
+                        </>
+                      ) : (
+                        <>
+                          You have booked this tour for{' '}
+                          {bookingDate
+                            ? new Date(bookingDate).toLocaleDateString()
+                            : 'an unknown date'}
+                          . Booking Status: {bookingStatus}.
+                        </>
+                      )}
+                    </Text>
+                    {bookingStatus !== 'CANCELLED' ? (
+                      <Button
+                        width="100%"
+                        mt={4}
+                        onClick={() =>
+                          handleCancelBooking(currentTourBooking._id)
+                        }
+                        colorScheme="red"
+                      >
+                        Cancel
+                      </Button>
+                    ) : null}
+                  </Box>
+                ) : (
+                  <Button
+                    width="100%"
+                    mt={4}
+                    onClick={handleBooking}
+                    isDisabled={isBooked && bookingStatus !== 'COMPLETED'}
+                  >
+                    {isBooked && !bookingStatus
+                      ? 'Booking in progress...'
+                      : 'Book'}
+                  </Button>
+                )}
               </Box>
             </Flex>
           </Flex>
@@ -566,7 +764,7 @@ const TourDetails: React.FC = () => {
           <Flex flexDir="column" mt={8}>
             <StarRating rating={4.5} reviewCount={22} />
             {reviews.map((review) => (
-              <>
+              <React.Fragment key={review.id}>
                 <VStack key={review.id} align="start" my={5}>
                   <Flex align="center" mb={4}>
                     <Avatar src={review.avatar} size="lg" />
@@ -587,7 +785,7 @@ const TourDetails: React.FC = () => {
                   width="100%"
                   borderColor="#D3D3D3"
                 />
-              </>
+              </React.Fragment>
             ))}
           </Flex>
         </VStack>

@@ -1,6 +1,6 @@
 import mongoose, { Schema as MongooseSchema } from 'mongoose'
 
-export interface IMessage {
+export default interface IMessage {
   _id: string
   sender: string
   content: string
@@ -30,4 +30,4 @@ const messageSchema: MongooseSchema = new Schema(
 )
 
 const Message = mongoose.model<IMessage>('Message', messageSchema)
-export default Message
+export { IMessage, Message }

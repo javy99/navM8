@@ -52,4 +52,12 @@ export interface Chat {
   latestMessage?: Message
 }
 
+export interface Booking {
+  _id: string
+  tour: Tour
+  userId: string
+  date: string
+  status: string
+}
+
 export type ChildrenProps = { children: React.ReactNode }

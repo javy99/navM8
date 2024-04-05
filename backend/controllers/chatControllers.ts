@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import Chat, { IChat } from '../models/chatModel'
-import { IUser, User } from '../models'
+import { IUser, User, IChat, Chat } from '../models'
 
 const accessChat = async (req: Request, res: Response) => {
   const { userId } = req.body

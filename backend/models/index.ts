@@ -1,2 +1,5 @@
-export { default as Tour } from './tourModel'
-export { User, IUser } from './userModel'
+export { ITour, Tour } from './tourModel'
+export { IUser, User } from './userModel'
+export { IChat, Chat } from './chatModel'
+export { IMessage, Message } from './messageModel'
+export { IBooking, Booking } from './bookingModel'

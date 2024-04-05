@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Text, Box, useTheme, Spinner } from '@chakra-ui/react'
-import { SearchBar, BookingCard, TourCard } from '../components'
+import { SearchBar, TourCard } from '../components'
 import HeaderBgImage from '../assets/hero-bg6.jpg'
 import { Tour } from '../types'
 import { useAuthContext } from '../hooks'
@@ -110,10 +110,12 @@ const HomePage: React.FC = () => {
                   >
                     My Bookings
                   </Text>
+                  {/*
                   <BookingCard width="auto" />
                   <BookingCard width="auto" />
                   <BookingCard width="auto" />
-                  <BookingCard width="auto" />
+                  <BookingCard width="auto" /> 
+                  */}
                 </Box>
               </>
             )}
