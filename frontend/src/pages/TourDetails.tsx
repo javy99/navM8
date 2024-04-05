@@ -26,6 +26,7 @@ import {
   BsPeople,
   BsHeart,
   BsHeartFill,
+  BsTranslate,
 } from 'react-icons/bs'
 import { Button, Rating } from '../components'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -34,6 +35,90 @@ import 'swiper/css/pagination'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { checkIsFavorite, toggleFavorite, getTourById } from '../services'
+import StarRating from '../components/StarRating'
+
+const reviews = [
+  {
+    id: 'review1',
+    name: 'John Doe',
+    date: '2023-03-25',
+    rating: 4.5,
+    text: 'Great product! Highly recommend. The quality exceeded my expectations and the customer service was outstanding. Will definitely be purchasing from here again.',
+    avatar: 'https://i.pravatar.cc/300?img=1',
+  },
+  {
+    id: 'review2',
+    name: 'Jane Smith',
+    date: '2023-03-20',
+    rating: 4.0,
+    text: `Very satisfied with the purchase. The item arrived on time and in perfect condition. The quality is great for the price point, and I've received numerous compliments already.`,
+    avatar: 'https://i.pravatar.cc/300?img=2',
+  },
+  {
+    id: 'review3',
+    name: 'Alex Johnson',
+    date: '2023-04-02',
+    rating: 5.0,
+    text: 'Absolutely love this product! It has become a staple in my daily routine. The results are noticeable, and I appreciate the eco-friendly packaging.',
+    avatar: 'https://i.pravatar.cc/300?img=3',
+  },
+  {
+    id: 'review4',
+    name: 'Chris Lee',
+    date: '2023-03-15',
+    rating: 3.5,
+    text: `The product is good, but it took longer than expected to arrive. Customer service was helpful when I reached out for updates. I'm happy with the product but hope shipping speeds up next time.`,
+    avatar: 'https://i.pravatar.cc/300?img=4',
+  },
+  {
+    id: 'review5',
+    name: 'Morgan Bailey',
+    date: '2023-03-30',
+    rating: 4.8,
+    text: `This has to be one of the best purchases I've made this year. Exceptional quality and it arrived earlier than anticipated. The brand's attention to detail is evident in the packaging and product itself.`,
+    avatar: 'https://i.pravatar.cc/300?img=5',
+  },
+  {
+    id: 'review6',
+    name: 'Jamie Rivera',
+    date: '2023-04-01',
+    rating: 4.2,
+    text: `Good value for the money. I was skeptical at first, but I'm glad I went ahead with the purchase. It fits my needs perfectly and the durability seems promising.`,
+    avatar: 'https://i.pravatar.cc/300?img=6',
+  },
+  {
+    id: 'review7',
+    name: 'Casey Kim',
+    date: '2023-03-22',
+    rating: 3.8,
+    text: `Overall, a solid product, though there's room for improvement. The features are great, but I experienced some minor issues with usability. The company seems receptive to feedback, so I'm optimistic about future updates.`,
+    avatar: 'https://i.pravatar.cc/300?img=7',
+  },
+  {
+    id: 'review8',
+    name: 'Jordan Parker',
+    date: '2023-03-18',
+    rating: 5.0,
+    text: `I'm thoroughly impressed! The product outperforms any other I've tried in its category. It's evident that a lot of thought went into its design and manufacture. Highly recommend to anyone on the fence.`,
+    avatar: 'https://i.pravatar.cc/300?img=8',
+  },
+  {
+    id: 'review9',
+    name: 'Taylor Green',
+    date: '2023-03-29',
+    rating: 4.6,
+    text: `This product has exceeded my expectations in every way. From functionality to design, it's top-notch. I've already recommended it to several friends and family members.`,
+    avatar: 'https://i.pravatar.cc/300?img=9',
+  },
+  {
+    id: 'review10',
+    name: 'Dakota Ray',
+    date: '2023-03-27',
+    rating: 4.4,
+    text: `After using this product for a few weeks, I'm happy with my purchase. It performs as advertised, and the customer support team was incredibly helpful with the questions I had.`,
+    avatar: 'https://i.pravatar.cc/300?img=10',
+  },
+]
 
 type ValuePiece = Date | null
 
@@ -246,6 +331,7 @@ const TourDetails: React.FC = () => {
             <Flex
               direction="column"
               width={{ base: '100%', md: '49%', lg: '58%', '2xl': '69%' }}
+              justifySelf="flex-end"
             >
               <Flex align="center">
                 <Icon as={BsGeoAltFill} color="#EC502C" h={18} w={18} mr={2} />
@@ -338,7 +424,7 @@ const TourDetails: React.FC = () => {
               <Divider
                 orientation="horizontal"
                 width="100%"
-                mt={6}
+                my={6}
                 borderColor="#D3D3D3"
               />
             </Flex>
@@ -358,7 +444,7 @@ const TourDetails: React.FC = () => {
                 <Divider
                   orientation="horizontal"
                   width="100%"
-                  mb={4}
+                  mb={2}
                   borderColor="#D3D3D3"
                 />
                 <Calendar
@@ -371,6 +457,138 @@ const TourDetails: React.FC = () => {
                 </Button>
               </Box>
             </Flex>
+          </Flex>
+          <Flex direction="column">
+            <Heading as="h4" size="md" color={primaryColor} mb={8} mt={4}>
+              Tour Author
+            </Heading>
+            <Flex align="center" mb={8}>
+              <Icon
+                as={BsCalendar2Minus}
+                color={secondaryColor}
+                h={22}
+                w={22}
+                mr={2}
+              />
+              <Text color={secondaryColor}>
+                <b>Full Name: </b>
+                {tourDetails.author.firstName} {tourDetails.author.lastName}
+              </Text>
+            </Flex>
+            <Flex align="center" mb={8}>
+              <Icon
+                as={BsTranslate}
+                color={secondaryColor}
+                h={22}
+                w={22}
+                mr={2}
+              />
+              <Text color={secondaryColor}>
+                <b>Languages Spoken: </b>
+                {tourDetails.author.languagesSpoken.join(', ')}
+              </Text>
+            </Flex>
+            <Flex align="center" mb={8}>
+              <Icon
+                as={BsCalendarCheck}
+                mr={2}
+                color={secondaryColor}
+                h={22}
+                w={22}
+              />
+              <Text color={secondaryColor}>
+                <b>Interests: </b>
+                {tourDetails.author.interests.join(', ')}
+              </Text>
+            </Flex>
+            <Flex align="center" mb={8}>
+              <Icon
+                as={BsCalendar2Minus}
+                color={secondaryColor}
+                h={22}
+                w={22}
+                mr={2}
+              />
+              <Text color={secondaryColor}>
+                <b>Bio: </b>
+                {tourDetails.author.bio}
+              </Text>
+            </Flex>
+            <Flex align="center" mb={8}>
+              <Icon as={BsClock} color={secondaryColor} h={22} w={22} mr={2} />
+              <Text color={secondaryColor}>
+                <b>Age: </b>
+                {new Date().getFullYear() -
+                  new Date(tourDetails.author.birthDate).getFullYear() -
+                  (new Date().getMonth() <
+                    new Date(tourDetails.author.birthDate).getMonth() ||
+                  (new Date().getMonth() ===
+                    new Date(tourDetails.author.birthDate).getMonth() &&
+                    new Date().getDate() <
+                      new Date(tourDetails.author.birthDate).getDate())
+                    ? 1
+                    : 0)}{' '}
+                y.o.
+              </Text>
+            </Flex>
+            <Flex align="center" mb={8}>
+              <Icon
+                as={BsCalendar2Minus}
+                color={secondaryColor}
+                h={22}
+                w={22}
+                mr={2}
+              />
+              <Text color={secondaryColor}>
+                <b>Place of birth: </b>
+                {tourDetails.author.country}, {tourDetails.author.city}
+              </Text>
+            </Flex>
+            <Flex align="center" mb={8}>
+              <Icon
+                as={BsCalendar2Minus}
+                color={secondaryColor}
+                h={22}
+                w={22}
+                mr={2}
+              />
+              <Text color={secondaryColor}>
+                <b>Gender: </b>
+                {tourDetails.author.gender}
+              </Text>
+            </Flex>
+          </Flex>
+          <Divider
+            orientation="horizontal"
+            width="100%"
+            borderColor="#D3D3D3"
+          />
+          <Flex flexDir="column" mt={8}>
+            <StarRating rating={4.5} reviewCount={22} />
+            {reviews.map((review) => (
+              <>
+                <VStack key={review.id} align="start" my={5}>
+                  <Flex align="center" mb={4}>
+                    <Avatar src={review.avatar} size="lg" />
+                    <Flex flexDir="column" ml={4}>
+                      <Text fontWeight="bold" mb={1}>
+                        {review.name}
+                      </Text>
+                      <Text fontSize="sm" mb={1}>
+                        {new Date(review.date).toLocaleDateString()}
+                      </Text>
+                      <StarRating rating={review.rating} showDetails={false} />
+                    </Flex>
+                  </Flex>
+                  <Text>{review.text}</Text>
+                </VStack>
+                <Divider
+                  orientation="horizontal"
+                  width="100%"
+                  borderColor="#D3D3D3"
+                />
+              </>
+            ))}
           </Flex>
         </VStack>
       ) : (
