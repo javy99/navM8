@@ -1,10 +1,10 @@
 import { Flex, Text, Box, useTheme, Spinner } from '@chakra-ui/react'
 import { SearchBar, TourCard, PageLayout } from '../components'
 import React, { useState, useEffect } from 'react'
-import HeaderBgImage from '../assets/hero-bg6.jpg'
 import { useAuthContext } from '../hooks'
 import { getAllTours } from '../services'
 import { Tour } from '../types'
+import HeaderBgImage from '../assets/home-bg.jpg'
 
 const HomePage: React.FC = () => {
   const { state } = useAuthContext()

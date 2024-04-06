@@ -3,7 +3,7 @@
   "extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
   "plugins": ["prettier"],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
   },
   "rules": {
     "prettier/prettier": "error",
@@ -11,6 +11,6 @@
     "@typescript-eslint/naming-convention": "off",
     "func-names": "off",
     "consistent-return": "off",
-    "no-console": "off"
-  }
+    "no-console": "off",
+  },
 }

@@ -1,9 +1,9 @@
 import * as express from 'express'
 import * as cors from 'cors'
 import * as dotenv from 'dotenv'
+import * as http from 'http'
 import mongoose from 'mongoose'
 import { Server as SocketIOServer } from 'socket.io'
-import * as http from 'http'
 import { Request, Response } from 'express'
 import {
   authRouter,

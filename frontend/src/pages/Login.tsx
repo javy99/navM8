@@ -16,7 +16,7 @@ import {
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Button } from '../components'
 import { useLogin } from '../hooks'
-import AuthBgImage from '../assets/hero-bg5.jpg'
+import AuthBgImage from '../assets/auth-bg.jpg'
 
 interface ErrorResponse {
   response: {
