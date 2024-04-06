@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Text,
   Flex,
@@ -22,7 +23,6 @@ import {
   BsCalendar2Fill,
   BsBookmarkXFill,
 } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import 'swiper/css'
@@ -42,7 +42,6 @@ const TourCard: React.FC<Props> = ({
   isFavoritePage = false,
   removeFromFavorites,
 }) => {
-  const [isFavorite, setIsFavorite] = useState(false)
   const navigate = useNavigate()
   const theme = useTheme()
   const { state } = useAuthContext()
@@ -51,6 +50,8 @@ const TourCard: React.FC<Props> = ({
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
   const whiteColor = theme.colors.white
+
+  const [isFavorite, setIsFavorite] = useState<boolean>(false)
 
   const favoriteIconColor = '#FF000F'
   const notFavoriteIconColor = 'gray.300'

@@ -10,18 +10,17 @@ import {
   FormControl,
   Input,
   Heading,
-  // Avatar,
 } from '@chakra-ui/react'
-import { BsArrowLeft } from 'react-icons/bs'
-import UpdateGroupChatModal from './UpdateGroupChatModal'
-import { getSender, getSenderFull } from '../configs/ChatLogics'
-import ProfileModal from './ProfileModal'
-import { Message } from '../types'
+import animationData from '../animations/typing.json'
 import ScrollableChat from './ScrollableChat'
 import { io } from 'socket.io-client'
 import Lottie from 'react-lottie'
-import animationData from '../animations/typing.json'
+import { BsArrowLeft } from 'react-icons/bs'
+import { getSender, getSenderFull } from '../configs/ChatLogics'
 import { fetchMessages, sendMessage } from '../services'
+import UpdateGroupChatModal from './UpdateGroupChatModal'
+import ProfileModal from './ProfileModal'
+import { Message } from '../types'
 
 const ENDPOINT = import.meta.env.VITE_API_URL
 let socket, selectedChatCompare
@@ -40,14 +39,16 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
     setNotification,
   } = useAuthContext()
   const { user } = state
-  const [messages, setMessages] = useState<Message[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
-  const [newMessage, setNewMessage] = useState<string>('')
-  const [socketConnected, setSocketConnected] = useState<boolean>(false)
+
   const theme = useTheme()
   const primaryColor = theme.colors.primary
-  const [typing, setTyping] = useState<boolean>(false)
+
+  const [socketConnected, setSocketConnected] = useState<boolean>(false)
+  const [newMessage, setNewMessage] = useState<string>('')
   const [isTyping, setIsTyping] = useState<boolean>(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [typing, setTyping] = useState<boolean>(false)
 
   const defaultOptions = {
     loop: true,

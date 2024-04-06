@@ -1,11 +1,11 @@
+import { ComponentProps } from 'react'
 import {
   Button as ChakraButton,
   useBreakpointValue,
   useTheme,
 } from '@chakra-ui/react'
-import React from 'react'
 
-type ButtonProps = React.ComponentProps<typeof ChakraButton>
+type ButtonProps = ComponentProps<typeof ChakraButton>
 
 const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
   const theme = useTheme()

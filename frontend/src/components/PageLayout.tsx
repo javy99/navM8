@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex } from '@chakra-ui/react'
-import { Navbar, Sidebar } from '../components'
+import { Navbar, Sidebar } from '.'
 import { User } from '../types'
 
 interface Props {

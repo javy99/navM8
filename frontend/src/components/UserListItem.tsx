@@ -1,4 +1,3 @@
-import React from 'react'
 import { Avatar, Box, Text } from '@chakra-ui/react'
 import { User } from '../types'
 
@@ -30,7 +29,6 @@ const UserListItem: React.FC<Props> = ({ user, handleFunction }) => {
         src={user.profilePictureURL}
       />
       <Box>
-        {/* <Text>{user.username}</Text> */}
         <Text>
           {user.firstName} {user.lastName}
         </Text>

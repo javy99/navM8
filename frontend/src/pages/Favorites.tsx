@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { Flex, VStack, Heading, useTheme, Spinner, Box } from '@chakra-ui/react'
+import { TourCard, PageLayout } from '../components'
+import { getFavoriteTours } from '../services'
 import { useAuthContext } from '../hooks'
-import TourCard from '../components/TourCard' // Ensure this import points to your TourCard component
-import PageLayout from './PageLayout'
+import { Tour } from '../types'
 
 const Favorites: React.FC = () => {
   const { state } = useAuthContext()
   const { user } = state
-
-  const [favoriteTours, setFavoriteTours] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const theme = useTheme()
   const primaryColor = theme.colors.primary
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [favoriteTours, setFavoriteTours] = useState<Tour[]>([])
+
   useEffect(() => {
     const fetchFavorites = async () => {
-      if (user) {
+      if (user && user._id && user.token) {
         try {
           setIsLoading(true)
-          const { data } = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/users/${user._id}/favoriteTours`,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
-            },
-          )
+          const data = await getFavoriteTours(user._id, user.token)
           setFavoriteTours(data)
         } catch (error) {
           console.error("Couldn't fetch favorite tours", error)
@@ -39,8 +32,10 @@ const Favorites: React.FC = () => {
     fetchFavorites()
   }, [user])
 
-  const removeFromFavorites = (tourId: string) => {
-    setFavoriteTours(favoriteTours.filter((tour) => tour._id !== tourId))
+  const removeFromFavorites = (tourId?: string) => {
+    if (tourId) {
+      setFavoriteTours(favoriteTours.filter((tour) => tour._id !== tourId))
+    }
   }
 
   return (

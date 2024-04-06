@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Box,
   Flex,
@@ -13,10 +14,9 @@ import {
   useTheme,
 } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import { useNavigate } from 'react-router-dom'
-import AuthBgImage from '../assets/hero-bg5.jpg'
 import { useSignup } from '../hooks'
 import { Button } from '../components'
+import AuthBgImage from '../assets/hero-bg5.jpg'
 
 interface ErrorResponse {
   response: {
@@ -25,15 +25,15 @@ interface ErrorResponse {
 }
 
 const Signup: React.FC = () => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
   const { error, isLoading, signup } = useSignup()
-  const [showPassword, setShowPassword] = useState(false)
   const theme = useTheme()
   const primaryColor = theme.colors.primary
 
-  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [username, setUsername] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>,

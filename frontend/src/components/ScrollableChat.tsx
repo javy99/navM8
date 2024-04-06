@@ -1,8 +1,8 @@
 import React from 'react'
-import { Message } from '../types'
-import ScrollableFeed from 'react-scrollable-feed'
-import { useAuthContext } from '../hooks'
 import { Avatar, Flex, Tooltip } from '@chakra-ui/react'
+import ScrollableFeed from 'react-scrollable-feed'
+import { Message } from '../types'
+import { useAuthContext } from '../hooks'
 import {
   isLastMessage,
   isSameSender,

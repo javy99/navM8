@@ -9,8 +9,6 @@ export {
   deleteFavoriteTour,
   getFavoriteTours,
 } from './userControllers'
-export { getAllTours, createTour, getMyTours, getTour } from './tourControllers'
-export { signupUser, loginUser } from './authControllers'
 export {
   accessChat,
   getChats,
@@ -19,7 +17,6 @@ export {
   addToGroup,
   removeFromGroup,
 } from './chatControllers'
-export { sendMessage, getAllMessages } from './messageControllers'
 export {
   createBooking,
   getBookingsForUser,
@@ -27,3 +24,6 @@ export {
   updateBookingStatus,
   deleteBooking,
 } from './bookingControllers'
+export { getAllTours, createTour, getMyTours, getTour } from './tourControllers'
+export { sendMessage, getAllMessages } from './messageControllers'
+export { signupUser, loginUser } from './authControllers'

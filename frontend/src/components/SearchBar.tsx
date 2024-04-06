@@ -19,11 +19,12 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 const SearchBar: React.FC = () => {
-  const [dates, setDates] = useState<[Date | null, Date | null]>([null, null])
   const { isOpen, onToggle } = useDisclosure()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
+
+  const [dates, setDates] = useState<[Date | null, Date | null]>([null, null])
 
   const formatDateRange = () => {
     const [startDate, endDate] = dates

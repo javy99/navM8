@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import {
   Box,
   Flex,
@@ -18,7 +19,6 @@ import {
   useTheme,
   BoxProps,
 } from '@chakra-ui/react'
-import { NavLink } from 'react-router-dom'
 import {
   BsFillMapFill,
   BsBookmarkHeartFill,
@@ -29,12 +29,12 @@ import {
   BsPersonCircle,
 } from 'react-icons/bs'
 import { IconType } from 'react-icons'
-import logo from '../assets/logo.svg'
-import { useSidebarContext } from '../context'
-import { User } from '../types'
-import { useAuthContext } from '../hooks'
 import ReactNotificationBadge from 'react-notification-badge'
 import { Effect } from 'react-notification-badge'
+import { useSidebarContext } from '../context'
+import { useAuthContext } from '../hooks'
+import { User } from '../types'
+import logo from '../assets/logo.svg'
 
 interface Props {
   user: User | null

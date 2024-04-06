@@ -1,4 +1,4 @@
-import { BsEyeFill } from 'react-icons/bs'
+import { useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -14,19 +14,19 @@ import {
   IconButton,
   Spinner,
 } from '@chakra-ui/react'
-import { useState } from 'react'
-import { useAuthContext } from '../hooks'
-import { User } from '../types'
 import UserBadgeItem from './UserBadgeItem'
-import UserListItem from './UserListItem'
-import FormField from './FormField'
-import Button from './Button'
+import { BsEyeFill } from 'react-icons/bs'
 import {
   searchUsers,
   renameGroupChat,
   addUserToGroup,
   removeUserFromGroup,
 } from '../services'
+import { useAuthContext } from '../hooks'
+import { User } from '../types'
+import UserListItem from './UserListItem'
+import FormField from './FormField'
+import Button from './Button'
 
 interface Props {
   fetchMessages: () => void
@@ -39,19 +39,19 @@ const UpdateGroupChatModal: React.FC<Props> = ({
   fetchAgain,
   setFetchAgain,
 }) => {
+  const { selectedChat, setSelectedChat, state } = useAuthContext()
+  const { user } = state
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [groupChatName, setGroupChatName] = useState<string>()
-  const [search, setSearch] = useState<string>('')
-  const [searchResult, setSearchResult] = useState<User[]>([])
-  const [loading, setLoading] = useState(false)
-  const [renameLoading, setRenameLoading] = useState(false)
   const toast = useToast()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
 
-  const { selectedChat, setSelectedChat, state } = useAuthContext()
-  const { user } = state
+  const [renameLoading, setRenameLoading] = useState<boolean>(false)
+  const [groupChatName, setGroupChatName] = useState<string>()
+  const [searchResult, setSearchResult] = useState<User[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [search, setSearch] = useState<string>('')
 
   const handleSearch = async (query) => {
     setSearch(query)

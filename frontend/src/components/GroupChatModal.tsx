@@ -21,7 +21,11 @@ import { User } from '../types'
 import UserBadgeItem from './UserBadgeItem'
 import { searchUsers, createGroupChat } from '../services'
 
-const GroupChatModal = ({ children }) => {
+interface Props {
+  children: React.ReactNode
+}
+
+const GroupChatModal: React.FC<Props> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [groupChatName, setGroupChatName] = useState('')
   const [selectedUsers, setSelectedUsers] = useState<User[]>([])

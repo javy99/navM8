@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Box,
   Flex,
@@ -9,16 +11,12 @@ import {
   useTheme,
   ResponsiveValue,
   Spinner,
-  // Spinner,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { BookingCard, Button, PageLayout } from '../components'
 import { useAuthContext } from '../hooks'
-import { BookingCard, Button } from '../components'
-import myBookingsBg from '../assets/mybookings-bg.jpg'
-import PageLayout from './PageLayout'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { fetchBookings } from '../services'
 import { Booking } from '../types'
+import myBookingsBg from '../assets/mybookings-bg.jpg'
 
 type FlexDirection =
   | 'row'
@@ -28,9 +26,9 @@ type FlexDirection =
   | undefined
 
 const MyBookings: React.FC = () => {
+  const navigate = useNavigate()
   const { state } = useAuthContext()
   const { user } = state
-  const navigate = useNavigate()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
@@ -38,6 +36,7 @@ const MyBookings: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [bookings, setBookings] = useState<Booking[]>([])
+
   const bookingCardWidth = useBreakpointValue({ base: '100%', md: '48%' })
   const imageBoxSize = useBreakpointValue({ base: '100%', md: '50%' })
   const contentPadding = useBreakpointValue({
@@ -47,24 +46,12 @@ const MyBookings: React.FC = () => {
   })
 
   useEffect(() => {
-    const fetchBookings = async () => {
+    const getBookings = async () => {
       setIsLoading(true)
       try {
         if (user && user.token) {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/bookings/mybookings`,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
-            },
-          )
-          if (response.status === 200) {
-            setBookings(response.data)
-          } else {
-            // Handle error
-            console.error('Failed to fetch bookings')
-          }
+          const fetchedBookings = await fetchBookings(user.token)
+          setBookings(fetchedBookings)
         }
       } catch (error) {
         console.error('Error fetching bookings:', error)
@@ -73,7 +60,7 @@ const MyBookings: React.FC = () => {
       }
     }
 
-    fetchBookings()
+    getBookings()
   }, [user?.token])
 
   const flexDirection: ResponsiveValue<FlexDirection> = useBreakpointValue({
@@ -107,7 +94,12 @@ const MyBookings: React.FC = () => {
             My Bookings
           </Heading>
           {bookings.length > 0 ? (
-            <Flex justifyContent="space-between" direction={flexDirection}>
+            <Flex
+              justifyContent="space-between"
+              direction={flexDirection}
+              flexWrap="wrap"
+              gap={{ base: 4, md: 6, lg: 8 }}
+            >
               {bookings.map((booking) => (
                 <BookingCard
                   key={booking._id}

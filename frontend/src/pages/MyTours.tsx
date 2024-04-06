@@ -17,9 +17,8 @@ import {
   ResponsiveValue,
   Spinner,
 } from '@chakra-ui/react'
-import { MyTourCard, Button, FormField } from '../components'
+import { MyTourCard, Button, FormField, PageLayout } from '../components'
 import { useAuthContext, useMyTours } from '../hooks'
-import PageLayout from './PageLayout'
 
 const MyTours: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()

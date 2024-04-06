@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Flex,
   Text,
@@ -9,20 +10,18 @@ import {
   useBreakpointValue,
   useTheme,
 } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
-import { BsPersonCircle } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
-import Button from './Button'
 import { useProfilePhoto, useSidebarContext } from '../context'
+import { BsPersonCircle, BsList } from 'react-icons/bs'
 import { useAuthContext, useLogout } from '../hooks'
+import Button from './Button'
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate()
   const { logout } = useLogout()
   const { state } = useAuthContext()
   const { user } = state
   const { toggleSidebar } = useSidebarContext()
   const { photo } = useProfilePhoto()
-  const navigate = useNavigate()
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary
@@ -54,7 +53,7 @@ const Navbar: React.FC = () => {
     >
       <IconButton
         display={{ base: 'flex', lg: 'none' }}
-        icon={<HamburgerIcon color={whiteColor} boxSize="25px" />}
+        icon={<BsList color={whiteColor} size="25px" />}
         onClick={toggleSidebar}
         aria-label="Open menu"
         size="md"

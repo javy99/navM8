@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react'
 import { Flex, Text, Box, useTheme, Spinner } from '@chakra-ui/react'
-import { SearchBar, TourCard } from '../components'
+import { SearchBar, TourCard, PageLayout } from '../components'
+import React, { useState, useEffect } from 'react'
 import HeaderBgImage from '../assets/hero-bg6.jpg'
-import { Tour } from '../types'
 import { useAuthContext } from '../hooks'
-import PageLayout from './PageLayout'
 import { getAllTours } from '../services'
+import { Tour } from '../types'
 
 const HomePage: React.FC = () => {
   const { state } = useAuthContext()
   const { user } = state
-
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
+
   const [tours, setTours] = useState<Tour[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 

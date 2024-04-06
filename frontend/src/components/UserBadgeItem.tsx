@@ -1,6 +1,5 @@
-import { BsX } from 'react-icons/bs'
 import { Badge } from '@chakra-ui/react'
-import React from 'react'
+import { BsX } from 'react-icons/bs'
 import { User } from '../types'
 
 interface Props {

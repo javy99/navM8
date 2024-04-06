@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Text,
   Flex,
@@ -11,13 +12,12 @@ import {
   Heading,
   Stack,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
-import { BsCalendar4, BsGeoAltFill, BsPeopleFill } from 'react-icons/bs'
-import { Tour } from '../types'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import { BsCalendar4, BsGeoAltFill, BsPeopleFill } from 'react-icons/bs'
+import { Tour } from '../types'
 
 type Props = {
   width: string | undefined

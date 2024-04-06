@@ -1,13 +1,10 @@
-import { useAuthContext } from '../hooks'
-import PageLayout from './PageLayout'
-import { Box } from '@chakra-ui/react'
-// import { ChatState } from '../context'
-import { MyChats, ChatBox } from '../components'
 import { useState } from 'react'
+import { Box } from '@chakra-ui/react'
+import { MyChats, ChatBox, PageLayout } from '../components'
+import { useAuthContext } from '../hooks'
 
 const Messages: React.FC = () => {
   const { state } = useAuthContext()
-  // const { chatUser } = ChatState()
   const { user } = state
 
   const [fetchAgain, setFetchAgain] = useState<boolean>(false)

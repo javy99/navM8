@@ -7,6 +7,10 @@ const createBooking = async (req: Request, res: Response) => {
     const { tourId, date: bookingDate } = req.body
     const userId = req.user._id
 
+    // Convert booking date to a Date object for comparison
+    const bookingDateObj = new Date(bookingDate)
+    bookingDateObj.setUTCHours(0, 0, 0, 0)
+
     // Fetch the tour to check its availability type
     const tour = await Tour.findById(tourId)
     if (!tour) {
@@ -20,8 +24,17 @@ const createBooking = async (req: Request, res: Response) => {
         .json({ error: 'Users cannot book their own tours.' })
     }
 
-    // Convert booking date to a Date object for comparison
-    const bookingDateObj = new Date(bookingDate)
+    // Check if the tour is already fully booked
+    const existingBookingsCount = await Booking.countDocuments({
+      tour: tourId,
+      date: bookingDateObj,
+      status: { $in: ['PENDING', 'CONFIRMED'] },
+    })
+    if (existingBookingsCount >= tour.maxPeople) {
+      return res
+        .status(400)
+        .json({ error: 'This tour is fully booked for the selected date.' })
+    }
 
     // Validation logic based on tour's type of availability
     const isValidDate = validateBookingDate(
@@ -57,6 +70,9 @@ function validateBookingDate(
   bookingDate,
   tourDate,
 ) {
+  const bookingDateStart = new Date(bookingDate).setUTCHours(0, 0, 0, 0)
+  const tourDateStart = new Date(tourDate).setUTCHours(0, 0, 0, 0)
+
   const dayOfWeek = bookingDate.getDay()
   if (typeOfAvailability === 'recurring') {
     switch (availability) {
@@ -70,12 +86,7 @@ function validateBookingDate(
         return false
     }
   } else if (typeOfAvailability === 'one-time') {
-    // For one-time tours, ensure the booking date matches the tour date
-    // Assuming the tour's `date` field is also a Date object
-    return (
-      bookingDate.setHours(0, 0, 0, 0) ===
-      new Date(tourDate).setHours(0, 0, 0, 0)
-    )
+    return bookingDateStart === tourDateStart
   }
   return false
 }

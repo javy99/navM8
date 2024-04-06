@@ -1,5 +1,5 @@
+export { IBooking, Booking } from './bookingModel'
+export { IMessage, Message } from './messageModel'
 export { ITour, Tour } from './tourModel'
 export { IUser, User } from './userModel'
 export { IChat, Chat } from './chatModel'
-export { IMessage, Message } from './messageModel'
-export { IBooking, Booking } from './bookingModel'

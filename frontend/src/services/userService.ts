@@ -109,10 +109,27 @@ const toggleFavorite = async (
   }
 }
 
+const getFavoriteTours = async (userId: string, token: string) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    return response.data
+  } catch (error) {
+    throw new Error("Couldn't fetch favorite tours")
+  }
+}
+
 export {
   getAllUsers,
   fetchUserProfile,
   updateUserProfile,
   checkIsFavorite,
   toggleFavorite,
+  getFavoriteTours,
 }

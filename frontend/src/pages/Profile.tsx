@@ -25,10 +25,9 @@ import {
   BsCameraFill,
 } from 'react-icons/bs'
 import ReactCountryFlag from 'react-country-flag'
-import { Button, FormField } from '../components'
+import { Button, FormField, PageLayout } from '../components'
 import { useAuthContext, usePhotoManager, useProfile } from '../hooks'
 import HeaderBgImage from '../assets/profile-bg.jpg'
-import PageLayout from './PageLayout'
 
 type FlexDirection =
   | 'row'
@@ -102,7 +101,6 @@ const Profile: React.FC = () => {
   const vStackPaddingX = useBreakpointValue({ base: 4, md: 6, lg: 8 })
   const vStackPaddingY = useBreakpointValue({ base: 3, md: 4, lg: 4 })
   const inputGap = useBreakpointValue({ base: 6, lg: 8, xxl: 12 })
-
   /* =================== Responsive adjustments =================== */
 
   return (

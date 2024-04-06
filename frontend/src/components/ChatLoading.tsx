@@ -2,7 +2,7 @@ import { Stack, Skeleton } from '@chakra-ui/react'
 
 import React from 'react'
 
-const ChatLoading = () => {
+const ChatLoading: React.FC = () => {
   return (
     <Stack>
       <Skeleton height="45px" />

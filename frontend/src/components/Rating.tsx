@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Icon, Text, Tooltip, useTheme } from '@chakra-ui/react'
 import { BsFillPatchCheckFill, BsInfoCircle } from 'react-icons/bs'
-import { StartRating } from '.'
+import StarRating from './StarRating'
 
 interface Props {
   rating: number
@@ -18,7 +18,7 @@ const Rating: React.FC<Props> = ({
 
   return (
     <Flex align="center">
-      <StartRating rating={rating} reviewCount={reviewCount} />
+      <StarRating rating={rating} reviewCount={reviewCount} />
       <Flex align="center" ml={6}>
         <Icon as={BsFillPatchCheckFill} color="#008ABF" w={22} h={22} />
         <Flex ml={2} align="center">

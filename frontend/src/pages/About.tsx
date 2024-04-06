@@ -1,6 +1,6 @@
 import React from 'react'
 import { VStack, Heading, useTheme } from '@chakra-ui/react'
-import PageLayout from './PageLayout'
+import { PageLayout } from '../components'
 import { useAuthContext } from '../hooks'
 
 const About: React.FC = () => {

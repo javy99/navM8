@@ -47,20 +47,18 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
   } = useAuthContext()
   const { user } = state
 
-  const [loggedUser, setLoggedUser] = useState(user)
-
   const toast = useToast()
-
-  const [search, setSearch] = useState('')
-  const [searchResult, setSearchResult] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [loadingChat, setLoadingChat] = useState(false)
-
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
+
+  const [loadingChat, setLoadingChat] = useState<boolean>(false)
+  const [searchResult, setSearchResult] = useState<Array<User>>([])
+  const [loggedUser, setLoggedUser] = useState<User | null>(user)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [search, setSearch] = useState<string>('')
 
   const handleSearch = async () => {
     if (!search) {
