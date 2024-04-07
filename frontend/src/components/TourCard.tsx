@@ -14,7 +14,6 @@ import {
   useTheme,
   Divider,
   Avatar,
-  useToast,
 } from '@chakra-ui/react'
 import {
   BsStarFill,
@@ -28,8 +27,7 @@ import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Review, Tour } from '../types'
-import { useAuthContext } from '../hooks'
-import { checkIsFavorite, toggleFavorite } from '../services'
+import { useAuthContext, useFavorite } from '../hooks'
 import axios from 'axios'
 
 type Props = {
@@ -47,12 +45,12 @@ const TourCard: React.FC<Props> = ({
   const theme = useTheme()
   const { state } = useAuthContext()
   const { user } = state
-  const toast = useToast()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
   const whiteColor = theme.colors.white
 
-  const [isFavorite, setIsFavorite] = useState<boolean>(false)
+  const { isFavorite, handleToggleFavorite } = useFavorite(tour._id, user)
+
   const [reviews, setReviews] = useState<Review[]>([])
 
   const favoriteIconColor = '#FF000F'
@@ -65,19 +63,6 @@ const TourCard: React.FC<Props> = ({
     : isFavorite
       ? favoriteIconColor
       : notFavoriteIconColor
-
-  useEffect(() => {
-    if (!user || !user._id || !user.token || !tour._id) {
-      console.error('Missing required data')
-      return
-    }
-
-    checkIsFavorite(user._id, tour._id, user.token)
-      .then(setIsFavorite)
-      .catch((error) =>
-        console.error("Couldn't fetch the favorite status", error),
-      )
-  }, [tour, user])
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -105,39 +90,13 @@ const TourCard: React.FC<Props> = ({
     fetchReviews()
   }, [tour._id, user?.token, tour])
 
-  const handleToggleFavorite = async (e) => {
-    e.stopPropagation()
-
-    if (!user || !user._id || !user.token || !tour._id) return
-
-    try {
-      await toggleFavorite(
-        user._id,
-        tour._id,
-        isFavorite,
-        isFavoritePage,
-        user.token,
-      )
-
-      if (isFavoritePage && removeFromFavorites) {
-        removeFromFavorites()
-        toast({
-          title: 'Removed from favorites',
-          status: 'info',
-          duration: 3000,
-          isClosable: true,
-        })
-      } else {
-        setIsFavorite(!isFavorite)
-        toast({
-          title: isFavorite ? 'Removed from favorites' : 'Added to favorites',
-          status: isFavorite ? 'info' : 'success',
-          duration: 3000,
-          isClosable: true,
-        })
-      }
-    } catch (error) {
-      console.error("Couldn't update the favorite status", error)
+  const handleToggleFavoriteClick = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation()
+    await handleToggleFavorite()
+    if (isFavorite && removeFromFavorites) {
+      removeFromFavorites()
     }
   }
 
@@ -148,11 +107,7 @@ const TourCard: React.FC<Props> = ({
   return (
     <ChakraCard
       borderRadius="xl"
-      width={
-        isFavoritePage
-          ? { base: '100%', md: '48%', xl: '31%', '2xl': '23%' }
-          : { base: '100%', md: '48%', '2xl': '31%' }
-      }
+      width={{ base: '100%', md: '48%', lg: '31%', '2xl': '23%' }}
       bg="#F6FBFC"
       transition="all 0.3s"
       _hover={{
@@ -259,7 +214,7 @@ const TourCard: React.FC<Props> = ({
               <Button
                 size="sm"
                 padding={0}
-                onClick={handleToggleFavorite}
+                onClick={handleToggleFavoriteClick}
                 _hover={{
                   bg: 'transparent',
                 }}

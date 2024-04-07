@@ -11,7 +11,6 @@ const HomePage: React.FC = () => {
   const { user } = state
   const theme = useTheme()
   const primaryColor = theme.colors.primary
-  const secondaryColor = theme.colors.secondary
 
   const [tours, setTours] = useState<Tour[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -85,39 +84,6 @@ const HomePage: React.FC = () => {
                 ))}
               </Flex>
             </Box>
-            {user && (
-              <>
-                <Box
-                  display={{ base: 'none', xl: 'block' }}
-                  minW={{ md: '2%' }}
-                  borderLeft="2px dashed"
-                  borderColor={secondaryColor}
-                  my={8}
-                  pr={3}
-                />
-                <Box
-                  flex="1"
-                  minW="24%"
-                  py={8}
-                  display={{ base: 'none', xl: 'block' }}
-                >
-                  <Text
-                    fontSize="xl"
-                    fontWeight="bold"
-                    mb={4}
-                    color={primaryColor}
-                  >
-                    My Bookings
-                  </Text>
-                  {/*
-                  <BookingCard width="auto" />
-                  <BookingCard width="auto" />
-                  <BookingCard width="auto" />
-                  <BookingCard width="auto" /> 
-                  */}
-                </Box>
-              </>
-            )}
           </Flex>
         </>
       )}

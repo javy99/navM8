@@ -32,15 +32,13 @@ import {
 import axios from 'axios'
 import { format, startOfDay } from 'date-fns'
 import {
-  checkIsFavorite,
-  toggleFavorite,
   getTourById,
   fetchBookings,
   createBooking,
   cancelBooking,
 } from '../services'
 import { Button, PageLayout, StarRating, ReviewForm } from '../components'
-import { useAuthContext } from '../hooks'
+import { useAuthContext, useFavorite } from '../hooks'
 import { Tour, Booking, Review } from '../types'
 
 type ValuePiece = Date | null
@@ -56,11 +54,12 @@ const TourDetails: React.FC = () => {
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
 
+  const { isFavorite, handleToggleFavorite } = useFavorite(id, user)
+
   const [reviews, setReviews] = useState<Review[]>([])
   const [value, onChange] = useState<Value>(new Date())
   const [isBooked, setIsBooked] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [tourDetails, setTourDetails] = useState<Tour | undefined>()
   const [bookingDate, setBookingDate] = useState<string | null>(null)
   const [bookingStatus, setBookingStatus] = useState<string | null>(null)
@@ -75,10 +74,6 @@ const TourDetails: React.FC = () => {
         if (user && user.token && id && user._id) {
           const tourData = await getTourById(id, user.token)
           setTourDetails(tourData)
-
-          // Check favorite status
-          const isFav = await checkIsFavorite(user._id, id, user.token)
-          setIsFavorite(isFav)
 
           // Fetch bookings
           const bookings = await fetchBookings(user.token)
@@ -134,37 +129,6 @@ const TourDetails: React.FC = () => {
 
     fetchReviews()
   }, [id, user?.token, tourDetails])
-
-  // Toggle favorite status
-  const handleToggleFavorite = async () => {
-    if (!user || !user._id || !user.token || !id) return
-
-    try {
-      await toggleFavorite(user._id, id, isFavorite, false, user.token)
-      setIsFavorite(!isFavorite)
-
-      const actionTaken = isFavorite
-        ? 'Removed from favorites'
-        : 'Added to favorites'
-      const status = isFavorite ? 'info' : 'success'
-
-      toast({
-        title: actionTaken,
-        status: status,
-        duration: 2000,
-        isClosable: true,
-      })
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast({
-          title: error.response?.data?.error || 'An error occurred',
-          status: 'error',
-          duration: 2000,
-          isClosable: true,
-        })
-      }
-    }
-  }
 
   // Get number of slides per view based on number of photos
   const getSlidesPerView = () => {
