@@ -27,9 +27,10 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import { Tour } from '../types'
+import { Review, Tour } from '../types'
 import { useAuthContext } from '../hooks'
 import { checkIsFavorite, toggleFavorite } from '../services'
+import axios from 'axios'
 
 type Props = {
   tour: Tour
@@ -52,6 +53,7 @@ const TourCard: React.FC<Props> = ({
   const whiteColor = theme.colors.white
 
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
+  const [reviews, setReviews] = useState<Review[]>([])
 
   const favoriteIconColor = '#FF000F'
   const notFavoriteIconColor = 'gray.300'
@@ -76,6 +78,32 @@ const TourCard: React.FC<Props> = ({
         console.error("Couldn't fetch the favorite status", error),
       )
   }, [tour, user])
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (
+        user &&
+        user.token &&
+        tour._id &&
+        tour &&
+        typeof tour.reviewCount === 'number' &&
+        tour.reviewCount > 0
+      ) {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/reviews/${tour._id}`,
+            {
+              headers: { Authorization: `Bearer ${user?.token}` },
+            },
+          )
+          setReviews(response.data)
+        } catch (error) {
+          console.error('Error fetching reviews:', error)
+        }
+      }
+    }
+    fetchReviews()
+  }, [tour._id, user?.token, tour])
 
   const handleToggleFavorite = async (e) => {
     e.stopPropagation()
@@ -193,7 +221,13 @@ const TourCard: React.FC<Props> = ({
           <Flex align="center" fontSize="sm" mb={2}>
             <Icon as={BsStarFill} mr={3} color="#D69E2E" w={4} h={4} />
             <Text>
-              <b>Rating:</b> 4.5
+              <b>Rating:</b>{' '}
+              {reviews.length > 0
+                ? (
+                    reviews.reduce((acc, review) => acc + review.rating, 0) /
+                    reviews.length
+                  ).toFixed(1)
+                : 'No reviews yet'}
             </Text>
           </Flex>
           <Divider orientation="horizontal" width="100%" mb={2} />

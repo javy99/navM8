@@ -16,22 +16,23 @@ import {
   useBreakpointValue,
   ResponsiveValue,
   Spinner,
+  useToast,
+  Grid,
 } from '@chakra-ui/react'
 import { MyTourCard, Button, FormField, PageLayout } from '../components'
 import { useAuthContext, useMyTours } from '../hooks'
+import { approveBooking } from '../services'
 
 const MyTours: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
-  const secondaryColor = theme.colors.secondary
   const { state } = useAuthContext()
   const { user } = state
   const {
     isLoading,
     tours,
-    upcomingTours,
-    pastTours,
     myTourInfo,
     selectedFiles,
     handleInputChange,
@@ -53,6 +54,22 @@ const MyTours: React.FC = () => {
     base: 'column',
     xl: 'row',
   })
+
+  const onApproveBooking = async (bookingId) => {
+    if (!user?.token) return
+
+    try {
+      await approveBooking(bookingId, user?.token)
+      toast({
+        title: 'Booking confirmed',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (error) {
+      console.error('Error confirming booking:', error)
+    }
+  }
 
   return (
     <PageLayout user={user}>
@@ -82,53 +99,23 @@ const MyTours: React.FC = () => {
             </Heading>
             <Button onClick={onOpen}>Add Tour</Button>
           </Flex>
-          <Flex
-            wrap={'wrap'}
+          <Grid
+            templateColumns={{
+              base: 'repeat(1, 100%)',
+              '2xl': 'repeat(2, 50%)',
+            }}
             gap={{ base: 4, md: 6, lg: 8 }}
             mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
           >
             {tours.map((tour) => (
               <MyTourCard
-                width={{ base: '100%', '2xl': '48%' }}
+                width={{ base: '100%', '2xl': '100%' }}
                 tour={tour}
                 key={tour._id}
+                onApproveBooking={onApproveBooking}
               />
             ))}
-          </Flex>
-          <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
-          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
-            Upcoming Tours
-          </Heading>
-          <Flex
-            wrap={'wrap'}
-            gap={{ base: 4, md: 6, lg: 8 }}
-            mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
-          >
-            {upcomingTours.map((tour) => (
-              <MyTourCard
-                width={{ base: '100%', '2xl': '48%' }}
-                tour={tour}
-                key={tour._id}
-              />
-            ))}
-          </Flex>
-          <Box width="100%" borderTop={`2px dashed ${secondaryColor}`} my={6} />
-          <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
-            Past Tours
-          </Heading>
-          <Flex
-            wrap={'wrap'}
-            gap={{ base: 4, md: 6, lg: 8 }}
-            mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
-          >
-            {pastTours.map((tour) => (
-              <MyTourCard
-                width={{ base: '100%', '2xl': '48%' }}
-                tour={tour}
-                key={tour._id}
-              />
-            ))}
-          </Flex>
+          </Grid>
         </VStack>
       )}
 

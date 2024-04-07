@@ -17,6 +17,23 @@ const fetchBookings = async (userToken: string) => {
   }
 }
 
+const fetchBookingsForTour = async (tourId: string, userToken: string) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/bookings/tour/${tourId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    )
+    return response.data
+  } catch (error) {
+    console.error('Error fetching bookings for tour:', error)
+    throw error
+  }
+}
+
 const createBooking = async (
   tourId: string,
   bookingDate: string,
@@ -58,4 +75,32 @@ const cancelBooking = async (bookingId: string, userToken: string) => {
   }
 }
 
-export { fetchBookings, createBooking, cancelBooking }
+const approveBooking = async (bookingId: string, userToken: string) => {
+  try {
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}`,
+      {
+        status: 'CONFIRMED',
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    )
+
+    return response.data
+  } catch (error) {
+    console.error('Error confirming booking:', error)
+    throw error
+  }
+}
+
+export {
+  fetchBookings,
+  fetchBookingsForTour,
+  createBooking,
+  cancelBooking,
+  approveBooking,
+}

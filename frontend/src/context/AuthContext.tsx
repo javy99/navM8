@@ -48,7 +48,10 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
 
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null)
   const [chats, setChats] = useState<Chat[]>([])
-  const [notification, setNotification] = useState<any[]>([])
+  const [notification, setNotification] = useState<any[]>(() => {
+    const savedNotifications = localStorage.getItem('notifications')
+    return savedNotifications ? JSON.parse(savedNotifications) : []
+  })
 
   useEffect(() => {
     const userJson = localStorage.getItem('user')
@@ -58,6 +61,11 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
       dispatch({ type: 'LOGIN', payload: user })
     }
   }, [])
+
+  useEffect(() => {
+    // Persist notifications to localStorage whenever they change
+    localStorage.setItem('notifications', JSON.stringify(notification))
+  }, [notification])
 
   return (
     <AuthContext.Provider

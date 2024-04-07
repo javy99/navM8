@@ -25,5 +25,6 @@ export {
   deleteBooking,
 } from './bookingControllers'
 export { getAllTours, createTour, getMyTours, getTour } from './tourControllers'
+export { createReview, getReviewsForTour } from './reviewController'
 export { sendMessage, getAllMessages } from './messageControllers'
 export { signupUser, loginUser } from './authControllers'

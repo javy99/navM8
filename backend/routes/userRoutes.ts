@@ -16,22 +16,23 @@ import {
 const userRouter = express.Router()
 const upload = multer({ dest: 'uploads/' })
 
-userRouter.get('/', requireAuth, getAllUsers)
+userRouter.use(requireAuth)
 
-userRouter.patch('/:id', requireAuth, updateProfile)
-userRouter.get('/:id', requireAuth, getProfile)
+userRouter.get('/', getAllUsers)
+
+userRouter.patch('/:id', updateProfile)
+userRouter.get('/:id', getProfile)
 
 userRouter.post(
   '/:id/photo',
-  requireAuth,
   upload.single('profilePictureURL'),
   uploadProfilePhoto,
 )
-userRouter.get('/:id/photo', requireAuth, getProfilePhoto)
-userRouter.delete('/:id/photo', requireAuth, deleteProfilePhoto)
+userRouter.get('/:id/photo', getProfilePhoto)
+userRouter.delete('/:id/photo', deleteProfilePhoto)
 
-userRouter.post('/:id/favoriteTours', requireAuth, addFavoriteTour)
-userRouter.get('/:id/favoriteTours', requireAuth, getFavoriteTours)
-userRouter.delete('/:id/favoriteTours/:tourId', requireAuth, deleteFavoriteTour)
+userRouter.post('/:id/favoriteTours', addFavoriteTour)
+userRouter.get('/:id/favoriteTours', getFavoriteTours)
+userRouter.delete('/:id/favoriteTours/:tourId', deleteFavoriteTour)
 
 export default userRouter

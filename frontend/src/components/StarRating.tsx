@@ -3,7 +3,7 @@ import { Flex, Text } from '@chakra-ui/react'
 import { BsStarFill, BsStarHalf } from 'react-icons/bs'
 
 interface Props {
-  rating: number
+  rating: number | string
   reviewCount?: number
   showDetails?: boolean
 }
@@ -13,10 +13,12 @@ const StarRating: React.FC<Props> = ({
   reviewCount = 0,
   showDetails = true,
 }) => {
+  const numericRating = typeof rating === 'string' ? parseFloat(rating) : rating
+
   const renderStars = () => {
     let stars: JSX.Element[] = []
     for (let i = 1; i <= 5; i++) {
-      if (i <= rating) {
+      if (i <= numericRating) {
         stars.push(
           <BsStarFill
             size={22}
@@ -25,7 +27,7 @@ const StarRating: React.FC<Props> = ({
             style={{ marginRight: '0.1rem' }}
           />,
         )
-      } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+      } else if (i === Math.ceil(numericRating) && numericRating % 1 !== 0) {
         stars.push(
           <BsStarHalf
             size={22}

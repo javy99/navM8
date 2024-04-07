@@ -18,6 +18,13 @@ export {
   getFavoriteTours,
 } from '../services/userService'
 export {
+  fetchBookingsForTour,
+  fetchBookings,
+  createBooking,
+  approveBooking,
+  cancelBooking,
+} from '../services/bookingService'
+export {
   fetchMyTours,
   createTour,
   getAllTours,
@@ -28,9 +35,5 @@ export {
   updateProfilePhoto,
   removeProfilePhoto,
 } from './profilePhotoService'
-export {
-  fetchBookings,
-  createBooking,
-  cancelBooking,
-} from '../services/bookingService'
+
 export { loginService, signupService } from '../services/authService'

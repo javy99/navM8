@@ -12,6 +12,7 @@ import {
   chatRouter,
   messageRouter,
   bookingRouter,
+  reviewRouter,
 } from './routes'
 import { notFound, errorHandler } from './middlewares'
 import 'colors'
@@ -82,12 +83,13 @@ io.on('connection', (socket) => {
 })
 
 // routes
-app.use('/api/auth', authRouter)
-app.use('/api/users', userRouter)
-app.use('/api/tours', toursRouter)
-app.use('/api/chat', chatRouter)
-app.use('/api/message', messageRouter)
 app.use('/api/bookings', bookingRouter)
+app.use('/api/message', messageRouter)
+app.use('/api/reviews', reviewRouter)
+app.use('/api/tours', toursRouter)
+app.use('/api/users', userRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/chat', chatRouter)
 app.use(notFound)
 app.use(errorHandler)
 

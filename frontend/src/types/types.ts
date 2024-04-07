@@ -34,6 +34,7 @@ export interface Tour {
   description: string
   photos: (File | string)[]
   author: User
+  reviewCount?: number
 }
 
 export interface Message {
@@ -55,9 +56,19 @@ export interface Chat {
 export interface Booking {
   _id: string
   tour: Tour
-  userId: string
+  userId: User
   date: string
   status: string
+}
+
+export interface Review {
+  _id: string
+  tour: Tour
+  user: User
+  rating: number
+  comment: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 export type ChildrenProps = { children: React.ReactNode }

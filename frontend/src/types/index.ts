@@ -1,6 +1,7 @@
 export type { ChildrenProps } from './types'
 export type { Message } from './types'
 export type { Booking } from './types'
+export type { Review } from './types'
 export type { User } from './types'
 export type { Tour } from './types'
 export type { Chat } from './types'

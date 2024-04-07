@@ -82,3 +82,8 @@
   padding: 8px;
   color: #69490b;
 }
+
+.react-calendar__tile--hasActive {
+  background-color: #0b6b78;
+  color: #fff;
+}

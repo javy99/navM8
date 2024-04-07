@@ -1,5 +1,6 @@
 export { IBooking, Booking } from './bookingModel'
 export { IMessage, Message } from './messageModel'
+export { IReview, Review } from './reviewModel'
 export { ITour, Tour } from './tourModel'
 export { IUser, User } from './userModel'
 export { IChat, Chat } from './chatModel'

@@ -11,11 +11,13 @@ import {
 
 const chatRouter = express.Router()
 
-chatRouter.post('/', requireAuth, accessChat)
-chatRouter.get('/', requireAuth, getChats)
-chatRouter.post('/group', requireAuth, createGroupChat)
-chatRouter.put('/rename', requireAuth, renameGroup)
-chatRouter.put('/groupremove', requireAuth, removeFromGroup)
-chatRouter.put('/groupadd', requireAuth, addToGroup)
+chatRouter.use(requireAuth)
+
+chatRouter.post('/', accessChat)
+chatRouter.get('/', getChats)
+chatRouter.post('/group', createGroupChat)
+chatRouter.put('/rename', renameGroup)
+chatRouter.put('/groupremove', removeFromGroup)
+chatRouter.put('/groupadd', addToGroup)
 
 export default chatRouter

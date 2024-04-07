@@ -10,7 +10,6 @@ import {
 
 const bookingRouter = express.Router()
 
-// Middleware to protect routes
 bookingRouter.use(requireAuth)
 
 bookingRouter.post('/', createBooking) // Create a booking

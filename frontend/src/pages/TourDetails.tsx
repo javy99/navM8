@@ -39,92 +39,9 @@ import {
   createBooking,
   cancelBooking,
 } from '../services'
-import { Button, Rating, PageLayout, StarRating } from '../components'
+import { Button, PageLayout, StarRating, ReviewForm } from '../components'
 import { useAuthContext } from '../hooks'
-import { Tour, Booking } from '../types'
-
-const reviews = [
-  {
-    id: 'review1',
-    name: 'John Doe',
-    date: '2023-03-25',
-    rating: 4.5,
-    text: 'Great product! Highly recommend. The quality exceeded my expectations and the customer service was outstanding. Will definitely be purchasing from here again.',
-    avatar: 'https://i.pravatar.cc/300?img=1',
-  },
-  {
-    id: 'review2',
-    name: 'Jane Smith',
-    date: '2023-03-20',
-    rating: 4.0,
-    text: `Very satisfied with the purchase. The item arrived on time and in perfect condition. The quality is great for the price point, and I've received numerous compliments already.`,
-    avatar: 'https://i.pravatar.cc/300?img=2',
-  },
-  {
-    id: 'review3',
-    name: 'Alex Johnson',
-    date: '2023-04-02',
-    rating: 5.0,
-    text: 'Absolutely love this product! It has become a staple in my daily routine. The results are noticeable, and I appreciate the eco-friendly packaging.',
-    avatar: 'https://i.pravatar.cc/300?img=3',
-  },
-  {
-    id: 'review4',
-    name: 'Chris Lee',
-    date: '2023-03-15',
-    rating: 3.5,
-    text: `The product is good, but it took longer than expected to arrive. Customer service was helpful when I reached out for updates. I'm happy with the product but hope shipping speeds up next time.`,
-    avatar: 'https://i.pravatar.cc/300?img=4',
-  },
-  {
-    id: 'review5',
-    name: 'Morgan Bailey',
-    date: '2023-03-30',
-    rating: 4.8,
-    text: `This has to be one of the best purchases I've made this year. Exceptional quality and it arrived earlier than anticipated. The brand's attention to detail is evident in the packaging and product itself.`,
-    avatar: 'https://i.pravatar.cc/300?img=5',
-  },
-  {
-    id: 'review6',
-    name: 'Jamie Rivera',
-    date: '2023-04-01',
-    rating: 4.2,
-    text: `Good value for the money. I was skeptical at first, but I'm glad I went ahead with the purchase. It fits my needs perfectly and the durability seems promising.`,
-    avatar: 'https://i.pravatar.cc/300?img=6',
-  },
-  {
-    id: 'review7',
-    name: 'Casey Kim',
-    date: '2023-03-22',
-    rating: 3.8,
-    text: `Overall, a solid product, though there's room for improvement. The features are great, but I experienced some minor issues with usability. The company seems receptive to feedback, so I'm optimistic about future updates.`,
-    avatar: 'https://i.pravatar.cc/300?img=7',
-  },
-  {
-    id: 'review8',
-    name: 'Jordan Parker',
-    date: '2023-03-18',
-    rating: 5.0,
-    text: `I'm thoroughly impressed! The product outperforms any other I've tried in its category. It's evident that a lot of thought went into its design and manufacture. Highly recommend to anyone on the fence.`,
-    avatar: 'https://i.pravatar.cc/300?img=8',
-  },
-  {
-    id: 'review9',
-    name: 'Taylor Green',
-    date: '2023-03-29',
-    rating: 4.6,
-    text: `This product has exceeded my expectations in every way. From functionality to design, it's top-notch. I've already recommended it to several friends and family members.`,
-    avatar: 'https://i.pravatar.cc/300?img=9',
-  },
-  {
-    id: 'review10',
-    name: 'Dakota Ray',
-    date: '2023-03-27',
-    rating: 4.4,
-    text: `After using this product for a few weeks, I'm happy with my purchase. It performs as advertised, and the customer support team was incredibly helpful with the questions I had.`,
-    avatar: 'https://i.pravatar.cc/300?img=10',
-  },
-]
+import { Tour, Booking, Review } from '../types'
 
 type ValuePiece = Date | null
 type Value = ValuePiece | [ValuePiece, ValuePiece]
@@ -139,6 +56,7 @@ const TourDetails: React.FC = () => {
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
 
+  const [reviews, setReviews] = useState<Review[]>([])
   const [value, onChange] = useState<Value>(new Date())
   const [isBooked, setIsBooked] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -189,6 +107,33 @@ const TourDetails: React.FC = () => {
 
     fetchData()
   }, [id, user, bookingStatus])
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (
+        user &&
+        user.token &&
+        id &&
+        tourDetails &&
+        typeof tourDetails.reviewCount === 'number' &&
+        tourDetails.reviewCount > 0
+      ) {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/reviews/${id}`,
+            {
+              headers: { Authorization: `Bearer ${user?.token}` },
+            },
+          )
+          setReviews(response.data)
+        } catch (error) {
+          console.error('Error fetching reviews:', error)
+        }
+      }
+    }
+
+    fetchReviews()
+  }, [id, user?.token, tourDetails])
 
   // Toggle favorite status
   const handleToggleFavorite = async () => {
@@ -315,6 +260,17 @@ const TourDetails: React.FC = () => {
     }
   }
 
+  const onSubmitReview = (newReview) => {
+    setReviews((prevReviews) => [...prevReviews, newReview])
+    toast({
+      title: 'Review Added',
+      description: 'Your review has been added successfully.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
+  }
+
   return (
     <PageLayout user={user}>
       {isLoading ? (
@@ -387,7 +343,20 @@ const TourDetails: React.FC = () => {
               </Box>
             </Flex>
             <Flex align="center" mb={6}>
-              <Rating rating={4.5} reviewCount={22} recommendationRate={95} />
+              {/* <Rating rating={4.5} reviewCount={22} recommendationRate={95} /> */}
+              {reviews.length > 0 ? (
+                <StarRating
+                  rating={(
+                    reviews.reduce((acc, review) => acc + review.rating, 0) /
+                    reviews.length
+                  ).toFixed(1)}
+                  reviewCount={reviews.length}
+                />
+              ) : (
+                <Text fontWeight="bold" color="red.500">
+                  NO REVIEWS YET!
+                </Text>
+              )}
             </Flex>
             {tourDetails.photos &&
               tourDetails.photos.length > 0 &&
@@ -729,18 +698,39 @@ const TourDetails: React.FC = () => {
               borderColor="#D3D3D3"
             />
             <Flex flexDir="column" mt={8}>
-              <StarRating rating={4.5} reviewCount={22} />
+              <Heading as="h4" size="md" color={primaryColor} mb={4}>
+                Reviews
+              </Heading>
+              {isBooked && bookingStatus === 'COMPLETED' && (
+                <ReviewForm
+                  tourId={tourDetails._id as string}
+                  onSubmitSuccess={onSubmitReview}
+                />
+              )}
+              {reviews.length > 0 ? (
+                <StarRating
+                  rating={(
+                    reviews.reduce((acc, review) => acc + review.rating, 0) /
+                    reviews.length
+                  ).toFixed(1)}
+                  reviewCount={reviews.length}
+                />
+              ) : (
+                <Text fontWeight="bold" color="red.500">
+                  NO REVIEWS YET!
+                </Text>
+              )}
               {reviews.map((review) => (
-                <React.Fragment key={review.id}>
-                  <VStack key={review.id} align="start" my={5}>
+                <React.Fragment key={review._id}>
+                  <VStack align="start" my={5}>
                     <Flex align="center" mb={4}>
-                      <Avatar src={review.avatar} size="lg" />
+                      <Avatar src={review.user.profilePictureURL} size="lg" />
                       <Flex flexDir="column" ml={4}>
                         <Text fontWeight="bold" mb={1}>
-                          {review.name}
+                          {review.user.firstName} {review.user.lastName}
                         </Text>
                         <Text fontSize="sm" mb={1}>
-                          {new Date(review.date).toLocaleDateString()}
+                          {new Date(review.createdAt).toLocaleDateString()}
                         </Text>
                         <StarRating
                           rating={review.rating}
@@ -748,7 +738,7 @@ const TourDetails: React.FC = () => {
                         />
                       </Flex>
                     </Flex>
-                    <Text>{review.text}</Text>
+                    <Text>{review.comment}</Text>
                   </VStack>
                   <Divider
                     orientation="horizontal"

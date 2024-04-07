@@ -95,7 +95,9 @@ const getBookingsForUser = async (req: Request, res: Response) => {
   // Logic to retrieve bookings for a specific user
   try {
     const userId = req.user._id
-    const bookings = await Booking.find({ userId }).populate('tour')
+    const bookings = await Booking.find({ userId })
+      .populate('tour')
+      .populate('userId')
     res.status(200).json(bookings)
   } catch (error) {
     res.status(404).json({ error: error.message })
@@ -106,8 +108,7 @@ const getBookingsForTour = async (req: Request, res: Response) => {
   // Logic to retrieve bookings for a specific tour
   try {
     const { tourId } = req.params
-    console.log(tourId)
-    const bookings = await Booking.find({ _id: tourId }).populate('tour')
+    const bookings = await Booking.find({ tour: tourId }).populate('tour').populate('userId')
     res.status(200).json(bookings)
   } catch (error) {
     res.status(404).json({ error: error.message })
@@ -120,6 +121,8 @@ const updateBookingStatus = async (req: Request, res: Response) => {
     const { bookingId } = req.params
     const { status } = req.body
 
+    const userId = req.user._id
+
     // Check if status is provided in the request body
     if (!status) {
       return res.status(400).json({ error: 'Status must be provided' })
@@ -131,13 +134,30 @@ const updateBookingStatus = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid status provided' })
     }
 
+    // Fetch the booking and its related tour
+    const booking = await Booking.findById(bookingId).populate('tour')
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' })
+    }
+
+    // Additional check for status 'CONFIRMED'
+    if (
+      status === 'CONFIRMED' &&
+      booking.tour.author.toString() !== userId.toString()
+    ) {
+      return res
+        .status(403)
+        .json({ error: 'Only the tour author can confirm bookings' })
+    }
+
     const updatedBooking = await Booking.findByIdAndUpdate(
       bookingId,
       { status },
       { new: true },
-    )
+    ).populate('tour', 'name author')
+
     if (!updatedBooking) {
-      return res.status(404).json({ error: 'Booking not found' })
+      return res.status(404).json({ error: 'Unable to update booking status' })
     }
     res.status(200).json(updatedBooking)
   } catch (error) {

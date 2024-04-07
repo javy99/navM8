@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
   Box,
@@ -18,6 +18,7 @@ import {
   useBreakpointValue,
   useTheme,
   BoxProps,
+  Badge,
 } from '@chakra-ui/react'
 import {
   BsFillMapFill,
@@ -29,12 +30,11 @@ import {
   BsPersonCircle,
 } from 'react-icons/bs'
 import { IconType } from 'react-icons'
-import ReactNotificationBadge from 'react-notification-badge'
-import { Effect } from 'react-notification-badge'
 import { useSidebarContext } from '../context'
 import { useAuthContext } from '../hooks'
 import { User } from '../types'
 import logo from '../assets/logo.svg'
+import { fetchMyTours, fetchBookingsForTour } from '../services'
 
 interface Props {
   user: User | null
@@ -52,6 +52,29 @@ const Sidebar: React.FC<Props> = ({ user }) => {
   const { notification } = useAuthContext()
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
+
+  const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0)
+
+  useEffect(() => {
+    const fetchAndCountPendingApprovals = async () => {
+      if (user?.token) {
+        const tours = await fetchMyTours(user.token)
+        let totalPending = 0
+
+        for (const tour of tours) {
+          const bookings = await fetchBookingsForTour(tour._id, user.token)
+          const pendingBookings = bookings.filter(
+            (booking) => booking.status === 'PENDING',
+          )
+          totalPending += pendingBookings.length
+        }
+
+        setPendingApprovalsCount(totalPending)
+      }
+    }
+
+    fetchAndCountPendingApprovals()
+  }, [user?.token])
 
   const commonStyles: BoxProps = {
     bg: primaryColor,
@@ -146,6 +169,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
               {({ isActive }) => (
                 <Flex
                   alignItems="center"
+                  justifyContent="space-between"
                   py={2}
                   px={4}
                   borderRadius="xl"
@@ -161,19 +185,51 @@ const Sidebar: React.FC<Props> = ({ user }) => {
                   color={isActive ? primaryColor : whiteColor}
                   fontWeight={isActive ? 'bold' : 'normal'}
                 >
-                  <Icon
-                    as={link.icon}
-                    mr="4"
-                    w={{ base: 4, md: 5 }}
-                    h={{ base: 4, md: 5 }}
-                  />
-                  <Text fontSize={{ base: 'sm', md: 'md' }}>{link.label}</Text>
+                  <Flex>
+                    <Icon
+                      as={link.icon}
+                      mr="4"
+                      w={{ base: 4, md: 5 }}
+                      h={{ base: 4, md: 5 }}
+                    />
+                    <Text
+                      fontSize={{ base: 'sm', md: 'md' }}
+                      whiteSpace="nowrap"
+                    >
+                      {link.label}
+                    </Text>
+                  </Flex>
+
+                  {link.label === 'My Tours' && pendingApprovalsCount > 0 && (
+                    <Badge
+                      ml={2}
+                      colorScheme="red"
+                      variant="solid"
+                      w={5}
+                      h={5}
+                      borderRadius="full"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      {pendingApprovalsCount}
+                    </Badge>
+                  )}
 
                   {link.label === 'Messages' && notification.length > 0 && (
-                    <ReactNotificationBadge
-                      count={notification.length}
-                      effect={Effect.ROTATE_X}
-                    />
+                    <Badge
+                      ml={2}
+                      colorScheme="red"
+                      variant="solid"
+                      w={5}
+                      h={5}
+                      borderRadius="full"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      {notification.length}
+                    </Badge>
                   )}
                 </Flex>
               )}
