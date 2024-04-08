@@ -1,16 +1,15 @@
 import axios from 'axios'
 import { User } from '../types'
 
+const BASE_API_URL = import.meta.env.VITE_API_URL
+
 const fetchUserProfile = async (token: string, id: string) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/users/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get(`${BASE_API_URL}/api/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch user profile.')
@@ -19,15 +18,11 @@ const fetchUserProfile = async (token: string, id: string) => {
 
 const updateUserProfile = async (token: string, id: string, userInfo: User) => {
   try {
-    await axios.patch(
-      `${import.meta.env.VITE_API_URL}/api/users/${id}`,
-      userInfo,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    await axios.patch(`${BASE_API_URL}/api/users/${id}`, userInfo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -42,14 +37,11 @@ const updateUserProfile = async (token: string, id: string, userInfo: User) => {
 
 const getAllUsers = async (token: string) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/users`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get(`${BASE_API_URL}/api/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch users.')
@@ -63,7 +55,7 @@ const checkIsFavorite = async (
 ) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours`,
+      `${BASE_API_URL}/api/users/${userId}/favoriteTours`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },
@@ -90,8 +82,8 @@ const toggleFavorite = async (
   }
 
   const url = isFavorited
-    ? `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours/${tourId}`
-    : `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours`
+    ? `${BASE_API_URL}/api/users/${userId}/favoriteTours/${tourId}`
+    : `${BASE_API_URL}/api/users/${userId}/favoriteTours`
 
   try {
     await axios({
@@ -112,7 +104,7 @@ const toggleFavorite = async (
 const getFavoriteTours = async (userId: string, token: string) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/users/${userId}/favoriteTours`,
+      `${BASE_API_URL}/api/users/${userId}/favoriteTours`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

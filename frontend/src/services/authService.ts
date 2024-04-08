@@ -1,14 +1,13 @@
 import axios from 'axios'
 
+const BASE_API_URL = import.meta.env.VITE_API_URL
+
 const loginService = async (email: string, password: string): Promise<any> => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/login`,
-      {
-        email,
-        password,
-      },
-    )
+    const response = await axios.post(`${BASE_API_URL}/api/auth/login`, {
+      email,
+      password,
+    })
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -26,14 +25,11 @@ const signupService = async (
   username: string,
 ): Promise<any> => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/signup`,
-      {
-        email,
-        password,
-        username,
-      },
-    )
+    const response = await axios.post(`${BASE_API_URL}/api/auth/signup`, {
+      email,
+      password,
+      username,
+    })
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {

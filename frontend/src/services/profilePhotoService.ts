@@ -1,15 +1,14 @@
 import axios from 'axios'
 
+const BASE_API_URL = import.meta.env.VITE_API_URL
+
 const fetchProfilePhoto = async (token: string, id: string) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/users/${id}/photo`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get(`${BASE_API_URL}/api/users/${id}/photo`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
     return response.data.profilePictureURL
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -36,7 +35,7 @@ const updateProfilePhoto = async (
 
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/users/${id}/photo`,
+      `${BASE_API_URL}/api/users/${id}/photo`,
       formData,
       {
         headers: {
@@ -54,14 +53,11 @@ const updateProfilePhoto = async (
 
 const removeProfilePhoto = async (token: string, id: string) => {
   try {
-    await axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/users/${id}/photo`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    await axios.delete(`${BASE_API_URL}/api/users/${id}/photo`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response && error.response.status === 404) {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api`
+const BASE_API_URL = import.meta.env.VITE_API_URL
 
 // Function to search users
 const searchUsers = async (query, token) => {
@@ -10,7 +10,7 @@ const searchUsers = async (query, token) => {
     },
   }
 
-  return await axios.get(`${API_URL}/users?search=${query}`, config)
+  return await axios.get(`${BASE_API_URL}/api/users?search=${query}`, config)
 }
 
 // Function to create a group chat
@@ -21,7 +21,7 @@ const createGroupChat = async (name, users, token) => {
     },
   }
   return await axios.post(
-    `${API_URL}/chat/group`,
+    `${BASE_API_URL}/api/chat/group`,
     {
       name,
       users: JSON.stringify(users),
@@ -38,7 +38,7 @@ const accessChat = async (userId, token) => {
       Authorization: `Bearer ${token}`,
     },
   }
-  return await axios.post(`${API_URL}/chat`, { userId }, config)
+  return await axios.post(`${BASE_API_URL}/api/chat`, { userId }, config)
 }
 
 // Function to fetch all chats for a user
@@ -48,7 +48,7 @@ const fetchChats = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   }
-  return await axios.get(`${API_URL}/chat`, config)
+  return await axios.get(`${BASE_API_URL}/api/chat`, config)
 }
 
 // Function to fetch messages of a chat
@@ -59,7 +59,7 @@ const fetchMessages = async (chatId: string, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   }
-  return await axios.get(`${API_URL}/message/${chatId}`, config)
+  return await axios.get(`${BASE_API_URL}/api/message/${chatId}`, config)
 }
 
 // Function to send a new message
@@ -70,7 +70,11 @@ const sendMessage = async (content: string, chatId: string, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   }
-  return await axios.post(`${API_URL}/message`, { content, chatId }, config)
+  return await axios.post(
+    `${BASE_API_URL}/api/message`,
+    { content, chatId },
+    config,
+  )
 }
 
 // Function to rename a group chat
@@ -85,7 +89,7 @@ const renameGroupChat = async (
     },
   }
   return await axios.put(
-    `${API_URL}/chat/rename`,
+    `${BASE_API_URL}/api/chat/rename`,
     {
       chatId,
       chatName,
@@ -106,7 +110,7 @@ const addUserToGroup = async (
     },
   }
   return await axios.put(
-    `${API_URL}/chat/groupadd`,
+    `${BASE_API_URL}/api/chat/groupadd`,
     {
       chatId,
       userId,
@@ -127,7 +131,7 @@ const removeUserFromGroup = async (
     },
   }
   return await axios.put(
-    `${API_URL}/chat/groupremove`,
+    `${BASE_API_URL}/api/chat/groupremove`,
     {
       chatId,
       userId,
