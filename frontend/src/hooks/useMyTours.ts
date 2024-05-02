@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useAuthContext } from '.'
-import { useToast } from '@chakra-ui/react'
+import { useDisclosure, useToast } from '@chakra-ui/react'
 import { Tour } from '../types'
-import { fetchMyTours, createTour } from '../services'
+import {
+  fetchMyTours,
+  createTour,
+  updateTour,
+  getTourById,
+  deleteTour,
+} from '../services'
 
 const initialTourInfo = {
+  id: null,
   name: '',
   country: '',
   city: '',
@@ -33,15 +40,16 @@ const initialTourInfo = {
   },
 }
 
-const useMyTours = (onClose) => {
+const useMyTours = () => {
   const toast = useToast()
   const { state } = useAuthContext()
   const { user } = state
-
   const [tours, setTours] = useState<Tour[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [myTourInfo, setMyTourInfo] = useState<Tour>(initialTourInfo)
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -109,42 +117,35 @@ const useMyTours = (onClose) => {
       }
     })
 
-    // Log FormData contents using Array.from()
-    const entries = Array.from(formData.entries())
-    entries.forEach(([key, value]) => {
-      console.log(`${key}:`, value, typeof value)
-    })
-
     try {
       if (!user?.token) {
         throw new Error('User token is not available.')
       }
 
-      const formData = new FormData()
-      Object.entries(myTourInfo).forEach(([key, value]) => {
-        if (key === 'photos' && Array.isArray(value)) {
-          value.forEach((file: File) => {
-            formData.append('photos', file)
-          })
-        } else {
-          formData.append(key, value ?? '')
-        }
-      })
-
-      const newTour = await createTour(formData, user.token)
-      setTours((prevTours) => [...prevTours, newTour])
+      let tourResult
+      if (myTourInfo._id) {
+        tourResult = await updateTour(myTourInfo._id, formData, user.token)
+        setTours((prevTours) =>
+          prevTours.map((tour) =>
+            tour._id === myTourInfo._id ? { ...tour, ...tourResult } : tour,
+          ),
+        )
+      } else {
+        tourResult = await createTour(formData, user.token)
+        setTours((prevTours) => [...prevTours, tourResult])
+      }
 
       toast({
-        title: 'Tour Created successfully.',
-        description: 'Your tour has been successfully created.',
+        title: `Tour ${myTourInfo._id ? 'Updated' : 'Created'} Successfully.`,
+        description: `Your tour has been successfully ${myTourInfo._id ? 'updated' : 'created'}.`,
         status: 'success',
         duration: 5000,
         isClosable: true,
       })
-      setMyTourInfo(initialTourInfo)
-      setSelectedFiles([])
 
       onClose()
+      setMyTourInfo(initialTourInfo)
+      setSelectedFiles([])
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message =
@@ -174,10 +175,87 @@ const useMyTours = (onClose) => {
 
   const handleRemoveFile = (index: number) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index))
-    setMyTourInfo((prev) => ({
-      ...prev,
-      photos: prev.photos?.filter((_, i) => i !== index) || [],
-    }))
+    setMyTourInfo((prev) => {
+      const updatedPhotos = [...prev.photos]
+      updatedPhotos.splice(index, 1)
+      return {
+        ...prev,
+        photos: updatedPhotos,
+      }
+    })
+  }
+
+  const handleEditTour = async (tourId) => {
+    setIsLoading(true)
+    try {
+      if (!user?.token) {
+        throw new Error('User token is not available.')
+      }
+
+      const data = await getTourById(tourId)
+
+      setMyTourInfo({
+        ...initialTourInfo,
+        ...data,
+      })
+
+      setSelectedFiles(
+        data.photos.map((photoUrl, index) => ({
+          file: null,
+          name: `photo-${index + 1}`,
+          preview: photoUrl,
+        })),
+      )
+
+      onOpen()
+    } catch (error) {
+      toast({
+        title: 'Failed to fetch tour details.',
+        description: 'Please check your connection and try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDeleteTour = async (tourId) => {
+    if (!window.confirm('Are you sure you want to delete this tour?')) return
+
+    setIsLoading(true)
+    try {
+      if (!user?.token) {
+        throw new Error('User token is not available.')
+      }
+
+      await deleteTour(tourId, user?.token)
+      setTours((prevTours) => prevTours.filter((tour) => tour._id !== tourId))
+      toast({
+        title: 'Tour Deleted Successfully.',
+        description: 'The tour has been removed from your listings.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (error) {
+      toast({
+        title: 'Failed to delete tour.',
+        description: 'Please check your connection and try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleAddTour = () => {
+    setMyTourInfo(initialTourInfo)
+    setSelectedFiles([])
+    onOpen()
   }
 
   return {
@@ -188,6 +266,13 @@ const useMyTours = (onClose) => {
     handleInputChange,
     handleSubmit,
     handleRemoveFile,
+    handleEditTour,
+    handleDeleteTour,
+    isOpen,
+    onOpen,
+    onClose,
+    setMyTourInfo,
+    handleAddTour,
   }
 }
 

@@ -12,17 +12,18 @@ const HomePage: React.FC = () => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary
 
-  const [tours, setTours] = useState<Tour[]>([])
+  const [allTours, setAllTours] = useState<Tour[]>([])
+  const [filteredTours, setFilteredTours] = useState<Tour[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    const fetchFeaturedGuides = async () => {
+    const fetchTours = async () => {
       try {
         setIsLoading(true)
-        if (!user || !user.token) return
 
-        const tours = await getAllTours(user?.token)
-        setTours(tours)
+        const tours = await getAllTours()
+        setAllTours(tours)
+        setFilteredTours(tours)
       } catch (error) {
         console.error('Failed to fetch guides:', error)
       } finally {
@@ -30,8 +31,28 @@ const HomePage: React.FC = () => {
       }
     }
 
-    fetchFeaturedGuides()
+    fetchTours()
   }, [user?.token])
+
+  const handleSearch = (cityName: string) => {
+    try {
+      if (typeof cityName !== 'string') {
+        throw new Error('City name should be a string')
+      }
+
+      // If cityName is empty, set filteredTours to allTours
+      if (cityName.trim() === '') {
+        setFilteredTours(allTours)
+      } else {
+        const filtered = allTours.filter(
+          (tour) => tour.city.toLowerCase() === cityName.toLowerCase(),
+        )
+        setFilteredTours(filtered)
+      }
+    } catch (error) {
+      console.error('Error searching tours by city:', error)
+    }
+  }
 
   return (
     <PageLayout user={user}>
@@ -71,7 +92,7 @@ const HomePage: React.FC = () => {
             <Text fontSize="lg">
               Explore, Discover, and Plan Your Perfect Getaway
             </Text>
-            <SearchBar />
+            <SearchBar onSearch={handleSearch} />
           </Box>
           <Flex direction={{ base: 'column', md: 'row' }} overflow="hidden">
             <Box p={8} flex="3" minW={{ md: '74%' }}>
@@ -79,7 +100,7 @@ const HomePage: React.FC = () => {
                 The Most Popular Tours
               </Text>
               <Flex wrap={'wrap'} gap={{ base: 6, '2xl': 10 }}>
-                {tours.map((tour) => (
+                {filteredTours.map((tour) => (
                   <TourCard tour={tour} key={tour._id} />
                 ))}
               </Flex>

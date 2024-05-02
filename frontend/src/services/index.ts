@@ -29,6 +29,8 @@ export {
   createTour,
   getAllTours,
   getTourById,
+  updateTour,
+  deleteTour,
 } from '../services/tourService'
 export {
   fetchProfilePhoto,

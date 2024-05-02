@@ -1,35 +1,40 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   Box,
   Input,
   Button,
   IconButton,
   HStack,
-  useDisclosure,
-  Divider,
   useTheme,
 } from '@chakra-ui/react'
-import {
-  FaSearch,
-  FaMapMarkerAlt,
-  FaCalendarAlt,
-  FaUserFriends,
-} from 'react-icons/fa'
-import DatePicker from 'react-datepicker'
+import { FaSearch, FaMapMarkerAlt } from 'react-icons/fa'
 import 'react-datepicker/dist/react-datepicker.css'
 
-const SearchBar: React.FC = () => {
-  const { isOpen, onToggle } = useDisclosure()
+interface Props {
+  onSearch: (cityName: string) => void
+}
+
+const SearchBar: React.FC<Props> = ({ onSearch }) => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
 
-  const [dates, setDates] = useState<[Date | null, Date | null]>([null, null])
+  const [cityName, setCityName] = useState<string>('')
 
-  const formatDateRange = () => {
-    const [startDate, endDate] = dates
-    if (!startDate || !endDate) return 'Dates'
-    return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+  const debounce = (func: (arg0: string) => void, delay: number) => {
+    let debounceTimer: NodeJS.Timeout
+    return function (arg0: string) {
+      clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(() => func(arg0), delay)
+    }
+  }
+
+  const handleSearch = useCallback(debounce(onSearch, 300), [onSearch])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newCityName = e.target.value
+    setCityName(newCityName)
+    handleSearch(newCityName)
   }
 
   return (
@@ -55,6 +60,8 @@ const SearchBar: React.FC = () => {
                 color: primaryColor,
               },
             }}
+            value={cityName}
+            onChange={handleChange}
           />
           <IconButton
             icon={<FaMapMarkerAlt />}
@@ -66,71 +73,6 @@ const SearchBar: React.FC = () => {
             color={primaryColor}
           />
         </HStack>
-
-        <Divider orientation="vertical" height="40px" borderColor="gray.200" />
-
-        {/* Date Range Picker */}
-        <HStack spacing={0} position="relative" flex="1">
-          <Input
-            variant="unstyled"
-            placeholder="Dates"
-            pl={12}
-            value={formatDateRange()}
-            readOnly
-            color={primaryColor}
-            onClick={onToggle}
-          />
-          <IconButton
-            icon={<FaCalendarAlt />}
-            aria-label="Dates"
-            variant="ghost"
-            isRound
-            size="lg"
-            position="absolute"
-            color={primaryColor}
-            onClick={onToggle}
-          />
-          {isOpen && (
-            <Box position="absolute" zIndex="popover" left={0} top="100%">
-              <DatePicker
-                selectsRange={true}
-                startDate={dates[0]}
-                endDate={dates[1]}
-                onChange={(update: [Date | null, Date | null]) =>
-                  setDates(update)
-                }
-                inline
-              />
-            </Box>
-          )}
-        </HStack>
-
-        <Divider orientation="vertical" height="40px" borderColor="gray.200" />
-
-        {/* Guests Input */}
-        <HStack spacing={0} position="relative" flex="1">
-          <Input
-            variant="unstyled"
-            placeholder="Number of travelers"
-            pl={12}
-            color="gray.600"
-            sx={{
-              '::placeholder': {
-                color: primaryColor,
-              },
-            }}
-          />
-          <IconButton
-            icon={<FaUserFriends />}
-            aria-label="Guests"
-            variant="ghost"
-            isRound
-            size="lg"
-            position="absolute"
-            color={primaryColor}
-          />
-        </HStack>
-
         <Button
           colorScheme="teal"
           px={5}
@@ -140,7 +82,7 @@ const SearchBar: React.FC = () => {
           _hover={{
             bg: primaryColor,
           }}
-          onClick={() => alert('Search functionality to be implemented')}
+          onClick={() => onSearch(cityName)}
         >
           <FaSearch color={whiteColor} />
         </Button>

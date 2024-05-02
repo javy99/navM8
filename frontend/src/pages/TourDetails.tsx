@@ -72,7 +72,7 @@ const TourDetails: React.FC = () => {
       setIsLoading(true)
       try {
         if (user && user.token && id && user._id) {
-          const tourData = await getTourById(id, user.token)
+          const tourData = await getTourById(id)
           setTourDetails(tourData)
 
           // Fetch bookings
@@ -307,7 +307,6 @@ const TourDetails: React.FC = () => {
               </Box>
             </Flex>
             <Flex align="center" mb={6}>
-              {/* <Rating rating={4.5} reviewCount={22} recommendationRate={95} /> */}
               {reviews.length > 0 ? (
                 <StarRating
                   rating={(

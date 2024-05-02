@@ -36,9 +36,17 @@ type Props = {
   width: string | ResponsiveWidth | undefined
   tour?: any
   onApproveBooking?: (bookingId: string) => void
+  onEdit?: () => void
+  onDelete?: () => void
 }
 
-const MyTourCard: React.FC<Props> = ({ width, tour, onApproveBooking }) => {
+const MyTourCard: React.FC<Props> = ({
+  width,
+  tour,
+  onApproveBooking,
+  onEdit,
+  onDelete,
+}) => {
   const { state } = useAuthContext()
   const { user } = state
 
@@ -81,9 +89,24 @@ const MyTourCard: React.FC<Props> = ({ width, tour, onApproveBooking }) => {
     if (onApproveBooking) await onApproveBooking(bookingId)
   }
 
+  const handleEditClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation()
+    if (onEdit) onEdit()
+  }
+
+  const handleDeleteClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.stopPropagation()
+    if (onDelete) onDelete()
+  }
+
   return (
     <Box width="100%">
       <Card
+        position="relative"
         direction={{ base: 'column', sm: 'row' }}
         overflow="hidden"
         variant="outline"
@@ -167,6 +190,20 @@ const MyTourCard: React.FC<Props> = ({ width, tour, onApproveBooking }) => {
             </Flex>
           </CardBody>
         </Stack>
+        <Flex
+          position="absolute"
+          bottom={4}
+          right={4}
+          alignItems="flex-end"
+          gap={2}
+        >
+          <Button size="sm" onClick={handleEditClick}>
+            Edit
+          </Button>
+          <Button size="sm" onClick={handleDeleteClick}>
+            Delete
+          </Button>
+        </Flex>
       </Card>
       {bookings.length > 0 && (
         <Box

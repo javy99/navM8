@@ -98,7 +98,7 @@ const getMyTours = async (req: Request, res: Response) => {
 const getTour = async (req: Request, res: Response) => {
   try {
     const tour = await Tour.findById(req.params.id).populate('author').exec()
-
+  
     if (!tour) {
       res.status(404).json({ error: 'Tour not found' })
       return
@@ -111,4 +111,82 @@ const getTour = async (req: Request, res: Response) => {
   }
 }
 
-export { getAllTours, createTour, getMyTours, getTour }
+const updateTour = async (req: Request, res: Response) => {
+  try {
+    const {
+      name,
+      country,
+      city,
+      maxPeople,
+      typeOfAvailability,
+      availability,
+      date,
+      from,
+      to,
+      description,
+    } = req.body
+
+    const tourId = req.params.id
+
+    const tour = await Tour.findById(tourId)
+
+    if (!tour) {
+      res.status(404).json({ error: 'Tour not found' })
+      return
+    }
+
+    // Check if the user is authorized to edit the tour
+    if (tour.author.toString() !== req.user._id.toString()) {
+      res.status(403).json({ error: 'Unauthorized' })
+      return
+    }
+
+    // Update tour fields
+    tour.name = name
+    tour.country = country
+    tour.city = city
+    tour.maxPeople = maxPeople
+    tour.typeOfAvailability = typeOfAvailability
+    tour.availability = availability
+    tour.date = date
+    tour.from = from
+    tour.to = to
+    tour.description = description
+
+    await tour.save()
+
+    res.json(tour)
+  } catch (error) {
+    res.status(400).json({
+      error:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    })
+  }
+}
+
+const deleteTour = async (req: Request, res: Response) => {
+  try {
+    const tourId = req.params.id
+
+    const tour = await Tour.findById(tourId)
+
+    if (!tour) {
+      res.status(404).json({ error: 'Tour not found' })
+      return
+    }
+
+    // Check if the user is authorized to delete the tour
+    if (tour.author.toString() !== req.user._id.toString()) {
+      res.status(403).json({ error: 'Unauthorized' })
+      return
+    }
+
+    await Tour.deleteOne({ _id: tourId })
+
+    res.json({ message: 'Tour deleted successfully' })
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export { getAllTours, createTour, getMyTours, getTour, updateTour, deleteTour }

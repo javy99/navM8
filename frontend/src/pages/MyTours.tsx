@@ -11,7 +11,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
   useTheme,
   useBreakpointValue,
   ResponsiveValue,
@@ -24,7 +23,6 @@ import { useAuthContext, useMyTours } from '../hooks'
 import { approveBooking } from '../services'
 
 const MyTours: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
@@ -38,7 +36,12 @@ const MyTours: React.FC = () => {
     handleInputChange,
     handleRemoveFile,
     handleSubmit,
-  } = useMyTours(onClose)
+    handleEditTour,
+    handleDeleteTour,
+    isOpen,
+    onClose,
+    handleAddTour,
+  } = useMyTours()
 
   type FlexDirection =
     | 'row'
@@ -97,7 +100,7 @@ const MyTours: React.FC = () => {
             <Heading as="h3" fontSize="1.5rem" color={primaryColor}>
               Offered Tours
             </Heading>
-            <Button onClick={onOpen}>Add Tour</Button>
+            <Button onClick={handleAddTour}>Add Tour</Button>
           </Flex>
           <Grid
             templateColumns={{
@@ -113,13 +116,15 @@ const MyTours: React.FC = () => {
                 tour={tour}
                 key={tour._id}
                 onApproveBooking={onApproveBooking}
+                onEdit={() => handleEditTour(tour._id)}
+                onDelete={() => handleDeleteTour(tour._id)}
               />
             ))}
           </Grid>
         </VStack>
       )}
 
-      <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered={true}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
         <ModalOverlay bg="rgba(0,0,0,0.5)" />
         <ModalContent
           borderBottom="16px solid"
@@ -135,7 +140,7 @@ const MyTours: React.FC = () => {
           >
             Create a Tour
           </ModalHeader>
-          <ModalCloseButton color={primaryColor} size="lg" />
+          <ModalCloseButton color={primaryColor} />
           <ModalBody>
             <VStack
               spacing={inputGap}
