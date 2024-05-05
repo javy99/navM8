@@ -1,5 +1,16 @@
-import { createContext, useReducer, useState, useEffect, Dispatch } from 'react'
+import {
+  createContext,
+  useReducer,
+  useState,
+  useEffect,
+  Dispatch,
+  useCallback,
+} from 'react'
 import { User, ChildrenProps, Chat } from '../types'
+import { io } from 'socket.io-client'
+
+const ENDPOINT = import.meta.env.VITE_API_URL
+let socket
 
 interface AuthState {
   user: User | null
@@ -19,6 +30,7 @@ export interface AuthContextType {
   setChats: React.Dispatch<React.SetStateAction<Chat[]>>
   notification: any[]
   setNotification: React.Dispatch<React.SetStateAction<any[]>>
+  socket: any
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -57,6 +69,45 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
     localStorage.setItem('notifications', JSON.stringify(notification))
   }, [notification])
 
+  const updateNotifications = useCallback(
+    (newMessageReceived) => {
+      if (selectedChat && newMessageReceived.chat._id === selectedChat._id)
+        return
+
+      setNotification((prevNotifications) => {
+        const exists = prevNotifications.find(
+          (n) => n._id === newMessageReceived._id,
+        )
+        return exists
+          ? prevNotifications
+          : [...prevNotifications, newMessageReceived]
+      })
+    },
+    [selectedChat],
+  )
+
+  useEffect(() => {
+    if (state.user) {
+      socket = io(ENDPOINT, { auth: { token: state.user.token } })
+      socket.emit('setup', state.user)
+
+      socket.on('message received', (newMessageReceived) => {
+        updateNotifications(newMessageReceived)
+      })
+
+      socket.on('connect_error', (err) => {
+        console.error('Socket connect_error:', err.message)
+      })
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('message received')
+        socket.disconnect()
+      }
+    }
+  }, [state.user, updateNotifications])
+
   return (
     <AuthContext.Provider
       value={{
@@ -68,6 +119,7 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
         setChats,
         notification,
         setNotification,
+        socket,
       }}
     >
       {children}
