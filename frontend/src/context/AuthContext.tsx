@@ -54,16 +54,6 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
   })
 
   useEffect(() => {
-    const userJson = localStorage.getItem('user')
-    const user = userJson ? JSON.parse(userJson) : null
-
-    if (user) {
-      dispatch({ type: 'LOGIN', payload: user })
-    }
-  }, [])
-
-  useEffect(() => {
-    // Persist notifications to localStorage whenever they change
     localStorage.setItem('notifications', JSON.stringify(notification))
   }, [notification])
 
