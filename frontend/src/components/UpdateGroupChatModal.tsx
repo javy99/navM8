@@ -27,6 +27,7 @@ import { User } from '../types'
 import UserListItem from './UserListItem'
 import FormField from './FormField'
 import Button from './Button'
+import { useChatState } from '../context'
 
 interface Props {
   fetchMessages: () => void
@@ -39,7 +40,10 @@ const UpdateGroupChatModal: React.FC<Props> = ({
   fetchAgain,
   setFetchAgain,
 }) => {
-  const { selectedChat, setSelectedChat, state } = useAuthContext()
+  const { chatState, setSelectedChat } = useChatState()
+  const { selectedChat } = chatState
+
+  const { state } = useAuthContext()
   const { user } = state
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()

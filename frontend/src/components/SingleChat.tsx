@@ -21,6 +21,7 @@ import { fetchMessages, sendMessage } from '../services'
 import UpdateGroupChatModal from './UpdateGroupChatModal'
 import ProfileModal from './ProfileModal'
 import { Message } from '../types'
+import { useChatState } from '../context'
 
 const ENDPOINT = import.meta.env.VITE_API_URL
 let socket, selectedChatCompare
@@ -31,14 +32,11 @@ interface Props {
 }
 
 const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
-  const {
-    state,
-    selectedChat,
-    setSelectedChat,
-    notification,
-    setNotification,
-  } = useAuthContext()
+  const { state } = useAuthContext()
   const { user } = state
+
+  const { chatState, setSelectedChat, setNotification } = useChatState()
+  const { selectedChat, notification } = chatState
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary

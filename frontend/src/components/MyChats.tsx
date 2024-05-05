@@ -30,22 +30,19 @@ import UserListItem from './UserListItem'
 import Button from './Button'
 import FormField from './FormField'
 import { accessChat, fetchChats, searchUsers } from '../services'
+import { useChatState } from '../context'
 
 interface Props {
   fetchAgain: boolean
 }
 
 const MyChats: React.FC<Props> = ({ fetchAgain }) => {
-  const {
-    state,
-    setSelectedChat,
-    selectedChat,
-    chats,
-    setChats,
-    notification,
-    setNotification,
-  } = useAuthContext()
+  const { state } = useAuthContext()
   const { user } = state
+
+  const { chatState, setSelectedChat, setNotification, setChats } =
+    useChatState()
+  const { selectedChat, chats, notification } = chatState
 
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()

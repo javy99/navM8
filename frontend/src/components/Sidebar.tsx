@@ -30,8 +30,7 @@ import {
   BsPersonCircle,
 } from 'react-icons/bs'
 import { IconType } from 'react-icons'
-import { useSidebarContext } from '../context'
-import { useAuthContext } from '../hooks'
+import { useChatState, useSidebarContext } from '../context'
 import { User } from '../types'
 import logo from '../assets/logo.svg'
 import { fetchMyTours, fetchBookingsForTour } from '../services'
@@ -49,7 +48,8 @@ interface NavLinkItem {
 const Sidebar: React.FC<Props> = ({ user }) => {
   const { isSidebarOpen, toggleSidebar } = useSidebarContext()
   const theme = useTheme()
-  const { notification } = useAuthContext()
+  const { chatState } = useChatState()
+  const { notification } = chatState
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
 

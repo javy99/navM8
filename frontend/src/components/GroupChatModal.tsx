@@ -13,13 +13,13 @@ import {
   useTheme,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useAuthContext } from '../hooks'
 import FormField from './FormField'
 import Button from './Button'
 import UserListItem from './UserListItem'
 import { User } from '../types'
 import UserBadgeItem from './UserBadgeItem'
 import { searchUsers, createGroupChat } from '../services'
+import { useChatState } from '../context'
 
 interface Props {
   children: React.ReactNode
@@ -38,7 +38,8 @@ const GroupChatModal: React.FC<Props> = ({ children }) => {
 
   const toast = useToast()
 
-  const { chats, setChats } = useAuthContext()
+  const { chatState, setChats } = useChatState()
+  const { chats } = chatState
 
   const handleSearch = async (query: string) => {
     setSearch(query)

@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
-import { useAuthContext } from '../hooks'
 import SingleChat from './SingleChat'
+import { useChatState } from '../context'
 
 interface Props {
   fetchAgain: boolean
@@ -8,7 +8,8 @@ interface Props {
 }
 
 const ChatBox: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
-  const { selectedChat } = useAuthContext()
+  const { chatState } = useChatState()
+  const { selectedChat } = chatState
 
   return (
     <Box

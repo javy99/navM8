@@ -58,11 +58,11 @@ root.render(
   <AuthContextProvider>
     <ProfilePhotoProvider>
       <ChakraProvider theme={customTheme}>
-        <SidebarProvider>
-          <ChatProvider>
+        <ChatProvider>
+          <SidebarProvider>
             <App />
-          </ChatProvider>
-        </SidebarProvider>
+          </SidebarProvider>
+        </ChatProvider>
       </ChakraProvider>
     </ProfilePhotoProvider>
   </AuthContextProvider>,

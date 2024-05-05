@@ -8,10 +8,10 @@ import {
   ProfilePhotoProvider,
   useProfilePhoto,
 } from './ProfilePhotoContext'
-import { ChatContext, ChatProvider, ChatState } from './ChatContext'
+import { ChatContext, ChatProvider, useChatState } from './ChatContext'
 import { AuthContext, AuthContextProvider } from './AuthContext'
 export type { AuthContextType } from './AuthContext'
 export { AuthContext, AuthContextProvider }
 export { ProfilePhotoContext, ProfilePhotoProvider, useProfilePhoto }
 export { SidebarContext, SidebarProvider, useSidebarContext }
-export { ChatContext, ChatProvider, ChatState }
+export { ChatContext, ChatProvider, useChatState }
