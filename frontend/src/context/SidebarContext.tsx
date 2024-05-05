@@ -1,4 +1,3 @@
-// SidebarContext.js
 import React, { createContext, useContext, useState } from 'react'
 import { ChildrenProps } from '../types'
 

@@ -59,7 +59,7 @@ const UpdateGroupChatModal: React.FC<Props> = ({
 
     try {
       setLoading(true)
-      const { data } = await searchUsers(query, user?.token)
+      const { data } = await searchUsers(query)
       setLoading(false)
       setSearchResult(data)
     } catch (error) {
@@ -101,11 +101,7 @@ const UpdateGroupChatModal: React.FC<Props> = ({
 
     try {
       setRenameLoading(true)
-      const { data } = await renameGroupChat(
-        selectedChat._id,
-        groupChatName,
-        user?.token,
-      )
+      const { data } = await renameGroupChat(selectedChat._id, groupChatName)
       setSelectedChat(data)
       setFetchAgain(!fetchAgain)
       setRenameLoading(false)
@@ -180,11 +176,7 @@ const UpdateGroupChatModal: React.FC<Props> = ({
 
     try {
       setLoading(true)
-      const { data } = await addUserToGroup(
-        selectedChat._id,
-        userToAdd._id,
-        user.token,
-      )
+      const { data } = await addUserToGroup(selectedChat._id, userToAdd._id)
       setSelectedChat(data)
       setFetchAgain(!fetchAgain)
       setLoading(false)
@@ -280,7 +272,6 @@ const UpdateGroupChatModal: React.FC<Props> = ({
       const { data } = await removeUserFromGroup(
         selectedChat._id,
         userToRemove._id,
-        user.token,
       )
 
       userToRemove._id === user._id

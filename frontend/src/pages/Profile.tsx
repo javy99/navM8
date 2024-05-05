@@ -309,7 +309,6 @@ const Profile: React.FC = () => {
             }}
             mb="3.125rem"
             w={{ base: '95%', lg: '85%' }}
-            borderRadius="2rem"
             borderTopLeftRadius="2rem"
             borderTopRightRadius="2rem"
             borderBottomLeftRadius="1rem"

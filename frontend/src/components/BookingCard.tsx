@@ -11,6 +11,7 @@ import {
   CardBody,
   Heading,
   Stack,
+  Badge,
 } from '@chakra-ui/react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
@@ -23,9 +24,10 @@ type Props = {
   width: string | undefined
   tour: Tour
   date: string
+  status: string
 }
 
-const BookingCard: React.FC<Props> = ({ width, tour, date }) => {
+const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
   const navigate = useNavigate()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
@@ -35,12 +37,27 @@ const BookingCard: React.FC<Props> = ({ width, tour, date }) => {
     navigate(`/${tour._id}`)
   }
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return 'red'
+      case 'CONFIRMED':
+        return 'green'
+      case 'CANCELLED':
+        return 'gray'
+      case 'COMPLETED':
+        return 'blue'
+      default:
+        return 'gray'
+    }
+  }
+
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
       overflow="hidden"
       variant="outline"
-      borderRadius="20px"
+      borderRadius="10px"
       width={width}
       bg="#F6FBFC"
       boxShadow="0 4px 4px 0 #69490b"
@@ -104,6 +121,22 @@ const BookingCard: React.FC<Props> = ({ width, tour, date }) => {
             </Text>
           </Flex>
         </CardBody>
+        <Flex
+          alignItems="center"
+          justifyContent="flex-end"
+          px={4}
+          pb={3}
+          mr={-3}
+        >
+          <Badge
+            colorScheme={getStatusColor(status)}
+            variant="outline"
+            fontSize="sm"
+            fontWeight="bold"
+          >
+            {status}
+          </Badge>
+        </Flex>
       </Stack>
     </Card>
   )

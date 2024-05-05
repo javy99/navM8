@@ -53,10 +53,9 @@ const useMyTours = () => {
 
   useEffect(() => {
     const fetchTours = async () => {
-      if (!user?.token) return
       setIsLoading(true)
       try {
-        const allTours = await fetchMyTours(user.token)
+        const allTours = await fetchMyTours()
         setTours(allTours)
       } catch (error) {
         toast({
@@ -72,7 +71,7 @@ const useMyTours = () => {
     }
 
     fetchTours()
-  }, [user?.token])
+  }, [user])
 
   const handleInputChange = (
     event: React.ChangeEvent<
@@ -118,20 +117,16 @@ const useMyTours = () => {
     })
 
     try {
-      if (!user?.token) {
-        throw new Error('User token is not available.')
-      }
-
       let tourResult
       if (myTourInfo._id) {
-        tourResult = await updateTour(myTourInfo._id, formData, user.token)
+        tourResult = await updateTour(myTourInfo._id, formData)
         setTours((prevTours) =>
           prevTours.map((tour) =>
             tour._id === myTourInfo._id ? { ...tour, ...tourResult } : tour,
           ),
         )
       } else {
-        tourResult = await createTour(formData, user.token)
+        tourResult = await createTour(formData)
         setTours((prevTours) => [...prevTours, tourResult])
       }
 
@@ -226,11 +221,7 @@ const useMyTours = () => {
 
     setIsLoading(true)
     try {
-      if (!user?.token) {
-        throw new Error('User token is not available.')
-      }
-
-      await deleteTour(tourId, user?.token)
+      await deleteTour(tourId)
       setTours((prevTours) => prevTours.filter((tour) => tour._id !== tourId))
       toast({
         title: 'Tour Deleted Successfully.',

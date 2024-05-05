@@ -3,6 +3,7 @@ import * as cors from 'cors'
 import * as dotenv from 'dotenv'
 import * as http from 'http'
 import mongoose from 'mongoose'
+import * as cookieParser from 'cookie-parser'
 import { Server as SocketIOServer } from 'socket.io'
 import { Request, Response } from 'express'
 import {
@@ -28,8 +29,16 @@ const { MONGODB_URL, BACKEND_PORT } = process.env
 const app = express()
 
 // middleware
+app.use(cookieParser())
+// app.use(cors())
+app.use(
+  cors({
+    origin: 'http://localhost:3001',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true,
+  }),
+)
 app.use(express.json({ limit: '50mb' }))
-app.use(cors())
 
 // Initialize HTTP server from Express app
 const server = http.createServer(app)

@@ -34,8 +34,8 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Review, Tour } from '../types'
 import { useAuthContext, useFavorite } from '../hooks'
-import axios from 'axios'
 import Button from './Button'
+import { fetchReviews } from '../services'
 
 type Props = {
   tour: Tour
@@ -74,30 +74,18 @@ const TourCard: React.FC<Props> = ({
       : notFavoriteIconColor
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      if (
-        user &&
-        user.token &&
-        tour._id &&
-        tour &&
-        typeof tour.reviewCount === 'number' &&
-        tour.reviewCount > 0
-      ) {
-        try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/reviews/${tour._id}`,
-            {
-              headers: { Authorization: `Bearer ${user?.token}` },
-            },
-          )
-          setReviews(response.data)
-        } catch (error) {
-          console.error('Error fetching reviews:', error)
-        }
-      }
+    if (
+      user &&
+      tour._id &&
+      tour &&
+      typeof tour.reviewCount === 'number' &&
+      tour.reviewCount > 0
+    ) {
+      fetchReviews(tour._id)
+        .then(setReviews)
+        .catch((error) => console.error('Error fetching reviews:', error))
     }
-    fetchReviews()
-  }, [tour._id, user?.token, tour])
+  }, [tour._id, tour])
 
   const handleToggleFavoriteClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -109,15 +97,11 @@ const TourCard: React.FC<Props> = ({
     }
   }
 
-  //const openCardDetails = () => {
-  //  navigate(`/${tour._id}`)
-  //}
-
   const openCardDetails = () => {
     if (user) {
       navigate(`/${tour._id}`)
     } else {
-      setIsModalOpen(true) // Open the modal if the user is not authenticated
+      setIsModalOpen(true)
     }
   }
 
@@ -138,7 +122,7 @@ const TourCard: React.FC<Props> = ({
   return (
     <>
       <ChakraCard
-        borderRadius="xl"
+        borderRadius="10px"
         width={{ base: '100%', md: '48%', lg: '31%', '2xl': '23%' }}
         bg="#F6FBFC"
         transition="all 0.3s"

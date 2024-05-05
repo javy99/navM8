@@ -46,7 +46,6 @@ const ProfileModal: React.FC<Props> = ({ user, children }) => {
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered={true}>
         <ModalOverlay bg="rgba(0,0,0,0.5)" />
         <ModalContent
-          h="400px"
           borderBottom="15px solid"
           borderColor={primaryColor}
           borderRadius="15px"
@@ -86,7 +85,7 @@ const ProfileModal: React.FC<Props> = ({ user, children }) => {
                 name={user.username}
               />
             )}
-            <Text fontSize={{ base: '18px', md: '23px' }}>
+            <Text fontSize={{ base: '18px', md: '23px' }} mt={5}>
               <span style={{ fontWeight: '600' }}>Email:</span> {user.email}
             </Text>
           </ModalBody>

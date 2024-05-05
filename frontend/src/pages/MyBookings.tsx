@@ -49,8 +49,8 @@ const MyBookings: React.FC = () => {
     const getBookings = async () => {
       setIsLoading(true)
       try {
-        if (user && user.token) {
-          const fetchedBookings = await fetchBookings(user.token)
+        if (user) {
+          const fetchedBookings = await fetchBookings()
           setBookings(fetchedBookings)
         }
       } catch (error) {
@@ -61,7 +61,7 @@ const MyBookings: React.FC = () => {
     }
 
     getBookings()
-  }, [user?.token])
+  }, [user])
 
   const flexDirection: ResponsiveValue<FlexDirection> = useBreakpointValue({
     base: 'column',
@@ -106,6 +106,7 @@ const MyBookings: React.FC = () => {
                   width={bookingCardWidth}
                   tour={booking.tour}
                   date={booking.date}
+                  status={booking.status}
                 />
               ))}
             </Flex>

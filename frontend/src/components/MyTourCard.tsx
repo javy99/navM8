@@ -19,7 +19,6 @@ import { useEffect, useState } from 'react'
 import { Booking } from '../types'
 import { useAuthContext } from '../hooks'
 import Button from './Button'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { fetchBookingsForTour } from '../services'
 
@@ -64,20 +63,16 @@ const MyTourCard: React.FC<Props> = ({
 
   useEffect(() => {
     const getBookingsForTour = async () => {
-      if (tour._id && user?.token) {
+      if (tour._id) {
         try {
-          const bookingsData = await fetchBookingsForTour(tour._id, user.token)
+          const bookingsData = await fetchBookingsForTour(tour._id)
           const sortedBookings = bookingsData.sort((a, b) => {
             return new Date(b.date).getTime() - new Date(a.date).getTime()
           })
 
           setBookings(sortedBookings)
         } catch (error) {
-          if (axios.isAxiosError(error)) {
-            console.error('Error fetching bookings:', error.response?.data)
-          } else {
-            console.error('Error:', error)
-          }
+          console.error('Error:', error)
         }
       }
     }
@@ -110,7 +105,7 @@ const MyTourCard: React.FC<Props> = ({
         direction={{ base: 'column', sm: 'row' }}
         overflow="hidden"
         variant="outline"
-        borderRadius="20px"
+        borderRadius="10px"
         width={width}
         bg="#F6FBFC"
         boxShadow="0 4px 4px 0 #69490b"

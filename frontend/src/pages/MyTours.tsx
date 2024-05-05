@@ -59,10 +59,8 @@ const MyTours: React.FC = () => {
   })
 
   const onApproveBooking = async (bookingId) => {
-    if (!user?.token) return
-
     try {
-      await approveBooking(bookingId, user?.token)
+      await approveBooking(bookingId)
       toast({
         title: 'Booking confirmed',
         status: 'success',
@@ -108,7 +106,7 @@ const MyTours: React.FC = () => {
               '2xl': 'repeat(2, 50%)',
             }}
             gap={{ base: 4, md: 6, lg: 8 }}
-            mx={{ base: 0, md: 2, lg: 4, xl: 10 }}
+            mx={{ base: 0, md: 2, lg: 4, xl: 6 }}
           >
             {tours.map((tour) => (
               <MyTourCard
@@ -127,6 +125,13 @@ const MyTours: React.FC = () => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
         <ModalOverlay bg="rgba(0,0,0,0.5)" />
         <ModalContent
+          maxW={{
+            base: '90%',
+            md: '80%',
+            lg: '70%',
+            xl: '60%',
+            '2xl': '50%',
+          }}
           borderBottom="16px solid"
           borderColor={primaryColor}
           borderRadius="15px"

@@ -18,6 +18,7 @@ import {
   Icon,
   Divider,
   useToast,
+  Badge,
 } from '@chakra-ui/react'
 import {
   BsCalendar2Minus,
@@ -71,12 +72,12 @@ const TourDetails: React.FC = () => {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        if (user && user.token && id && user._id) {
+        if (user && id && user._id) {
           const tourData = await getTourById(id)
           setTourDetails(tourData)
 
           // Fetch bookings
-          const bookings = await fetchBookings(user.token)
+          const bookings = await fetchBookings()
           const tourBooking = bookings.find(
             (booking) => booking.tour._id === id,
           )
@@ -162,7 +163,7 @@ const TourDetails: React.FC = () => {
     const bookingDateISO = format(bookingDate, 'yyyy-MM-dd')
 
     try {
-      const booking = await createBooking(id, bookingDateISO, user.token)
+      const booking = await createBooking(id, bookingDateISO)
 
       setIsBooked(true)
       setBookingStatus('PENDING')
@@ -189,7 +190,7 @@ const TourDetails: React.FC = () => {
 
   // Cancel booking
   const handleCancelBooking = async (bookingId) => {
-    if (!user || !user.token || !id || !currentTourBooking) {
+    if (!user || !id || !currentTourBooking) {
       toast({
         title: 'Please log in to cancel this booking.',
         status: 'error',
@@ -200,7 +201,7 @@ const TourDetails: React.FC = () => {
     }
 
     try {
-      await cancelBooking(bookingId, user.token)
+      await cancelBooking(bookingId)
 
       setIsBooked(false)
       setBookingStatus(null)
@@ -502,7 +503,11 @@ const TourDetails: React.FC = () => {
                   {isBooked && bookingStatus ? (
                     <Box width="100%">
                       <Text
-                        color="red.500"
+                        color={
+                          bookingStatus === 'CONFIRMED'
+                            ? 'green.500'
+                            : 'red.500'
+                        }
                         mt={4}
                         fontWeight="bold"
                         textAlign="center"
@@ -517,7 +522,26 @@ const TourDetails: React.FC = () => {
                             {bookingDate
                               ? new Date(bookingDate).toLocaleDateString()
                               : 'an unknown date'}
-                            . Booking Status: {bookingStatus}.
+                            <br />
+                            <Flex
+                              alignItems="center"
+                              justifyContent="center"
+                              mt={1}
+                            >
+                              Booking Status:{' '}
+                              <Badge
+                                variant="solid"
+                                fontSize={15}
+                                ml={1}
+                                colorScheme={
+                                  bookingStatus === 'CONFIRMED'
+                                    ? 'green'
+                                    : 'red'
+                                }
+                              >
+                                {bookingStatus}
+                              </Badge>
+                            </Flex>
                           </>
                         )}
                       </Text>

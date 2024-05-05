@@ -57,12 +57,12 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     const fetchAndCountPendingApprovals = async () => {
-      if (user?.token) {
-        const tours = await fetchMyTours(user.token)
+      if (user) {
+        const tours = await fetchMyTours()
         let totalPending = 0
 
         for (const tour of tours) {
-          const bookings = await fetchBookingsForTour(tour._id, user.token)
+          const bookings = await fetchBookingsForTour(tour._id)
           const pendingBookings = bookings.filter(
             (booking) => booking.status === 'PENDING',
           )
@@ -74,7 +74,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
     }
 
     fetchAndCountPendingApprovals()
-  }, [user?.token])
+  }, [user])
 
   const commonStyles: BoxProps = {
     bg: primaryColor,
@@ -149,7 +149,6 @@ const Sidebar: React.FC<Props> = ({ user }) => {
     }
   }
 
-  // Sidebar content component for reuse in both drawer and static sidebar
   const SidebarContent = () => (
     <>
       <VStack align="center" mb={2}>

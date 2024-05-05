@@ -38,4 +38,9 @@ export {
   removeProfilePhoto,
 } from './profilePhotoService'
 
-export { loginService, signupService } from '../services/authService'
+export {
+  loginService,
+  signupService,
+  logoutService,
+} from '../services/authService'
+export { submitReview, fetchReviews } from '../services/reviewService'

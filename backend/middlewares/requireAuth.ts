@@ -2,16 +2,15 @@ import * as jwt from 'jsonwebtoken'
 import { Secret } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { User } from '../models'
+import { createToken } from '../controllers/authControllers'
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  // verify authentication
-  const { authorization } = req.headers
+  const token = req.cookies.token
+  const refreshToken = req.cookies.refreshToken
 
-  if (!authorization) {
+  if (!token && !refreshToken) {
     return res.status(401).json({ error: 'Authorization token required' })
   }
-
-  const token = authorization.split(' ')[1]
 
   try {
     const JWT_SECRET = process.env.JWT_SECRET as Secret
@@ -20,9 +19,33 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
       throw new Error('JWT secret is not defined.')
     }
 
-    const { _id } = jwt.verify(token, JWT_SECRET) as { _id: string }
+    // Verify the access token
+    let decoded: { _id: string }
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as { _id: string }
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError && refreshToken) {
+        const refreshDecoded = jwt.verify(refreshToken, JWT_SECRET) as {
+          _id: string
+        }
+        const newToken = createToken(refreshDecoded._id.toString(), '3d')
 
-    const user = await User.findById(_id).select('-password')
+        // Set the new access token in the response cookies
+        res.cookie('token', newToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 3 * 24 * 60 * 60 * 1000,
+        })
+
+        // Decode the new access token
+        decoded = jwt.verify(newToken, JWT_SECRET) as { _id: string }
+      } else {
+        throw error // If there's no refresh token or another error, rethrow the error
+      }
+    }
+
+    // Find the user based on the decoded token
+    const user = await User.findById(decoded._id).select('-password')
     if (!user) {
       return res.status(404).json({ error: 'User not found' })
     }

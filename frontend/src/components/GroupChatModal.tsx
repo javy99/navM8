@@ -38,8 +38,7 @@ const GroupChatModal: React.FC<Props> = ({ children }) => {
 
   const toast = useToast()
 
-  const { state, chats, setChats } = useAuthContext()
-  const { user } = state
+  const { chats, setChats } = useAuthContext()
 
   const handleSearch = async (query: string) => {
     setSearch(query)
@@ -48,7 +47,7 @@ const GroupChatModal: React.FC<Props> = ({ children }) => {
 
     try {
       setLoading(true)
-      const { data } = await searchUsers(query, user?.token)
+      const { data } = await searchUsers(query)
       setLoading(false)
       setSearchResult(data)
     } catch (error) {
@@ -79,7 +78,6 @@ const GroupChatModal: React.FC<Props> = ({ children }) => {
       const { data } = await createGroupChat(
         groupChatName,
         selectedUsers.map((u) => u._id),
-        user?.token,
       )
 
       setChats([data, ...chats])

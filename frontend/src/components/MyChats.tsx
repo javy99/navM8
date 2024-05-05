@@ -60,6 +60,10 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [search, setSearch] = useState<string>('')
 
+  useEffect(() => {
+    setLoggedUser(user)
+  }, [user])
+
   const handleSearch = async () => {
     if (!search) {
       toast({
@@ -72,7 +76,7 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
       return
     }
 
-    if (!user || !user.token) {
+    if (!user) {
       toast({
         title: 'Authentication error',
         description: 'You must be logged in to search for users.',
@@ -86,7 +90,7 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
 
     try {
       setLoading(true)
-      const { data } = await searchUsers(search, user.token)
+      const { data } = await searchUsers(search)
       setLoading(false)
       setSearchResult(data)
     } catch (error) {
@@ -102,7 +106,7 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
   }
 
   const handleAccessChat = async (userId: string) => {
-    if (!user || !user.token) {
+    if (!user) {
       toast({
         title: 'Authentication error',
         description: 'You must be logged in to access chats.',
@@ -116,7 +120,7 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
 
     try {
       setLoadingChat(true)
-      const { data } = await accessChat(userId, user.token)
+      const { data } = await accessChat(userId)
 
       if (!chats.find((chat) => chat._id === data._id)) {
         setChats([...chats, data])
@@ -142,7 +146,7 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
   useEffect(() => {
     const fetchAllChats = async () => {
       try {
-        const { data } = await fetchChats(user?.token)
+        const { data } = await fetchChats()
         setChats(data)
       } catch (error) {
         toast({
@@ -156,11 +160,8 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
       }
     }
 
-    setLoggedUser(JSON.parse(localStorage.getItem('user') || '{}'))
     fetchAllChats()
   }, [fetchAgain])
-
-  // ChatLogics. Instead of username have first and last names
 
   const hasNotification = (chatId) => {
     return notification.some((n) => n.chat._id === chatId)
@@ -260,18 +261,12 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
         alignItems="center"
         borderTop={`3px solid ${primaryColor}`}
         borderBottom={`3px solid ${primaryColor}`}
-        // bgColor={primaryColor}
       >
         <Heading as="h1" size="md" mb={1} color={primaryColor}>
           Chats
         </Heading>
         <GroupChatModal>
-          <Button
-            display="flex"
-            rightIcon={<BsPlus size={25} />}
-            // bgColor={whiteColor}
-            // color={primaryColor}
-          >
+          <Button display="flex" rightIcon={<BsPlus size={25} />}>
             New Group
           </Button>
         </GroupChatModal>
@@ -332,7 +327,7 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
                             size="md"
                             cursor="pointer"
                             name={user?.username}
-                            src={user.profilePictureURL || undefined}
+                            src={user.profilePictureURL}
                             fontWeight={500}
                           />
                         ))

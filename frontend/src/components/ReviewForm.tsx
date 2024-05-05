@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { Box, useToast } from '@chakra-ui/react'
-import axios from 'axios'
-import { useAuthContext } from '../hooks'
 import { Review } from '../types'
 import Button from './Button'
 import FormField from './FormField'
+import { submitReview } from '../services'
 
 interface Props {
   tourId: string
@@ -12,26 +11,18 @@ interface Props {
 }
 
 const ReviewForm: React.FC<Props> = ({ tourId, onSubmitSuccess }) => {
-  const { state } = useAuthContext()
-  const { user } = state
   const [rating, setRating] = useState<string>('5')
   const [comment, setComment] = useState<string>('')
   const toast = useToast()
 
-  const submitReview = async () => {
+  const handleReviewSubmit = async () => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/reviews`,
-        {
-          tourId,
-          rating: parseInt(rating, 10),
-          comment,
-        },
-        {
-          headers: { Authorization: `Bearer ${user?.token}` },
-        },
+      const reviewData = await submitReview(
+        tourId,
+        parseInt(rating, 10),
+        comment,
       )
-      onSubmitSuccess(response.data)
+      onSubmitSuccess(reviewData)
       toast({
         title: 'Review submitted successfully',
         status: 'success',
@@ -42,7 +33,7 @@ const ReviewForm: React.FC<Props> = ({ tourId, onSubmitSuccess }) => {
       if (error instanceof Error) {
         toast({
           title: 'Error submitting review',
-          description: "Please both rating and comment!",
+          description: 'Please both rating and comment!',
           status: 'error',
           duration: 5000,
           isClosable: true,
@@ -78,7 +69,7 @@ const ReviewForm: React.FC<Props> = ({ tourId, onSubmitSuccess }) => {
         onChange={(e) => setComment(e.target.value)}
         placeholder="Write your review here..."
       />
-      <Button mt="4" colorScheme="blue" onClick={submitReview}>
+      <Button mt="4" colorScheme="blue" onClick={handleReviewSubmit}>
         Submit Review
       </Button>
     </Box>

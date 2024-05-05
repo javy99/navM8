@@ -2,13 +2,11 @@ import axios from 'axios'
 
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
-const fetchProfilePhoto = async (token: string, id: string) => {
+axios.defaults.withCredentials = true
+
+const fetchProfilePhoto = async (id: string) => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/api/users/${id}/photo`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const response = await axios.get(`${BASE_API_URL}/api/users/${id}/photo`)
     return response.data.profilePictureURL
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -21,11 +19,7 @@ const fetchProfilePhoto = async (token: string, id: string) => {
   }
 }
 
-const updateProfilePhoto = async (
-  token: string,
-  id: string,
-  file: File | null,
-) => {
+const updateProfilePhoto = async (id: string, file: File | null) => {
   if (!file) {
     throw new Error('No file provided to update profile photo.')
   }
@@ -37,11 +31,6 @@ const updateProfilePhoto = async (
     const response = await axios.post(
       `${BASE_API_URL}/api/users/${id}/photo`,
       formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
     )
 
     return response.data.profilePictureURL
@@ -51,13 +40,9 @@ const updateProfilePhoto = async (
   }
 }
 
-const removeProfilePhoto = async (token: string, id: string) => {
+const removeProfilePhoto = async (id: string) => {
   try {
-    await axios.delete(`${BASE_API_URL}/api/users/${id}/photo`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    await axios.delete(`${BASE_API_URL}/api/users/${id}/photo`)
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response && error.response.status === 404) {

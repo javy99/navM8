@@ -62,11 +62,11 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
   const toast = useToast()
 
   const fetchMessagesHandler = async () => {
-    if (!selectedChat || !user || !selectedChat._id || !user.token) return
+    if (!selectedChat || !user || !selectedChat._id) return
 
     try {
       setLoading(true)
-      const data = await fetchMessages(selectedChat._id, user.token)
+      const data = await fetchMessages(selectedChat._id)
       setMessages(data.data)
       setLoading(false)
 
@@ -141,15 +141,11 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
   }, [notification, selectedChatCompare])
 
   const sendMessageHandler = async (e: any) => {
-    if (e.key === 'Enter' && newMessage && selectedChat?._id && user?.token) {
+    if (e.key === 'Enter' && newMessage && selectedChat?._id) {
       socket.emit('stop typing', selectedChat?._id)
       try {
         setNewMessage('')
-        const response = await sendMessage(
-          newMessage,
-          selectedChat._id,
-          user.token,
-        )
+        const response = await sendMessage(newMessage, selectedChat._id)
         const messageData: Message = response.data
         socket.emit('new message', messageData)
         setMessages((prevMessages) => [...prevMessages, messageData])

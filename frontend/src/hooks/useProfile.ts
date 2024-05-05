@@ -37,7 +37,7 @@ const useProfile = () => {
           throw new Error('User or user token is not available.')
         }
 
-        const data = await fetchUserProfile(user.token, user._id)
+        const data = await fetchUserProfile(user.token)
         const formattedBirthDate = data.birthDate
           ? new Date(data.birthDate).toISOString().split('T')[0]
           : ''

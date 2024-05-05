@@ -2,16 +2,11 @@ import axios from 'axios'
 
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
-const fetchBookings = async (userToken: string) => {
+axios.defaults.withCredentials = true
+
+const fetchBookings = async () => {
   try {
-    const response = await axios.get(
-      `${BASE_API_URL}/api/bookings/mybookings`,
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      },
-    )
+    const response = await axios.get(`${BASE_API_URL}/api/bookings/mybookings`)
     return response.data
   } catch (error) {
     console.error('Error fetching bookings:', error)
@@ -19,15 +14,10 @@ const fetchBookings = async (userToken: string) => {
   }
 }
 
-const fetchBookingsForTour = async (tourId: string, userToken: string) => {
+const fetchBookingsForTour = async (tourId: string) => {
   try {
     const response = await axios.get(
       `${BASE_API_URL}/api/bookings/tour/${tourId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      },
     )
     return response.data
   } catch (error) {
@@ -36,24 +26,12 @@ const fetchBookingsForTour = async (tourId: string, userToken: string) => {
   }
 }
 
-const createBooking = async (
-  tourId: string,
-  bookingDate: string,
-  userToken: string,
-) => {
+const createBooking = async (tourId: string, bookingDate: string) => {
   try {
-    const response = await axios.post(
-      `${BASE_API_URL}/api/bookings`,
-      {
-        tourId,
-        date: bookingDate,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      },
-    )
+    const response = await axios.post(`${BASE_API_URL}/api/bookings`, {
+      tourId,
+      date: bookingDate,
+    })
     return response.data.booking
   } catch (error) {
     console.error('Error creating booking:', error)
@@ -61,31 +39,21 @@ const createBooking = async (
   }
 }
 
-const cancelBooking = async (bookingId: string, userToken: string) => {
+const cancelBooking = async (bookingId: string) => {
   try {
-    await axios.delete(`${BASE_API_URL}/api/bookings/${bookingId}`, {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    })
+    await axios.delete(`${BASE_API_URL}/api/bookings/${bookingId}`)
   } catch (error) {
     console.error('Error canceling booking:', error)
     throw error
   }
 }
 
-const approveBooking = async (bookingId: string, userToken: string) => {
+const approveBooking = async (bookingId: string) => {
   try {
     const response = await axios.patch(
       `${BASE_API_URL}/api/bookings/${bookingId}`,
       {
         status: 'CONFIRMED',
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`,
-        },
       },
     )
 

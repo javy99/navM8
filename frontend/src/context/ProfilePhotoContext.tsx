@@ -29,9 +29,9 @@ export const ProfilePhotoProvider: React.FC<ChildrenProps> = ({ children }) => {
 
   useEffect(() => {
     const loadPhoto = async () => {
-      if (user?.token && user?._id) {
+      if (user?._id) {
         try {
-          const photoUrl = await fetchProfilePhoto(user.token, user._id)
+          const photoUrl = await fetchProfilePhoto(user._id)
           setPhoto(photoUrl)
         } catch (error) {
           console.error('Error fetching profile photo:', error)
@@ -40,16 +40,16 @@ export const ProfilePhotoProvider: React.FC<ChildrenProps> = ({ children }) => {
     }
 
     loadPhoto()
-  }, [user?.token, user?._id])
+  }, [user])
 
   const updatePhoto = async (file: File | null) => {
     try {
       let photoUrl = null
-      if (user?.token && user?._id) {
+      if (user?._id) {
         if (file) {
-          photoUrl = await updateProfilePhoto(user.token, user._id, file)
+          photoUrl = await updateProfilePhoto(user._id, file)
         } else {
-          await removeProfilePhoto(user.token, user._id)
+          await removeProfilePhoto(user._id)
           photoUrl = null
         }
         setPhoto(photoUrl)
@@ -62,8 +62,8 @@ export const ProfilePhotoProvider: React.FC<ChildrenProps> = ({ children }) => {
 
   const removePhoto = async () => {
     try {
-      if (user?.token && user?._id) {
-        await removeProfilePhoto(user.token, user._id)
+      if (user?._id) {
+        await removeProfilePhoto(user._id)
         setPhoto(null)
       }
     } catch (error) {
