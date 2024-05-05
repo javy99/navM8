@@ -63,6 +63,7 @@ const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
       boxShadow="0 4px 4px 0 #69490b"
       cursor="pointer"
       onClick={openCardDetails}
+      position="relative"
       transition="all 0.3s"
       _hover={{
         transform: 'translateY(-5px)',
@@ -121,17 +122,11 @@ const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
             </Text>
           </Flex>
         </CardBody>
-        <Flex
-          alignItems="center"
-          justifyContent="flex-end"
-          px={4}
-          pb={3}
-          mr={-3}
-        >
+        <Flex position="absolute" bottom={3} right={3}>
           <Badge
             colorScheme={getStatusColor(status)}
             variant="outline"
-            fontSize="sm"
+            fontSize={{ base: 'xs', '2xl': 'sm' }}
             fontWeight="bold"
           >
             {status}
