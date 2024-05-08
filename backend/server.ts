@@ -16,7 +16,6 @@ import {
   reviewRouter,
 } from './routes'
 import { notFound, errorHandler } from './middlewares'
-import 'colors'
 
 interface CustomError extends Error {
   status?: number
@@ -115,10 +114,11 @@ if (MONGODB_URL) {
     .connect(MONGODB_URL)
     .then(() => {
       server.listen(BACKEND_PORT, () => {
+        console.log('==============================================================')
         console.log(
-          `Connected to MongoDB and listening on port ${BACKEND_PORT} :)`.red
-            .bold,
+          `===== Connected to MongoDB and listening on port ${BACKEND_PORT} :) =====`,
         )
+        console.log('==============================================================')
       })
     })
     .catch((err: unknown) => {
