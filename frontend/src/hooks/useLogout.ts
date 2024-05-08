@@ -12,7 +12,6 @@ const useLogout = () => {
 
       dispatch({ type: 'LOGOUT', payload: null })
 
-      // Show success toast
       toast({
         title: 'Logged out',
         description: 'You have been successfully logged out.',

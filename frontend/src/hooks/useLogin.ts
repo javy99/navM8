@@ -17,15 +17,6 @@ const useLogin = () => {
     try {
       const json = await loginService(email, password)
 
-      // // Update token in cookies
-      // const cookie = Cookies.set('token', json.token, {
-      //   expires: 3,
-      //   secure: true,
-      //   httpOnly: true,
-      //   sameSite: 'strict',
-      // })
-      // console.log(cookie)
-
       dispatch({ type: 'LOGIN', payload: json })
 
       toast({

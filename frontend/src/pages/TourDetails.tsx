@@ -79,7 +79,7 @@ const TourDetails: React.FC = () => {
           // Fetch bookings
           const bookings = await fetchBookings()
           const tourBooking = bookings.find(
-            (booking) => booking.tour._id === id,
+            (booking) => booking.tour?._id === id,
           )
           if (tourBooking) {
             setIsBooked(true)
@@ -131,7 +131,6 @@ const TourDetails: React.FC = () => {
     fetchReviews()
   }, [id, user?.token, tourDetails])
 
-  // Get number of slides per view based on number of photos
   const getSlidesPerView = () => {
     const photosCount = tourDetails?.photos?.length || 0
     return photosCount >= 3 ? 3 : photosCount
@@ -502,22 +501,32 @@ const TourDetails: React.FC = () => {
                   />
                   {isBooked && bookingStatus ? (
                     <Box width="100%">
-                      <Text
-                        color={
-                          bookingStatus === 'CONFIRMED'
-                            ? 'green.500'
-                            : 'red.500'
-                        }
-                        mt={4}
-                        fontWeight="bold"
-                        textAlign="center"
-                      >
-                        {bookingStatus === 'COMPLETED' ? (
-                          <>
+                      {bookingStatus === 'COMPLETED' ? (
+                        <>
+                          <Text
+                            color="green.500"
+                            mt={4}
+                            fontWeight="bold"
+                            textAlign="center"
+                          >
                             This tour has been completed. You can book it again!
-                          </>
-                        ) : (
-                          <>
+                          </Text>
+                          <Button width="100%" mt={4} onClick={handleBooking}>
+                            Book Again
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Text
+                            color={
+                              bookingStatus === 'CONFIRMED'
+                                ? 'green.500'
+                                : 'red.500'
+                            }
+                            mt={4}
+                            fontWeight="bold"
+                            textAlign="center"
+                          >
                             You have booked this tour for{' '}
                             {bookingDate
                               ? new Date(bookingDate).toLocaleDateString()
@@ -542,21 +551,24 @@ const TourDetails: React.FC = () => {
                                 {bookingStatus}
                               </Badge>
                             </Flex>
-                          </>
-                        )}
-                      </Text>
-                      {bookingStatus !== 'CANCELLED' ? (
-                        <Button
-                          width="100%"
-                          mt={4}
-                          onClick={() =>
-                            handleCancelBooking(currentTourBooking?._id || '')
-                          }
-                          colorScheme="red"
-                        >
-                          Cancel
-                        </Button>
-                      ) : null}
+                          </Text>
+                          {bookingStatus !== 'CANCELLED' &&
+                          bookingStatus !== 'COMPLETED' ? (
+                            <Button
+                              width="100%"
+                              mt={4}
+                              onClick={() =>
+                                handleCancelBooking(
+                                  currentTourBooking?._id || '',
+                                )
+                              }
+                              colorScheme="red"
+                            >
+                              Cancel
+                            </Button>
+                          ) : null}
+                        </>
+                      )}
                     </Box>
                   ) : (
                     <Button

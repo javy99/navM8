@@ -52,6 +52,10 @@ const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
     }
   }
 
+  if (!tour) {
+    return null
+  }
+
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
@@ -70,7 +74,7 @@ const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
         boxShadow: '0 4px 4px 0 #69490b',
       }}
     >
-      {tour.photos.length > 0 && (
+      {tour.photos && tour.photos.length > 0 && (
         <Box
           maxW={{ base: '100%', sm: '200px' }}
           overflow="hidden"
@@ -101,8 +105,8 @@ const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
             {tour.name}
           </Heading>
 
-          <Text py={3}>{tour.description}</Text>
-          <Flex alignItems="center">
+          {/* <Text py={3}>{tour.description}</Text> */}
+          <Flex pt={3}  alignItems="center">
             <Icon as={BsCalendar4} color="#EC502C" w={5} h={5} />
             <Text ml={2} color={secondaryColor}>
               {date.toLocaleString().split('T')[0]}

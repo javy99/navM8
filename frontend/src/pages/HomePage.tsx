@@ -22,8 +22,21 @@ const HomePage: React.FC = () => {
         setIsLoading(true)
 
         const tours = await getAllTours()
-        setAllTours(tours)
-        setFilteredTours(tours)
+
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+
+        const validTours = tours.filter((tour) => {
+          if (tour.typeOfAvailability === 'one-time') {
+            const tourDate = new Date(tour.date)
+            tourDate.setHours(0, 0, 0, 0)
+            return tourDate >= today
+          }
+          return true
+        })
+
+        setAllTours(validTours)
+        setFilteredTours(validTours)
       } catch (error) {
         console.error('Failed to fetch guides:', error)
       } finally {

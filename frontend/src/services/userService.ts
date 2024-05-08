@@ -14,7 +14,7 @@ const fetchUserProfile = async (id: string) => {
   }
 }
 
-const updateUserProfile = async (token: string, id: string, userInfo: User) => {
+const updateUserProfile = async (id: string, userInfo: User) => {
   try {
     await axios.patch(`${BASE_API_URL}/api/users/${id}`, userInfo)
   } catch (error) {
@@ -29,7 +29,7 @@ const updateUserProfile = async (token: string, id: string, userInfo: User) => {
   }
 }
 
-const getAllUsers = async (token: string) => {
+const getAllUsers = async () => {
   try {
     const response = await axios.get(`${BASE_API_URL}/api/users`)
     return response.data
@@ -38,11 +38,7 @@ const getAllUsers = async (token: string) => {
   }
 }
 
-const checkIsFavorite = async (
-  userId: string,
-  tourId: string,
-  token: string,
-) => {
+const checkIsFavorite = async (userId: string, tourId: string) => {
   try {
     const response = await axios.get(
       `${BASE_API_URL}/api/users/${userId}/favoriteTours`,
@@ -61,7 +57,6 @@ const toggleFavorite = async (
   tourId: string,
   isFavorited: boolean,
   isFavoritePage: boolean,
-  token: string,
 ) => {
   let method = isFavorited ? 'delete' : 'post'
   if (isFavoritePage) {
@@ -84,7 +79,7 @@ const toggleFavorite = async (
   }
 }
 
-const getFavoriteTours = async (userId: string, token: string) => {
+const getFavoriteTours = async (userId: string) => {
   try {
     const response = await axios.get(
       `${BASE_API_URL}/api/users/${userId}/favoriteTours`,

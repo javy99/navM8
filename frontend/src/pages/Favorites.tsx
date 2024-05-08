@@ -16,10 +16,10 @@ const Favorites: React.FC = () => {
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      if (user && user._id && user.token) {
+      if (user && user._id) {
         try {
           setIsLoading(true)
-          const data = await getFavoriteTours(user._id, user.token)
+          const data = await getFavoriteTours(user._id)
           setFavoriteTours(data)
         } catch (error) {
           console.error("Couldn't fetch favorite tours", error)

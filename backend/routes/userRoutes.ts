@@ -16,10 +16,9 @@ import {
 const userRouter = express.Router()
 const upload = multer({ dest: 'uploads/' })
 
-userRouter.use(requireAuth)
-
 userRouter.get('/', getAllUsers)
 
+userRouter.use(requireAuth)
 userRouter.patch('/:id', updateProfile)
 userRouter.get('/:id', getProfile)
 

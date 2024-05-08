@@ -66,10 +66,10 @@ const useProfile = () => {
 
   const updateProfile = async (userInfo: User) => {
     try {
-      if (!user || !user.token || !user._id) {
+      if (!user || !user._id) {
         throw new Error('User or user token is not available.')
       }
-      await updateUserProfile(user.token, user._id, userInfo)
+      await updateUserProfile(user._id, userInfo)
       setIsEditMode(false)
       toast({
         title: 'Profile updated successfully.',

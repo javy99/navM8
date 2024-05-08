@@ -45,6 +45,7 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
     const fetchUser = async () => {
       try {
         const user = await getUser()
+
         if (user) {
           dispatch({ type: 'LOGIN', payload: user })
         } else {

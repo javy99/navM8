@@ -17,14 +17,6 @@ const useSignup = () => {
     try {
       const json = await signupService(email, password, username)
 
-      // Update token in cookies
-      // Cookies.set('token', json.token, {
-      //   expires: 3,
-      //   secure: true,
-      //   httpOnly: true,
-      //   sameSite: 'strict',
-      // })
-
       dispatch({ type: 'LOGIN', payload: json })
 
       toast({

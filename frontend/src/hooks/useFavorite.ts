@@ -8,9 +8,9 @@ const useFavorite = (tourId, user) => {
 
   useEffect(() => {
     const fetchFavoriteStatus = async () => {
-      if (user && user._id && user.token && tourId) {
+      if (user && user._id && tourId) {
         try {
-          const status = await checkIsFavorite(user._id, tourId, user.token)
+          const status = await checkIsFavorite(user._id, tourId)
           setIsFavorite(status)
         } catch (error) {
           console.error("Couldn't fetch the favorite status", error)
@@ -22,10 +22,10 @@ const useFavorite = (tourId, user) => {
   }, [tourId, user])
 
   const handleToggleFavorite = useCallback(async () => {
-    if (!user || !user._id || !user.token || !tourId) return
+    if (!user || !user._id || !tourId) return
 
     try {
-      await toggleFavorite(user._id, tourId, isFavorite, false, user.token)
+      await toggleFavorite(user._id, tourId, isFavorite, false)
       setIsFavorite(!isFavorite)
 
       const message = isFavorite
