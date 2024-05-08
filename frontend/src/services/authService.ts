@@ -17,7 +17,7 @@ const loginService = async (email: string, password: string): Promise<any> => {
     )
 
     // Update token in cookies
-    Cookies.set('token', response.data.token, { expires: 3 })
+    Cookies.set('token', response.data.token)
 
     return response.data
   } catch (error) {
@@ -34,9 +34,7 @@ const loginService = async (email: string, password: string): Promise<any> => {
               },
             )
             // Update access token in cookies
-            Cookies.set('token', refreshResponse.data.token, {
-              expires: 3,
-            })
+            Cookies.set('token', refreshResponse.data.token, {})
             return await loginService(email, password)
           } catch (refreshError: any) {
             throw new Error(
@@ -102,4 +100,20 @@ const logoutService = async (): Promise<void> => {
   }
 }
 
-export { loginService, signupService, logoutService }
+const getUser = async (): Promise<any> => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/api/auth/user`, {
+      withCredentials: true,
+    })
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data.error || 'An error occurred fetching user',
+      )
+    }
+    throw new Error('An error occurred fetching user')
+  }
+}
+
+export { loginService, signupService, logoutService, getUser }

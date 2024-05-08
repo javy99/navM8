@@ -20,7 +20,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     // create tokens
     const token = createToken(user._id.toString(), '3d')
-    const refreshToken = createToken(user._id.toString(), '7d') // New token with longer expiration
+    const refreshToken = createToken(user._id.toString(), '7d')
 
     // Set cookies here
     res.cookie('token', token, {
@@ -53,7 +53,7 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
 
     // create tokens
     const token = createToken(user._id.toString(), '3d')
-    const refreshToken = createToken(user._id.toString(), '7d') // New token with longer expiration
+    const refreshToken = createToken(user._id.toString(), '7d')
 
     // Set cookies here
     res.cookie('token', token, {
@@ -117,4 +117,26 @@ const refreshToken = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export { createToken, loginUser, signupUser, logoutUser, refreshToken }
+const getUser = async (req: Request, res: Response): Promise<void> => {
+  const token = req.cookies.token
+
+  try {
+    if (!req.user) {
+      throw new Error('User not found')
+    }
+
+    res.json({
+      _id: req.user._id,
+      email: req.user.email,
+      token,
+    })
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).json({ error: error.message })
+    } else {
+      res.status(400).json({ error: 'An unexpected error occurred' })
+    }
+  }
+}
+
+export { createToken, loginUser, signupUser, logoutUser, refreshToken, getUser }

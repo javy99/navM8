@@ -114,6 +114,7 @@ const Signup: React.FC = () => {
                   type="text"
                   focusBorderColor={primaryColor}
                   sx={{ '::placeholder': { color: primaryColor } }}
+                  autoComplete="username"
                 />
                 <Input
                   name="email"
@@ -128,6 +129,7 @@ const Signup: React.FC = () => {
                       color: primaryColor,
                     },
                   }}
+                  autoComplete="email"
                 />
                 <InputGroup>
                   <Input

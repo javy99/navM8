@@ -40,7 +40,7 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
         // Decode the new access token
         decoded = jwt.verify(newToken, JWT_SECRET) as { _id: string }
       } else {
-        throw error // If there's no refresh token or another error, rethrow the error
+        throw error
       }
     }
 

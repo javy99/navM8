@@ -34,4 +34,11 @@ export {
 } from './tourControllers'
 export { createReview, getReviewsForTour } from './reviewController'
 export { sendMessage, getAllMessages } from './messageControllers'
-export { signupUser, loginUser } from './authControllers'
+export {
+  createToken,
+  loginUser,
+  signupUser,
+  logoutUser,
+  refreshToken,
+  getUser,
+} from './authControllers'

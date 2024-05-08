@@ -117,6 +117,7 @@ const Login: React.FC = () => {
                       color: primaryColor,
                     },
                   }}
+                  autoComplete="email"
                 />
                 <InputGroup>
                   <Input

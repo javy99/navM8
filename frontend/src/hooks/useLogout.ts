@@ -9,6 +9,7 @@ const useLogout = () => {
   const logout = async () => {
     try {
       await logoutService()
+
       dispatch({ type: 'LOGOUT', payload: null })
 
       // Show success toast

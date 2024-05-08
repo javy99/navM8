@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuthContext } from '.'
 import { loginService } from '../services'
 import { useToast } from '@chakra-ui/react'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 
 const useLogin = () => {
   const [error, setError] = useState<string | null>(null)
@@ -17,11 +17,14 @@ const useLogin = () => {
     try {
       const json = await loginService(email, password)
 
-      // Update token in cookies
-      const cookie = Cookies.set('token', json.token, {
-        expires: 3,
-      }) // Adjust expiry as needed
-      console.log(cookie)
+      // // Update token in cookies
+      // const cookie = Cookies.set('token', json.token, {
+      //   expires: 3,
+      //   secure: true,
+      //   httpOnly: true,
+      //   sameSite: 'strict',
+      // })
+      // console.log(cookie)
 
       dispatch({ type: 'LOGIN', payload: json })
 

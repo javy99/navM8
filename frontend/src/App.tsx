@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
 import {
   Profile,
   Messages,
@@ -13,6 +12,7 @@ import {
   Login,
   TourDetails,
 } from './pages'
+import { PrivateRoute } from './components'
 
 const App = () => {
   return (
@@ -23,12 +23,27 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/chat" element={<Messages />} />
-          <Route path="/bookings" element={<MyBookings />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/mytours" element={<MyTours />} />
-          <Route path="/:id" element={<TourDetails />} />
+          <Route
+            path="/profile"
+            element={<PrivateRoute component={Profile} />}
+          />
+          <Route path="/chat" element={<PrivateRoute component={Messages} />} />
+          <Route
+            path="/bookings"
+            element={<PrivateRoute component={MyBookings} />}
+          />
+          <Route
+            path="/favorites"
+            element={<PrivateRoute component={Favorites} />}
+          />
+          <Route
+            path="/mytours"
+            element={<PrivateRoute component={MyTours} />}
+          />
+          <Route
+            path="/:id"
+            element={<PrivateRoute component={TourDetails} />}
+          />
         </Routes>
       </BrowserRouter>
     </>

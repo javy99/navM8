@@ -1,5 +1,6 @@
-import { createContext, useReducer, Dispatch } from 'react'
+import { createContext, useReducer, Dispatch, useEffect } from 'react'
 import { User, ChildrenProps } from '../types'
+import { getUser } from '../services'
 
 interface AuthState {
   user: User | null
@@ -39,6 +40,23 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
   })
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getUser()
+        if (user) {
+          dispatch({ type: 'LOGIN', payload: user })
+        } else {
+          dispatch({ type: 'LOGOUT', payload: null })
+        }
+      } catch (error) {
+        dispatch({ type: 'LOGOUT', payload: null })
+      }
+    }
+
+    fetchUser()
+  }, [])
 
   return (
     <AuthContext.Provider

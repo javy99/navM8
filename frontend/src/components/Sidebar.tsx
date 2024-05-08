@@ -74,7 +74,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
     }
 
     fetchAndCountPendingApprovals()
-  }, [user])
+  }, [user?.token])
 
   const commonStyles: BoxProps = {
     bg: primaryColor,

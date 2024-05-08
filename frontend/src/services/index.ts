@@ -42,5 +42,6 @@ export {
   loginService,
   signupService,
   logoutService,
+  getUser,
 } from '../services/authService'
 export { submitReview, fetchReviews } from '../services/reviewService'
