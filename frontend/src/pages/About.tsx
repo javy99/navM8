@@ -11,7 +11,8 @@ import {
 } from '@chakra-ui/react'
 import { PageLayout } from '../components'
 import { useAuthContext } from '../hooks'
-import { FaUserFriends, FaSuitcaseRolling } from 'react-icons/fa'
+import { FaUserFriends } from 'react-icons/fa'
+import { MdTravelExplore } from 'react-icons/md'
 import { FcExpired } from 'react-icons/fc'
 import { getAllTours, getAllUsers } from '../services'
 
@@ -74,7 +75,7 @@ const About: React.FC = () => {
       label: 'Users',
     },
     {
-      icon: FaSuitcaseRolling,
+      icon: MdTravelExplore,
       value: tourCount,
       label: 'Active Tours',
     },
@@ -110,30 +111,10 @@ const About: React.FC = () => {
           <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
             About & How-to
           </Heading>
-          <Text fontSize="lg" mb={6}>
-            navM8, short for "navigator mate," is your go-to platform for
-            authentic travel experiences. We connect travelers with
-            knowledgeable locals who offer personalized tours, making
-            exploration affordable and enriching.
-          </Text>
-          <Heading as="h4" fontSize="1.2rem" color={primaryColor} mb={4}>
-            Features
-          </Heading>
-          <Text mb={4}>- Browse tours by destination.</Text>
-          <Text mb={4}>
-            - Message local guides to customize your experience.
-          </Text>
-          <Text mb={4}>
-            - Enjoy a personalized tour with a passionate local.
-          </Text>
-          <Text mb={6}>
-            - Accessible to all, whether you're a seasoned traveler or
-            first-time adventurer.
-          </Text>
-          <Heading as="h4" fontSize="1.2rem" color={primaryColor} mb={4}>
+          {/* <Heading as="h4" fontSize="1.2rem" color={primaryColor} mb={4}>
             Statistics
-          </Heading>
-          <SimpleGrid columns={{ sm: 1, lg: 3, '2xl': 4 }} spacing={5}>
+          </Heading> */}
+          <SimpleGrid columns={{ sm: 1, lg: 3, '2xl': 4 }} spacing={5} mb={4}>
             {stats.map((stat) => (
               <Box
                 key={stat.label}
@@ -159,6 +140,26 @@ const About: React.FC = () => {
               </Box>
             ))}
           </SimpleGrid>
+          <Text fontSize="lg" mb={6}>
+            navM8, short for "navigator mate," is your go-to platform for
+            authentic travel experiences. We connect travelers with
+            knowledgeable locals who offer personalized tours, making
+            exploration affordable and enriching.
+          </Text>
+          <Heading as="h4" fontSize="1.2rem" color={primaryColor} mb={4}>
+            Features
+          </Heading>
+          <Text mb={4}>- Browse tours by destination.</Text>
+          <Text mb={4}>
+            - Message local guides to customize your experience.
+          </Text>
+          <Text mb={4}>
+            - Enjoy a personalized tour with a passionate local.
+          </Text>
+          <Text mb={6}>
+            - Accessible to all, whether you're a seasoned traveler or
+            first-time adventurer.
+          </Text>
         </VStack>
       )}
     </PageLayout>
