@@ -14,10 +14,12 @@ const toursRouter = express.Router()
 const upload = multer({ dest: 'uploads/' })
 
 toursRouter.get('/', getAllTours)
-toursRouter.post('/mytours', requireAuth, upload.array('photos'), createTour)
-toursRouter.put('/mytours/:id', requireAuth, upload.array('photos'), updateTour)
-toursRouter.delete('/mytours/:id', requireAuth, deleteTour)
-toursRouter.get('/mytours', requireAuth, getMyTours)
+
+toursRouter.use(requireAuth)
+toursRouter.post('/mytours', upload.array('photos'), createTour)
+toursRouter.put('/mytours/:id', upload.array('photos'), updateTour)
+toursRouter.delete('/mytours/:id', deleteTour)
+toursRouter.get('/mytours', getMyTours)
 toursRouter.get('/:id', getTour)
 
 export default toursRouter

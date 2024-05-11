@@ -17,7 +17,7 @@ const fetchBookings = async () => {
 const fetchBookingsForTour = async (tourId: string) => {
   try {
     const response = await axios.get(
-      `${BASE_API_URL}/api/bookings/tour/${tourId}`,
+      `${BASE_API_URL}/api/bookings/tours/${tourId}`,
     )
     return response.data
   } catch (error) {

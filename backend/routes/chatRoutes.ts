@@ -16,8 +16,8 @@ chatRouter.use(requireAuth)
 chatRouter.post('/', accessChat)
 chatRouter.get('/', getChats)
 chatRouter.post('/group', createGroupChat)
-chatRouter.put('/rename', renameGroup)
-chatRouter.put('/groupremove', removeFromGroup)
-chatRouter.put('/groupadd', addToGroup)
+chatRouter.put('/group/rename', renameGroup)
+chatRouter.put('/group/removeUser', removeFromGroup)
+chatRouter.put('/group/addUser', addToGroup)
 
 export default chatRouter

@@ -54,7 +54,6 @@ const io = new SocketIOServer(server, {
 io.on('connection', (socket) => {
   console.log('a user connected:', socket.id)
 
-  // More event handlers can be added here
   socket.on('setup', (userData) => {
     socket.join(userData._id)
     socket.emit('connected')
@@ -92,12 +91,12 @@ io.on('connection', (socket) => {
 
 // routes
 app.use('/api/bookings', bookingRouter)
-app.use('/api/message', messageRouter)
+app.use('/api/messages', messageRouter)
 app.use('/api/reviews', reviewRouter)
 app.use('/api/tours', toursRouter)
 app.use('/api/users', userRouter)
 app.use('/api/auth', authRouter)
-app.use('/api/chat', chatRouter)
+app.use('/api/chats', chatRouter)
 app.use(notFound)
 app.use(errorHandler)
 
@@ -114,11 +113,15 @@ if (MONGODB_URL) {
     .connect(MONGODB_URL)
     .then(() => {
       server.listen(BACKEND_PORT, () => {
-        console.log('==============================================================')
+        console.log(
+          '==============================================================',
+        )
         console.log(
           `===== Connected to MongoDB and listening on port ${BACKEND_PORT} :) =====`,
         )
-        console.log('==============================================================')
+        console.log(
+          '==============================================================',
+        )
       })
     })
     .catch((err: unknown) => {

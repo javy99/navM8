@@ -14,7 +14,7 @@ bookingRouter.use(requireAuth)
 
 bookingRouter.post('/', createBooking) // Create a booking
 bookingRouter.get('/mybookings', getBookingsForUser) // Get bookings for a specific user
-bookingRouter.get('/tour/:tourId', getBookingsForTour) // Get bookings for a specific tour
+bookingRouter.get('/tours/:tourId', getBookingsForTour) // Get bookings for a specific tour
 bookingRouter.patch('/:bookingId', updateBookingStatus) // Update booking status
 bookingRouter.delete('/:bookingId', deleteBooking) // Delete a booking
 

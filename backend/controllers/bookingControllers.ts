@@ -108,7 +108,9 @@ const getBookingsForTour = async (req: Request, res: Response) => {
   // Logic to retrieve bookings for a specific tour
   try {
     const { tourId } = req.params
-    const bookings = await Booking.find({ tour: tourId }).populate('tour').populate('userId')
+    const bookings = await Booking.find({ tour: tourId })
+      .populate('tour')
+      .populate('userId')
     res.status(200).json(bookings)
   } catch (error) {
     res.status(404).json({ error: error.message })
@@ -173,7 +175,8 @@ const deleteBooking = async (req: Request, res: Response) => {
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
-    res.status(204).send() // No content to send back
+
+    res.json({ message: 'Booking deleted successfully' })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

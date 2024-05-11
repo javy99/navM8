@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useAuthContext } from '.'
 import { loginService } from '../services'
 import { useToast } from '@chakra-ui/react'
-// import Cookies from 'js-cookie'
 
 const useLogin = () => {
   const [error, setError] = useState<string | null>(null)
