@@ -1,8 +1,8 @@
 import mongoose, { Schema as MongooseSchema } from 'mongoose'
 
 export default interface IReview {
-  tour: string
-  user: string
+  tour: mongoose.Schema.Types.ObjectId
+  user: mongoose.Schema.Types.ObjectId
   rating: number
   comment: string
 }

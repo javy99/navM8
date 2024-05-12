@@ -3,7 +3,7 @@ import ITour from './tourModel'
 
 export default interface IBooking extends Document {
   tour: ITour
-  userId: mongoose.Types.ObjectId
+  userId: mongoose.Schema.Types.ObjectId
   date: Date
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED'
 }

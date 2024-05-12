@@ -16,6 +16,7 @@ export default interface ITour extends Document {
   description: string
   photos: string[]
   author: mongoose.Schema.Types.ObjectId
+  reviewCount: number
 }
 
 const tourSchema: MongooseSchema = new Schema(

@@ -1,12 +1,12 @@
 import mongoose, { Schema as MongooseSchema } from 'mongoose'
 
 export default interface IChat {
-  _id: string
+  _id: mongoose.Schema.Types.ObjectId
   chatName: string
   isGroupChat: boolean
-  users: string[]
-  latestMessage: string
-  groupAdmin: string
+  users: mongoose.Schema.Types.ObjectId[]
+  latestMessage: mongoose.Schema.Types.ObjectId
+  groupAdmin: mongoose.Schema.Types.ObjectId
 }
 
 const { Schema } = mongoose
@@ -23,16 +23,16 @@ const chatSchema: MongooseSchema = new Schema(
     },
     users: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
       },
     ],
     latestMessage: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Message',
     },
     groupAdmin: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
   },

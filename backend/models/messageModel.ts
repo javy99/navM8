@@ -1,10 +1,10 @@
 import mongoose, { Schema as MongooseSchema } from 'mongoose'
 
 export default interface IMessage {
-  _id: string
-  sender: string
+  _id: mongoose.Schema.Types.ObjectId
+  sender: mongoose.Schema.Types.ObjectId
   content: string
-  chat: string
+  chat: mongoose.Schema.Types.ObjectId
 }
 
 const { Schema } = mongoose
@@ -12,7 +12,7 @@ const { Schema } = mongoose
 const messageSchema: MongooseSchema = new Schema(
   {
     sender: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
     content: {
@@ -20,7 +20,7 @@ const messageSchema: MongooseSchema = new Schema(
       trim: true,
     },
     chat: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Chat',
     },
   },
