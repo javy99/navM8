@@ -61,7 +61,7 @@ const MyTourCard: React.FC<Props> = ({
   const [bookings, setBookings] = useState<Booking[]>([])
 
   const openCardDetails = () => {
-    navigate(`/${tour._id}`)
+    navigate(`/tours/${tour._id}`)
   }
 
   useEffect(() => {

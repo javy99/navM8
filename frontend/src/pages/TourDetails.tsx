@@ -19,6 +19,7 @@ import {
   Divider,
   useToast,
   Badge,
+  Tooltip,
 } from '@chakra-ui/react'
 import {
   BsCalendar2Minus,
@@ -272,15 +273,21 @@ const TourDetails: React.FC = () => {
                   src={tourDetails.author.profilePictureURL}
                   fontWeight={500}
                 />
-                <Text fontStyle="italic">
-                  By{' '}
-                  <Link to={`/users/${tourDetails.author._id}`}>
-                    <b>
-                      {tourDetails.author.firstName}{' '}
-                      {tourDetails.author.lastName}
-                    </b>
-                  </Link>
-                </Text>
+                <Tooltip
+                  label={`View ${tourDetails.author.firstName}'s Profile`}
+                  hasArrow
+                  placement="bottom-end"
+                >
+                  <Text fontStyle="italic">
+                    By{' '}
+                    <Link to={`/users/${tourDetails.author._id}`}>
+                      <b>
+                        {tourDetails.author.firstName}{' '}
+                        {tourDetails.author.lastName}
+                      </b>
+                    </Link>
+                  </Text>
+                </Tooltip>
               </Flex>
               <Box
                 width="50px"
@@ -538,7 +545,7 @@ const TourDetails: React.FC = () => {
                               alignItems="center"
                               justifyContent="center"
                               mt={1}
-                              display='flex'
+                              display="flex"
                             >
                               Booking Status:{' '}
                               <Badge

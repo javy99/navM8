@@ -47,7 +47,7 @@ const DetailBox = ({ icon, label, detail, isList = false }) => {
   return (
     <Flex mb={4} w="full" maxW="md" gap={2}>
       <Icon as={icon} mr={2} w={6} h={6} />
-      <Text>
+      <Box>
         {isList ? (
           <Flex wrap="wrap" alignItems="center">
             <b>{label}:</b>
@@ -70,7 +70,7 @@ const DetailBox = ({ icon, label, detail, isList = false }) => {
             {label === 'Birth Date' ? formatDate(detail) : detail}
           </Text>
         )}
-      </Text>
+      </Box>
     </Flex>
   )
 }
