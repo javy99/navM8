@@ -168,7 +168,7 @@ const UserDetails: React.FC = () => {
                 >
                   {selectedUser.username}
                 </Text>
-                <Text fontSize="2xl" mb={2} fontWeight={400}>
+                <Text fontSize="2xl" mb={2} fontWeight={400} textTransform='uppercase'>
                   {selectedUser.firstName} {selectedUser.lastName}
                 </Text>
                 <Badge

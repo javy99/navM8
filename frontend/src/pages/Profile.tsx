@@ -9,21 +9,13 @@ import {
   IconButton,
   Text,
   Badge,
-  Divider,
   Heading,
   useBreakpointValue,
   useTheme,
   ResponsiveValue,
   Spinner,
 } from '@chakra-ui/react'
-import {
-  BsPersonCircle,
-  BsStarFill,
-  BsStar,
-  BsStarHalf,
-  BsTrashFill,
-  BsCameraFill,
-} from 'react-icons/bs'
+import { BsPersonCircle, BsTrashFill, BsCameraFill } from 'react-icons/bs'
 import ReactCountryFlag from 'react-country-flag'
 import { Button, FormField, PageLayout } from '../components'
 import { useAuthContext, usePhotoManager, useProfile } from '../hooks'
@@ -77,6 +69,7 @@ const Profile: React.FC = () => {
     md: '80%',
     lg: '85%',
     xl: '70%',
+    '2xl': '50%',
   })
   const profileContainerPadding = useBreakpointValue({
     base: 3,
@@ -207,12 +200,7 @@ const Profile: React.FC = () => {
               </Box>
 
               {userInfo.country && userInfo.city && userInfo.birthDate && (
-                <Flex
-                  flexDirection="column"
-                  alignItems="flex-start"
-                  ml={{ md: 6 }}
-                  mr={{ base: 3, sm: 0 }}
-                >
+                <Flex flexDirection="column" alignItems="flex-start" mr={3}>
                   <Text
                     color={primaryColor}
                     fontWeight="bold"
@@ -264,36 +252,7 @@ const Profile: React.FC = () => {
                   </Text>
                 </Flex>
               )}
-              <Box display={{ base: 'none', md: 'block' }} bg="#0000001A">
-                <Divider orientation="vertical" />
-              </Box>
-              <Flex
-                display={{ base: 'none', sm: 'flex' }}
-                flexDirection="column"
-                alignItems={{ sm: 'flex-start' }}
-                color={secondaryColor}
-                fontSize="sm"
-                mr={{ sm: 3 }}
-              >
-                <Text mb={2}>
-                  <b>Tours Taken:</b> 5
-                </Text>
-                <Text mb={2}>
-                  <b>Tours Offered:</b> 1
-                </Text>
-                <Flex>
-                  <Text fontWeight="bold" mr={2}>
-                    Review:
-                  </Text>
-                  <Flex>
-                    <Icon as={BsStarFill} color="#DFB300" boxSize={4} mr={1} />
-                    <Icon as={BsStarFill} color="#DFB300" boxSize={4} mr={1} />
-                    <Icon as={BsStarFill} color="#DFB300" boxSize={4} mr={1} />
-                    <Icon as={BsStarHalf} color="#DFB300" boxSize={4} mr={1} />
-                    <Icon as={BsStar} color="#DFB300" boxSize={4} />
-                  </Flex>
-                </Flex>
-              </Flex>
+              <Flex display={{ base: 'none', sm: 'flex' }} />
             </Flex>
           </Box>
           <Box
