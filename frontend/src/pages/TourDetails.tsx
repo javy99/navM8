@@ -519,7 +519,7 @@ const TourDetails: React.FC = () => {
                         </>
                       ) : (
                         <>
-                          <Text
+                          <Box
                             color={
                               bookingStatus === 'CONFIRMED'
                                 ? 'green.500'
@@ -534,10 +534,11 @@ const TourDetails: React.FC = () => {
                               ? new Date(bookingDate).toLocaleDateString()
                               : 'an unknown date'}
                             <br />
-                            <Flex
+                            <Text
                               alignItems="center"
                               justifyContent="center"
                               mt={1}
+                              display='flex'
                             >
                               Booking Status:{' '}
                               <Badge
@@ -552,8 +553,8 @@ const TourDetails: React.FC = () => {
                               >
                                 {bookingStatus}
                               </Badge>
-                            </Flex>
-                          </Text>
+                            </Text>
+                          </Box>
                           {bookingStatus !== 'CANCELLED' &&
                           bookingStatus !== 'COMPLETED' ? (
                             <Button

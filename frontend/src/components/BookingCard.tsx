@@ -34,7 +34,7 @@ const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
   const secondaryColor = theme.colors.secondary
 
   const openCardDetails = () => {
-    navigate(`/${tour._id}`)
+    navigate(`/tours/${tour._id}`)
   }
 
   const getStatusColor = (status: string) => {
@@ -106,7 +106,7 @@ const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
           </Heading>
 
           {/* <Text py={3}>{tour.description}</Text> */}
-          <Flex pt={3}  alignItems="center">
+          <Flex pt={3} alignItems="center">
             <Icon as={BsCalendar4} color="#EC502C" w={5} h={5} />
             <Text ml={2} color={secondaryColor}>
               {date.toLocaleString().split('T')[0]}

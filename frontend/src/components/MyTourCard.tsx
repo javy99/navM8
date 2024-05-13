@@ -9,6 +9,7 @@ import {
   Heading,
   Flex,
   Icon,
+  useToast,
 } from '@chakra-ui/react'
 import { BsPeopleFill, BsGeoAltFill, BsCalendar4 } from 'react-icons/bs'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -20,7 +21,7 @@ import { Booking } from '../types'
 import { useAuthContext } from '../hooks'
 import Button from './Button'
 import { useNavigate } from 'react-router-dom'
-import { fetchBookingsForTour } from '../services'
+import { cancelBooking, fetchBookingsForTour } from '../services'
 
 type ResponsiveWidth = {
   base?: string
@@ -50,6 +51,8 @@ const MyTourCard: React.FC<Props> = ({
   const { user } = state
 
   const navigate = useNavigate()
+
+  const toast = useToast()
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary
@@ -82,6 +85,34 @@ const MyTourCard: React.FC<Props> = ({
 
   const handleApproveBooking = async (bookingId: string) => {
     if (onApproveBooking) await onApproveBooking(bookingId)
+  }
+
+  const handleCancelBooking = async (bookingId: string) => {
+    try {
+      await cancelBooking(bookingId)
+
+      setBookings((prevBookings) =>
+        prevBookings.map((booking) => {
+          return booking._id === bookingId
+            ? { ...booking, status: 'CANCELLED' }
+            : booking
+        }),
+      )
+
+      toast({
+        title: 'Booking canceled',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (error) {
+      toast({
+        title: 'Error canceling booking',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
   }
 
   const handleEditClick = (
@@ -238,13 +269,22 @@ const MyTourCard: React.FC<Props> = ({
                 </Text>
               </Box>
               {booking.status === 'PENDING' && (
-                <Button
-                  size="sm"
-                  colorScheme="green"
-                  onClick={() => handleApproveBooking(booking._id)}
-                >
-                  Approve
-                </Button>
+                <Flex gap={2}>
+                  <Button
+                    size="sm"
+                    onClick={() => handleApproveBooking(booking._id)}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    size="sm"
+                    background="red.500"
+                    _hover={{ background: 'red.600' }}
+                    onClick={() => handleCancelBooking(booking._id)}
+                  >
+                    Cancel
+                  </Button>
+                </Flex>
               )}
               <Button
                 size="sm"
