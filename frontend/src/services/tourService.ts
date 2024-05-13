@@ -59,6 +59,15 @@ const deleteTour = async (tourId: string) => {
   }
 }
 
+const getUserTours = async (userId) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/api/tours/user/${userId}`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
 export {
   getAllTours,
   fetchMyTours,
@@ -66,4 +75,5 @@ export {
   getTourById,
   updateTour,
   deleteTour,
+  getUserTours,
 }

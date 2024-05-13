@@ -11,6 +11,7 @@ import {
   Signup,
   Login,
   TourDetails,
+  UserDetails,
 } from './pages'
 import { PrivateRoute } from './components'
 
@@ -41,8 +42,12 @@ const App = () => {
             element={<PrivateRoute component={MyTours} />}
           />
           <Route
-            path="/:id"
+            path="/tours/:id"
             element={<PrivateRoute component={TourDetails} />}
+          />
+          <Route
+            path="/users/:id"
+            element={<PrivateRoute component={UserDetails} />}
           />
         </Routes>
       </BrowserRouter>

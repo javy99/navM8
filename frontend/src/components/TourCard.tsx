@@ -99,7 +99,7 @@ const TourCard: React.FC<Props> = ({
 
   const openCardDetails = () => {
     if (user) {
-      navigate(`/${tour._id}`)
+      navigate(`/tours/${tour._id}`)
     } else {
       setIsModalOpen(true)
     }

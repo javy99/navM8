@@ -1,4 +1,5 @@
 export { default as TourDetails } from './TourDetails'
+export { default as UserDetails } from './UserDetails'
 export { default as MyBookings } from './MyBookings'
 export { default as Favorites } from './Favorites'
 export { default as HomePage } from './HomePage'

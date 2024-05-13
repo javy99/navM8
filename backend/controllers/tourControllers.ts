@@ -98,7 +98,7 @@ const getMyTours = async (req: Request, res: Response) => {
 const getTour = async (req: Request, res: Response) => {
   try {
     const tour = await Tour.findById(req.params.id).populate('author').exec()
-  
+
     if (!tour) {
       res.status(404).json({ error: 'Tour not found' })
       return
@@ -189,4 +189,25 @@ const deleteTour = async (req: Request, res: Response) => {
   }
 }
 
-export { getAllTours, createTour, getMyTours, getTour, updateTour, deleteTour }
+const getUserTours = async (req: Request, res: Response) => {
+  try {
+    const tours = await Tour.find({ author: req.params.id })
+      .populate('author')
+      .exec()
+
+    res.json(tours)
+  } catch (error) {
+    console.error('Error fetching user tours:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export {
+  getAllTours,
+  createTour,
+  getMyTours,
+  getTour,
+  updateTour,
+  deleteTour,
+  getUserTours,
+}

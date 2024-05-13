@@ -8,6 +8,7 @@ import {
   getTour,
   updateTour,
   deleteTour,
+  getUserTours,
 } from '../controllers'
 
 const toursRouter = express.Router()
@@ -21,5 +22,6 @@ toursRouter.put('/mytours/:id', upload.array('photos'), updateTour)
 toursRouter.delete('/mytours/:id', deleteTour)
 toursRouter.get('/mytours', getMyTours)
 toursRouter.get('/:id', getTour)
+toursRouter.get('/user/:id', getUserTours)
 
 export default toursRouter

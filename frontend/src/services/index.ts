@@ -31,6 +31,7 @@ export {
   getTourById,
   updateTour,
   deleteTour,
+  getUserTours,
 } from '../services/tourService'
 export {
   fetchProfilePhoto,

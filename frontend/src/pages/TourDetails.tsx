@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -28,7 +28,6 @@ import {
   BsPeople,
   BsHeart,
   BsHeartFill,
-  BsTranslate,
 } from 'react-icons/bs'
 import axios from 'axios'
 import { format, startOfDay } from 'date-fns'
@@ -275,9 +274,12 @@ const TourDetails: React.FC = () => {
                 />
                 <Text fontStyle="italic">
                   By{' '}
-                  <b>
-                    {tourDetails.author.firstName} {tourDetails.author.lastName}
-                  </b>
+                  <Link to={`/users/${tourDetails.author._id}`}>
+                    <b>
+                      {tourDetails.author.firstName}{' '}
+                      {tourDetails.author.lastName}
+                    </b>
+                  </Link>
                 </Text>
               </Flex>
               <Box
@@ -585,118 +587,7 @@ const TourDetails: React.FC = () => {
                 </Box>
               </Flex>
             </Flex>
-            <Flex direction="column">
-              <Heading as="h4" size="md" color={primaryColor} mb={8} mt={4}>
-                Tour Author
-              </Heading>
-              <Flex align="center" mb={8}>
-                <Icon
-                  as={BsCalendar2Minus}
-                  color={secondaryColor}
-                  h={22}
-                  w={22}
-                  mr={2}
-                />
-                <Text color={secondaryColor}>
-                  <b>Full Name: </b>
-                  {tourDetails.author.firstName} {tourDetails.author.lastName}
-                </Text>
-              </Flex>
-              <Flex align="center" mb={8}>
-                <Icon
-                  as={BsTranslate}
-                  color={secondaryColor}
-                  h={22}
-                  w={22}
-                  mr={2}
-                />
-                <Text color={secondaryColor}>
-                  <b>Languages Spoken: </b>
-                  {tourDetails.author.languagesSpoken.join(', ')}
-                </Text>
-              </Flex>
-              <Flex align="center" mb={8}>
-                <Icon
-                  as={BsCalendarCheck}
-                  mr={2}
-                  color={secondaryColor}
-                  h={22}
-                  w={22}
-                />
-                <Text color={secondaryColor}>
-                  <b>Interests: </b>
-                  {tourDetails.author.interests.join(', ')}
-                </Text>
-              </Flex>
-              <Flex align="center" mb={8}>
-                <Icon
-                  as={BsCalendar2Minus}
-                  color={secondaryColor}
-                  h={22}
-                  w={22}
-                  mr={2}
-                />
-                <Text color={secondaryColor}>
-                  <b>Bio: </b>
-                  {tourDetails.author.bio}
-                </Text>
-              </Flex>
-              <Flex align="center" mb={8}>
-                <Icon
-                  as={BsClock}
-                  color={secondaryColor}
-                  h={22}
-                  w={22}
-                  mr={2}
-                />
-                <Text color={secondaryColor}>
-                  <b>Age: </b>
-                  {new Date().getFullYear() -
-                    new Date(tourDetails.author.birthDate).getFullYear() -
-                    (new Date().getMonth() <
-                      new Date(tourDetails.author.birthDate).getMonth() ||
-                    (new Date().getMonth() ===
-                      new Date(tourDetails.author.birthDate).getMonth() &&
-                      new Date().getDate() <
-                        new Date(tourDetails.author.birthDate).getDate())
-                      ? 1
-                      : 0)}{' '}
-                  y.o.
-                </Text>
-              </Flex>
-              <Flex align="center" mb={8}>
-                <Icon
-                  as={BsCalendar2Minus}
-                  color={secondaryColor}
-                  h={22}
-                  w={22}
-                  mr={2}
-                />
-                <Text color={secondaryColor}>
-                  <b>Place of birth: </b>
-                  {tourDetails.author.country}, {tourDetails.author.city}
-                </Text>
-              </Flex>
-              <Flex align="center" mb={8}>
-                <Icon
-                  as={BsCalendar2Minus}
-                  color={secondaryColor}
-                  h={22}
-                  w={22}
-                  mr={2}
-                />
-                <Text color={secondaryColor}>
-                  <b>Gender: </b>
-                  {tourDetails.author.gender}
-                </Text>
-              </Flex>
-            </Flex>
-            <Divider
-              orientation="horizontal"
-              width="100%"
-              borderColor="#D3D3D3"
-            />
-            <Flex flexDir="column" mt={8}>
+            <Flex flexDir="column" mt={4}>
               <Heading as="h4" size="md" color={primaryColor} mb={4}>
                 Reviews
               </Heading>

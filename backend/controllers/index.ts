@@ -31,6 +31,7 @@ export {
   getTour,
   updateTour,
   deleteTour,
+  getUserTours,
 } from './tourControllers'
 export { createReview, getReviewsForTour } from './reviewController'
 export { sendMessage, getAllMessages } from './messageControllers'

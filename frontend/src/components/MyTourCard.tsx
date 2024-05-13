@@ -98,6 +98,10 @@ const MyTourCard: React.FC<Props> = ({
     if (onDelete) onDelete()
   }
 
+  const handleViewProfile = (userId) => {
+    navigate(`/users/${userId}`)
+  }
+
   return (
     <Box width="100%">
       <Card
@@ -242,6 +246,13 @@ const MyTourCard: React.FC<Props> = ({
                   Approve
                 </Button>
               )}
+              <Button
+                size="sm"
+                colorScheme="blue"
+                onClick={() => handleViewProfile(booking.userId._id)}
+              >
+                View Profile
+              </Button>
             </Flex>
           ))}
         </Box>
