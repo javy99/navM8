@@ -10,6 +10,7 @@ import {
   FormControl,
   Input,
   Heading,
+  Tooltip,
 } from '@chakra-ui/react'
 import animationData from '../animations/typing.json'
 import ScrollableChat from './ScrollableChat'
@@ -22,6 +23,7 @@ import UpdateGroupChatModal from './UpdateGroupChatModal'
 import ProfileModal from './ProfileModal'
 import { Message } from '../types'
 import { useChatState } from '../context'
+import { Link } from 'react-router-dom'
 
 const ENDPOINT = import.meta.env.VITE_API_URL
 let socket, selectedChatCompare
@@ -206,7 +208,17 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
             />
             {!selectedChat.isGroupChat ? (
               <>
-                {getSender(user, selectedChat.users)}
+                <Tooltip
+                  label={`View ${selectedChat.users.find((u) => u._id !== user?._id)?.firstName}'s Profile`}
+                  hasArrow
+                  placement="bottom-end"
+                >
+                  <Link
+                    to={`/users/${selectedChat.users.find((u) => u._id !== user?._id)?._id ?? '#'}`}
+                  >
+                    <b>{getSender(user, selectedChat.users)}</b>
+                  </Link>
+                </Tooltip>
                 <ProfileModal user={getSenderFull(user, selectedChat.users)} />
               </>
             ) : (
