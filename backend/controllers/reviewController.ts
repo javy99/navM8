@@ -12,7 +12,6 @@ const createReview = async (req: Request, res: Response) => {
 
   const userId = req.user._id
 
-  // Check if booking is completed
   const booking = await Booking.findOne({
     tour: tourId,
     userId,

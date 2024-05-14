@@ -65,7 +65,6 @@ const About: React.FC = () => {
       })
   }, [])
 
-  // Using a soft gradient or a complementary color
   const boxBg = `linear-gradient(135deg, ${theme.colors.gray[100]}, ${theme.colors.gray[300]})`
 
   const stats = [
@@ -111,9 +110,6 @@ const About: React.FC = () => {
           <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
             About & How-to
           </Heading>
-          {/* <Heading as="h4" fontSize="1.2rem" color={primaryColor} mb={4}>
-            Statistics
-          </Heading> */}
           <SimpleGrid columns={{ sm: 1, lg: 3, '2xl': 4 }} spacing={5} mb={4}>
             {stats.map((stat) => (
               <Box

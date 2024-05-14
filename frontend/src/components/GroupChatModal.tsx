@@ -82,7 +82,6 @@ const GroupChatModal: React.FC<Props> = ({ children }) => {
       )
 
       setChats([data, ...chats])
-      // Reset the input fields and selected users
       setGroupChatName('')
       setSelectedUsers([])
       setSearch('')

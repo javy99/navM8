@@ -12,7 +12,6 @@ const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
   const primaryColor = theme.colors.primary
   const whiteColor = theme.colors.white
 
-  // Responsive font size, padding, and border radius
   const fontSize = useBreakpointValue({ base: 'md', ls: 'lg' })
   const paddingX = useBreakpointValue({ base: 4, md: 5 })
   const paddingY = useBreakpointValue({ base: 2, md: 3 })

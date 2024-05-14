@@ -14,7 +14,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-// Profile
 const updateProfile = async (req: Request, res: Response): Promise<void> => {
   const {
     firstName,
@@ -109,7 +108,6 @@ const getProfile = async (req: Request, res: Response) => {
   }
 }
 
-// Profile Photo
 const uploadProfilePhoto = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded.' })
@@ -203,7 +201,6 @@ const getAllUsers = async (req: Request, res: Response) => {
         $or: [
           { email: new RegExp(search.toString(), 'i') },
           { firstName: new RegExp(search.toString(), 'i') },
-          // { lastName: new RegExp(search.toString(), 'i') },
         ],
       }
     }
@@ -217,7 +214,6 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 }
 
-// Add favorite tour
 const addFavoriteTour = async (req: Request, res: Response) => {
   const userId = req.params.id
   const { tourId } = req.body
@@ -225,19 +221,16 @@ const addFavoriteTour = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(userId)
 
-    // Check if the user exists
     if (!user) {
       return res.status(404).send('User not found.')
     }
 
-    // Check if the tour ID is already in the user's favoriteTours
     if (user.favoriteTours.includes(tourId)) {
       return res.status(400).send('Tour is already in favorites.')
     }
 
-    // Add the tour ID to the user's favoriteTours array
     user.favoriteTours.push(tourId)
-    await user.save() // Save the updated user document
+    await user.save()
 
     res.status(200).json({
       message: 'Tour added to favorites successfully.',
@@ -249,22 +242,19 @@ const addFavoriteTour = async (req: Request, res: Response) => {
   }
 }
 
-// Delete favorite tour
 const deleteFavoriteTour = async (req: Request, res: Response) => {
   const userId = req.params.id
-  const tourId = req.params.tourId // Assuming you're now capturing tourId from the URL
+  const tourId = req.params.tourId
 
   try {
-    // Directly remove the tourId from user's favoriteTours using $pull
     const updateResult = await User.findByIdAndUpdate(
       userId,
       {
         $pull: { favoriteTours: tourId },
       },
       { new: true },
-    ) // Return the updated document
+    )
 
-    // If the user was not found or the update did not modify any document
     if (!updateResult) {
       return res
         .status(404)

@@ -30,17 +30,19 @@ import {
   BsHeart,
   BsHeartFill,
 } from 'react-icons/bs'
-import axios from 'axios'
 import { format, startOfDay } from 'date-fns'
 import {
   getTourById,
   fetchBookings,
   createBooking,
   cancelBooking,
+  fetchReviews,
+  fetchUserProfile,
 } from '../services'
 import { Button, PageLayout, StarRating, ReviewForm } from '../components'
 import { useAuthContext, useFavorite } from '../hooks'
 import { Tour, Booking, Review } from '../types'
+import axios from 'axios'
 
 type ValuePiece = Date | null
 type Value = ValuePiece | [ValuePiece, ValuePiece]
@@ -76,7 +78,6 @@ const TourDetails: React.FC = () => {
           const tourData = await getTourById(id)
           setTourDetails(tourData)
 
-          // Fetch bookings
           const bookings = await fetchBookings()
           const tourBooking = bookings.find(
             (booking) => booking._id === bookingId,
@@ -95,7 +96,6 @@ const TourDetails: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching data:', error)
-        // Handle error
       } finally {
         setIsLoading(false)
       }
@@ -105,7 +105,7 @@ const TourDetails: React.FC = () => {
   }, [id, user])
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchTourReviews = async () => {
       if (
         user &&
         user.token &&
@@ -115,20 +115,15 @@ const TourDetails: React.FC = () => {
         tourDetails.reviewCount > 0
       ) {
         try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/reviews/${id}`,
-            {
-              headers: { Authorization: `Bearer ${user?.token}` },
-            },
-          )
-          setReviews(response.data)
+          const reviewsData = await fetchReviews(id)
+          setReviews(reviewsData)
         } catch (error) {
           console.error('Error fetching reviews:', error)
         }
       }
     }
 
-    fetchReviews()
+    fetchTourReviews()
   }, [id, user?.token, tourDetails])
 
   const getSlidesPerView = () => {
@@ -136,9 +131,8 @@ const TourDetails: React.FC = () => {
     return photosCount >= 3 ? 3 : photosCount
   }
 
-  // Book tour
   const handleBooking = async () => {
-    if (!user || !id || !value) {
+    if (!user || !id || !value || !user._id) {
       toast({
         title: 'Please log in and select a date to book this tour.',
         status: 'error',
@@ -148,46 +142,43 @@ const TourDetails: React.FC = () => {
       return
     }
 
-    if (!user.firstName || !user.lastName || !user.email) {
-      toast({
-        title: 'Please complete your profile to book this tour.',
-        description: 'Redirecting to your profile page...',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      })
-
-      setTimeout(() => {
-        window.location.href = '/profile'
-      }, 3000)
-
-      return
-    }
-
-    if (!id || !value) {
-      toast({
-        title: 'Please select a date to book this tour.',
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-      })
-      return
-    }
-
-    const bookingDate = Array.isArray(value) ? value[0] : value
-    if (!bookingDate) {
-      toast({
-        title: 'Please select a date to book this tour.',
-        status: 'warning',
-        duration: 2000,
-        isClosable: true,
-      })
-      return
-    }
-
-    const bookingDateISO = format(bookingDate, 'yyyy-MM-dd')
-
     try {
+      const userProfile = await fetchUserProfile(user._id)
+      if (
+        !userProfile.firstName ||
+        !userProfile.lastName ||
+        !userProfile.email ||
+        !userProfile.city ||
+        !userProfile.country
+      ) {
+        toast({
+          title: 'Please complete your profile to book this tour.',
+          description: 'Redirecting to your profile page...',
+          status: 'warning',
+          duration: 3000,
+          isClosable: true,
+        })
+
+        setTimeout(() => {
+          window.location.href = '/profile'
+        }, 3000)
+
+        return
+      }
+
+      const bookingDate = Array.isArray(value) ? value[0] : value
+      if (!bookingDate) {
+        toast({
+          title: 'Please select a date to book this tour.',
+          status: 'warning',
+          duration: 2000,
+          isClosable: true,
+        })
+        return
+      }
+
+      const bookingDateISO = format(bookingDate, 'yyyy-MM-dd')
+
       const booking = await createBooking(id, bookingDateISO)
 
       setIsBooked(true)
@@ -214,7 +205,6 @@ const TourDetails: React.FC = () => {
     }
   }
 
-  // Cancel booking
   const handleCancelBooking = async (bookingId) => {
     if (!user || !id || !currentTourBooking) {
       toast({

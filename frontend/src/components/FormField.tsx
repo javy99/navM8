@@ -116,7 +116,6 @@ const FormField: React.FC<Props> = ({
     cursor: 'pointer',
   }
 
-  // Custom styling for file input wrapper
   const fileInputWrapperStyle = {
     boxShadow: 'inset 0 0 2px 2px rgba(0, 0, 0, 0.2)',
     borderRadius: '0.9375rem',

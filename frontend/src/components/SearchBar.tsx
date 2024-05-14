@@ -48,7 +48,6 @@ const SearchBar: React.FC<Props> = ({ onSearch }) => {
       mt={10}
     >
       <HStack spacing={0} height="100%" align="center">
-        {/* Location Input */}
         <HStack spacing={0} position="relative" flex="1" align="center">
           <Input
             variant="unstyled"

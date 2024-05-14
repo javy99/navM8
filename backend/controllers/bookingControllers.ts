@@ -1,4 +1,3 @@
-// bookingController.ts
 import { Request, Response } from 'express'
 import { Booking, Tour } from '../models'
 
@@ -11,13 +10,11 @@ const createBooking = async (req: Request, res: Response) => {
     const bookingDateObj = new Date(bookingDate)
     bookingDateObj.setUTCHours(0, 0, 0, 0)
 
-    // Fetch the tour to check its availability type
     const tour = await Tour.findById(tourId)
     if (!tour) {
       return res.status(404).json({ error: 'Tour not found' })
     }
 
-    // Prevent users from booking their own tours
     if (tour.author.toString() === userId.toString()) {
       return res
         .status(403)
@@ -92,7 +89,6 @@ function validateBookingDate(
 }
 
 const getBookingsForUser = async (req: Request, res: Response) => {
-  // Logic to retrieve bookings for a specific user
   try {
     const userId = req.user._id
     const bookings = await Booking.find({ userId })
@@ -105,7 +101,6 @@ const getBookingsForUser = async (req: Request, res: Response) => {
 }
 
 const getBookingsForTour = async (req: Request, res: Response) => {
-  // Logic to retrieve bookings for a specific tour
   try {
     const { tourId } = req.params
     const bookings = await Booking.find({ tour: tourId })
@@ -118,31 +113,26 @@ const getBookingsForTour = async (req: Request, res: Response) => {
 }
 
 const updateBookingStatus = async (req: Request, res: Response) => {
-  // Logic to update the status of a booking
   try {
     const { bookingId } = req.params
     const { status } = req.body
 
     const userId = req.user._id
 
-    // Check if status is provided in the request body
     if (!status) {
       return res.status(400).json({ error: 'Status must be provided' })
     }
 
-    // Check if the provided status is one of the allowed values
     const allowedStatuses = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED']
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status provided' })
     }
 
-    // Fetch the booking and its related tour
     const booking = await Booking.findById(bookingId).populate('tour')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
 
-    // Additional check for status 'CONFIRMED'
     if (
       status === 'CONFIRMED' &&
       booking.tour.author.toString() !== userId.toString()
@@ -168,7 +158,6 @@ const updateBookingStatus = async (req: Request, res: Response) => {
 }
 
 const deleteBooking = async (req: Request, res: Response) => {
-  // Logic to delete a booking
   try {
     const { bookingId } = req.params
     const booking = await Booking.findByIdAndDelete(bookingId)

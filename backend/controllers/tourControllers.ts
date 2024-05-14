@@ -175,7 +175,6 @@ const deleteTour = async (req: Request, res: Response) => {
       return
     }
 
-    // Check if the user is authorized to delete the tour
     if (tour.author.toString() !== req.user._id.toString()) {
       res.status(403).json({ error: 'Unauthorized' })
       return

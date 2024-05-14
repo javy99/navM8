@@ -121,7 +121,6 @@ const useProfile = () => {
   }
 
   const prepareDataForDatabase = (userInfoToClean: User): User => {
-    // Trim spaces for languagesSpoken and interests
     const cleanedData = { ...userInfoToClean }
     if (cleanedData.languagesSpoken) {
       cleanedData.languagesSpoken = cleanedData.languagesSpoken.map((item) =>
@@ -134,7 +133,6 @@ const useProfile = () => {
     return cleanedData
   }
 
-  // Handle button click to open file input
   const handleButtonClick = () => inputFileRef.current?.click()
 
   const handleEdit = () => {

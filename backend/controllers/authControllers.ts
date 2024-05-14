@@ -22,7 +22,6 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const token = createToken(user._id.toString(), '3d')
     const refreshToken = createToken(user._id.toString(), '7d')
 
-    // Set cookies here
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
@@ -55,7 +54,6 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
     const token = createToken(user._id.toString(), '3d')
     const refreshToken = createToken(user._id.toString(), '7d')
 
-    // Set cookies here
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,

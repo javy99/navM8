@@ -3,7 +3,11 @@ import { useAuthContext } from '../hooks'
 import { Navigate, useLocation } from 'react-router-dom'
 import { Box, Spinner, useTheme } from '@chakra-ui/react'
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+interface Props {
+  component: React.FC
+}
+
+const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
   const { state } = useAuthContext()
   const { user } = state
   const theme = useTheme()

@@ -112,7 +112,6 @@ const BookingCard: React.FC<Props> = ({
             {tour.name}
           </Heading>
 
-          {/* <Text py={3}>{tour.description}</Text> */}
           <Flex pt={3} alignItems="center">
             <Icon as={BsCalendar4} color="#EC502C" w={5} h={5} />
             <Text ml={2} color={secondaryColor}>

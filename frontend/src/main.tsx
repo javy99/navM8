@@ -8,7 +8,7 @@ import {
   SidebarProvider,
   ProfilePhotoProvider,
   ChatProvider,
-} from './context/index.js'
+} from './context'
 
 const customTheme = extendTheme({
   colors: {
@@ -50,11 +50,9 @@ const customTheme = extendTheme({
   },
 })
 
-// Use createRoot API for React 18+
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container)
 root.render(
-  // <React.StrictMode>
   <AuthContextProvider>
     <ProfilePhotoProvider>
       <ChakraProvider theme={customTheme}>
@@ -66,5 +64,4 @@ root.render(
       </ChakraProvider>
     </ProfilePhotoProvider>
   </AuthContextProvider>,
-  // </React.StrictMode>,
 )

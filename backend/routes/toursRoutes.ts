@@ -17,6 +17,7 @@ const upload = multer({ dest: 'uploads/' })
 toursRouter.get('/', getAllTours)
 
 toursRouter.use(requireAuth)
+
 toursRouter.post('/mytours', upload.array('photos'), createTour)
 toursRouter.put('/mytours/:id', upload.array('photos'), updateTour)
 toursRouter.delete('/mytours/:id', deleteTour)

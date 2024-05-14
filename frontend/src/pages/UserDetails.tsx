@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { PageLayout, TourCard } from '../components'
 import { useAuthContext } from '../hooks'
 import {
@@ -17,7 +18,6 @@ import {
   useTheme,
 } from '@chakra-ui/react'
 import { getAllUsers, getUserTours } from '../services'
-import { useParams } from 'react-router-dom'
 import {
   BsCalendar2Minus,
   BsTranslate,
@@ -34,7 +34,19 @@ import {
 import { Tour, User } from '../types'
 import bgImage from '../assets/user_page-bg.avif'
 
-const DetailBox = ({ icon, label, detail, isList = false }) => {
+interface DetailBoxProps {
+  icon: React.ElementType
+  label: string
+  detail: string | string[]
+  isList?: boolean
+}
+
+const DetailBox: React.FC<DetailBoxProps> = ({
+  icon,
+  label,
+  detail,
+  isList = false,
+}) => {
   const formatDate = (dateString) => {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -51,7 +63,7 @@ const DetailBox = ({ icon, label, detail, isList = false }) => {
         {isList ? (
           <Flex wrap="wrap" alignItems="center">
             <b>{label}:</b>
-            {detail.map((item, index) => (
+            {(detail as string[]).map((item, index) => (
               <Tag
                 key={index}
                 size="md"
@@ -168,7 +180,12 @@ const UserDetails: React.FC = () => {
                 >
                   {selectedUser.username}
                 </Text>
-                <Text fontSize="2xl" mb={2} fontWeight={400} textTransform='uppercase'>
+                <Text
+                  fontSize="2xl"
+                  mb={2}
+                  fontWeight={400}
+                  textTransform="uppercase"
+                >
                   {selectedUser.firstName} {selectedUser.lastName}
                 </Text>
                 <Badge
@@ -217,12 +234,12 @@ const UserDetails: React.FC = () => {
               <DetailBox
                 icon={BsPersonSquare}
                 label="Username"
-                detail={selectedUser.username}
+                detail={selectedUser.username || 'N/A'}
               />
               <DetailBox
                 icon={BsEnvelopeAt}
                 label="Email"
-                detail={selectedUser.email}
+                detail={selectedUser.email || 'N/A'}
               />
               <DetailBox
                 icon={BsCake2}

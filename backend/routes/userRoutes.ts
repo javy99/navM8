@@ -19,9 +19,9 @@ const upload = multer({ dest: 'uploads/' })
 userRouter.get('/', getAllUsers)
 
 userRouter.use(requireAuth)
+
 userRouter.patch('/:id', updateProfile)
 userRouter.get('/:id', getProfile)
-
 userRouter.post(
   '/:id/photo',
   upload.single('profilePictureURL'),
@@ -29,7 +29,6 @@ userRouter.post(
 )
 userRouter.get('/:id/photo', getProfilePhoto)
 userRouter.delete('/:id/photo', deleteProfilePhoto)
-
 userRouter.post('/:id/favoriteTours', addFavoriteTour)
 userRouter.get('/:id/favoriteTours', getFavoriteTours)
 userRouter.delete('/:id/favoriteTours/:tourId', deleteFavoriteTour)
