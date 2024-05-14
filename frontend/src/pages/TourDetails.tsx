@@ -102,7 +102,7 @@ const TourDetails: React.FC = () => {
     }
 
     fetchData()
-  }, [id, user, bookingStatus])
+  }, [id, user])
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -138,7 +138,7 @@ const TourDetails: React.FC = () => {
 
   // Book tour
   const handleBooking = async () => {
-    if (!user || !user.token || !id || !value) {
+    if (!user || !id || !value) {
       toast({
         title: 'Please log in and select a date to book this tour.',
         status: 'error',
@@ -166,6 +166,7 @@ const TourDetails: React.FC = () => {
 
       setIsBooked(true)
       setBookingStatus('PENDING')
+      setBookingDate(new Date(booking.date).toLocaleDateString())
       setCurrentTourBooking(booking)
 
       toast({
