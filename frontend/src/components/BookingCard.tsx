@@ -25,16 +25,23 @@ type Props = {
   tour: Tour
   date: string
   status: string
+  bookingId: string
 }
 
-const BookingCard: React.FC<Props> = ({ width, tour, date, status }) => {
+const BookingCard: React.FC<Props> = ({
+  width,
+  tour,
+  date,
+  status,
+  bookingId,
+}) => {
   const navigate = useNavigate()
   const theme = useTheme()
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
 
   const openCardDetails = () => {
-    navigate(`/tours/${tour._id}`)
+    navigate(`/tours/${tour._id}/${bookingId}`)
   }
 
   const getStatusColor = (status: string) => {

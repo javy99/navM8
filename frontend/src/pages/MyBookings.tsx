@@ -107,6 +107,7 @@ const MyBookings: React.FC = () => {
                   tour={booking.tour}
                   date={booking.date}
                   status={booking.status}
+                  bookingId={booking._id}
                 />
               ))}
             </Flex>

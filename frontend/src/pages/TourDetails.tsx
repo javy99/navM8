@@ -50,7 +50,7 @@ const TourDetails: React.FC = () => {
   const { user } = state
   const toast = useToast()
   const theme = useTheme()
-  const { id } = useParams()
+  const { id, bookingId } = useParams()
   const whiteColor = theme.colors.white
   const primaryColor = theme.colors.primary
   const secondaryColor = theme.colors.secondary
@@ -79,7 +79,7 @@ const TourDetails: React.FC = () => {
           // Fetch bookings
           const bookings = await fetchBookings()
           const tourBooking = bookings.find(
-            (booking) => booking.tour?._id === id,
+            (booking) => booking._id === bookingId,
           )
           if (tourBooking) {
             setIsBooked(true)

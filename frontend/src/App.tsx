@@ -35,7 +35,7 @@ const App: React.FC = () => {
         />
         <Route path="/mytours" element={<PrivateRoute component={MyTours} />} />
         <Route
-          path="/tours/:id"
+          path="/tours/:id/:bookingId?"
           element={<PrivateRoute component={TourDetails} />}
         />
         <Route
