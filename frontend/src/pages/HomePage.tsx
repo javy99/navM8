@@ -2,7 +2,7 @@ import { Flex, Text, Box, useTheme, Spinner } from '@chakra-ui/react'
 import { SearchBar, TourCard, PageLayout } from '../components'
 import React, { useState, useEffect } from 'react'
 import { useAuthContext } from '../hooks'
-import { getAllTours } from '../services'
+import { fetchReviews, getAllTours } from '../services'
 import { Tour } from '../types'
 import HeaderBgImage from '../assets/home-bg.jpg'
 
@@ -35,8 +35,34 @@ const HomePage: React.FC = () => {
           return true
         })
 
-        setAllTours(validTours)
-        setFilteredTours(validTours)
+        const toursWithRatings = await Promise.all(
+          validTours.map(async (tour) => {
+            if (tour.reviewCount > 0) {
+              try {
+                const reviews = await fetchReviews(tour._id)
+                const averageRating =
+                  reviews.length > 0
+                    ? reviews.reduce((sum, review) => sum + review.rating, 0) /
+                      reviews.length
+                    : 0
+                return { ...tour, averageRating }
+              } catch (error) {
+                console.error(
+                  `Error fetching reviews for tour ${tour._id}:`,
+                  error,
+                )
+                return { ...tour, averageRating: 0 }
+              }
+            } else {
+              return { ...tour, averageRating: 0 }
+            }
+          }),
+        )
+
+        toursWithRatings.sort((a, b) => b.averageRating - a.averageRating)
+
+        setAllTours(toursWithRatings)
+        setFilteredTours(toursWithRatings)
       } catch (error) {
         console.error('Failed to fetch guides:', error)
       } finally {
@@ -45,7 +71,7 @@ const HomePage: React.FC = () => {
     }
 
     fetchTours()
-  }, [user?.token])
+  }, [])
 
   const handleSearch = (cityName: string) => {
     try {

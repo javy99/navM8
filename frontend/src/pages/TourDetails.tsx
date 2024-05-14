@@ -148,6 +148,32 @@ const TourDetails: React.FC = () => {
       return
     }
 
+    if (!user.firstName || !user.lastName || !user.email) {
+      toast({
+        title: 'Please complete your profile to book this tour.',
+        description: 'Redirecting to your profile page...',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
+
+      setTimeout(() => {
+        window.location.href = '/profile'
+      }, 3000)
+
+      return
+    }
+
+    if (!id || !value) {
+      toast({
+        title: 'Please select a date to book this tour.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+      return
+    }
+
     const bookingDate = Array.isArray(value) ? value[0] : value
     if (!bookingDate) {
       toast({

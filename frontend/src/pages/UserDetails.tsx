@@ -283,7 +283,7 @@ const UserDetails: React.FC = () => {
                   color="red.500"
                   textTransform="uppercase"
                 >
-                  {selectedUser.firstName} has no tours yet.
+                  {selectedUser.firstName} has no tours yet!
                 </Text>
               )}
             </Flex>

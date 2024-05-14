@@ -35,7 +35,8 @@ const MyBookings: React.FC = () => {
   const whiteColor = theme.colors.white
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [bookings, setBookings] = useState<Booking[]>([])
+  const [currentBookings, setCurrentBookings] = useState<Booking[]>([])
+  const [pastBookings, setPastBookings] = useState<Booking[]>([])
 
   const bookingCardWidth = useBreakpointValue({ base: '100%', md: '48%' })
   const imageBoxSize = useBreakpointValue({ base: '100%', md: '50%' })
@@ -51,7 +52,19 @@ const MyBookings: React.FC = () => {
       try {
         if (user) {
           const fetchedBookings = await fetchBookings()
-          setBookings(fetchedBookings)
+
+          const now = new Date()
+
+          const current = fetchedBookings.filter(
+            (booking) =>
+              new Date(booking.date) >= now && booking.status !== 'COMPLETED',
+          )
+          const past = fetchedBookings.filter(
+            (booking) =>
+              new Date(booking.date) < now || booking.status === 'COMPLETED',
+          )
+          setCurrentBookings(current)
+          setPastBookings(past)
         }
       } catch (error) {
         console.error('Error fetching bookings:', error)
@@ -93,14 +106,14 @@ const MyBookings: React.FC = () => {
           <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
             My Bookings
           </Heading>
-          {bookings.length > 0 ? (
+          {currentBookings.length > 0 ? (
             <Flex
               justifyContent="space-between"
               direction={flexDirection}
               flexWrap="wrap"
               gap={{ base: 4, md: 6, lg: 8 }}
             >
-              {bookings.map((booking) => (
+              {currentBookings.map((booking) => (
                 <BookingCard
                   key={booking._id}
                   width={bookingCardWidth}
@@ -158,14 +171,29 @@ const MyBookings: React.FC = () => {
             <Heading as="h3" fontSize="1.5rem" color={primaryColor} mb={4}>
               Past Trips
             </Heading>
-            <Flex flexWrap="wrap" justifyContent="space-between" mx={12}>
-              {/*
-            <BookingCard width={bookingCardWidth} />
-            <BookingCard width={bookingCardWidth} />
-            <BookingCard width={bookingCardWidth} />
-            <BookingCard width={bookingCardWidth} />
-      */}
-            </Flex>
+            {pastBookings.length > 0 ? (
+              <Flex
+                justifyContent="space-between"
+                direction={flexDirection}
+                flexWrap="wrap"
+                gap={{ base: 4, md: 6, lg: 8 }}
+              >
+                {pastBookings.map((booking) => (
+                  <BookingCard
+                    key={booking._id}
+                    width={bookingCardWidth}
+                    tour={booking.tour}
+                    date={booking.date}
+                    status={booking.status}
+                    bookingId={booking._id}
+                  />
+                ))}
+              </Flex>
+            ) : (
+              <Text fontWeight="bold" color="red.500" textTransform="uppercase">
+                No past trips!
+              </Text>
+            )}
           </Box>
         </VStack>
       )}

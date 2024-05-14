@@ -48,6 +48,7 @@ const useMyTours = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [myTourInfo, setMyTourInfo] = useState<Tour>(initialTourInfo)
+  const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -183,10 +184,6 @@ const useMyTours = () => {
   const handleEditTour = async (tourId) => {
     setIsLoading(true)
     try {
-      if (!user?.token) {
-        throw new Error('User token is not available.')
-      }
-
       const data = await getTourById(tourId)
 
       setMyTourInfo({
@@ -202,6 +199,7 @@ const useMyTours = () => {
         })),
       )
 
+      setIsEditMode(true)
       onOpen()
     } catch (error) {
       toast({
@@ -244,6 +242,7 @@ const useMyTours = () => {
   const handleAddTour = () => {
     setMyTourInfo(initialTourInfo)
     setSelectedFiles([])
+    setIsEditMode(false)
     onOpen()
   }
 
@@ -262,6 +261,7 @@ const useMyTours = () => {
     onClose,
     setMyTourInfo,
     handleAddTour,
+    isEditMode,
   }
 }
 

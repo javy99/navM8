@@ -41,6 +41,7 @@ const MyTours: React.FC = () => {
     isOpen,
     onClose,
     handleAddTour,
+    isEditMode,
   } = useMyTours()
 
   type FlexDirection =
@@ -143,7 +144,7 @@ const MyTours: React.FC = () => {
             color={primaryColor}
             fontWeight="bold"
           >
-            Create a Tour
+            {isEditMode ? 'Edit Tour' : 'Create a Tour'}
           </ModalHeader>
           <ModalCloseButton color={primaryColor} />
           <ModalBody>
