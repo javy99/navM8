@@ -8,12 +8,14 @@ import {
   Icon,
   SimpleGrid,
   Spinner,
+  HStack,
+  Divider,
 } from '@chakra-ui/react'
 import { PageLayout } from '../components'
 import { useAuthContext } from '../hooks'
-import { FaUserFriends } from 'react-icons/fa'
+import { FaCheckCircle, FaUserFriends } from 'react-icons/fa'
 import { MdTravelExplore } from 'react-icons/md'
-import { FcExpired } from 'react-icons/fc'
+import { FcCheckmark, FcExpired } from 'react-icons/fc'
 import { getAllTours, getAllUsers } from '../services'
 
 const About: React.FC = () => {
@@ -136,26 +138,87 @@ const About: React.FC = () => {
               </Box>
             ))}
           </SimpleGrid>
-          <Text fontSize="lg" mb={6}>
-            navM8, short for "navigator mate," is your go-to platform for
-            authentic travel experiences. We connect travelers with
+          <Text fontSize="lg" my={6}>
+            <b>navM8</b>, short for <b>"navigator mate,"</b> is your go-to
+            platform for authentic travel experiences. We connect travelers with
             knowledgeable locals who offer personalized tours, making
             exploration affordable and enriching.
           </Text>
+          <Divider mb={6} />
           <Heading as="h4" fontSize="1.2rem" color={primaryColor} mb={4}>
             Features
           </Heading>
-          <Text mb={4}>- Browse tours by destination.</Text>
-          <Text mb={4}>
-            - Message local guides to customize your experience.
-          </Text>
-          <Text mb={4}>
-            - Enjoy a personalized tour with a passionate local.
-          </Text>
-          <Text mb={6}>
-            - Accessible to all, whether you're a seasoned traveler or
-            first-time adventurer.
-          </Text>
+          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={5} mb={6}>
+            <HStack>
+              <Icon as={FaCheckCircle} color={primaryColor} w={5} h={5} />
+              <Text>Browse tours by destination.</Text>
+            </HStack>
+            <HStack>
+              <Icon as={FaCheckCircle} color={primaryColor} w={5} h={5} />
+              <Text>Message local guides to customize your experience.</Text>
+            </HStack>
+            <HStack>
+              <Icon as={FaCheckCircle} color={primaryColor} w={5} h={5} />
+              <Text>Enjoy a personalized tour with a passionate local.</Text>
+            </HStack>
+            <HStack>
+              <Icon as={FaCheckCircle} color={primaryColor} w={5} h={5} />
+              <Text>
+                Accessible to all, whether you're a seasoned traveler or
+                first-time adventurer.
+              </Text>
+            </HStack>
+          </SimpleGrid>
+          <Divider mb={6} />
+          <Heading as="h4" fontSize="1.2rem" color={primaryColor} mb={4}>
+            Authorized User Functionalities
+          </Heading>
+          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={5} mb={6}>
+            <HStack align="start">
+              <Icon as={FcCheckmark} w={6} h={6} />
+              <Text>
+                <b>Create and Manage Tours:</b> Design your own tours, set
+                schedules, and manage bookings with ease.
+              </Text>
+            </HStack>
+            <HStack align="start">
+              <Icon as={FcCheckmark} w={6} h={6} />
+              <Text>
+                <b>Review and Ratings:</b> Share your experiences and read
+                reviews from other travelers to ensure you choose the best
+                guides and tours.
+              </Text>
+            </HStack>
+            <HStack align="start">
+              <Icon as={FcCheckmark} w={6} h={6} />
+              <Text>
+                <b>Exclusive Deals:</b> Gain access to special discounts and
+                offers available only to registered users.
+              </Text>
+            </HStack>
+            <HStack align="start">
+              <Icon as={FcCheckmark} w={6} h={6} />
+              <Text>
+                <b>Advanced Messaging:</b> Enjoy direct communication with
+                guides, allowing for detailed customization of your travel
+                plans.
+              </Text>
+            </HStack>
+            <HStack align="start">
+              <Icon as={FcCheckmark} w={6} h={6} />
+              <Text>
+                <b>Personalized Recommendations:</b> Receive tour suggestions
+                tailored to your preferences and travel history.
+              </Text>
+            </HStack>
+            <HStack align="start">
+              <Icon as={FcCheckmark} w={6} h={6} />
+              <Text>
+                <b>Priority Support:</b> Benefit from faster response times and
+                dedicated support to assist with any inquiries or issues.
+              </Text>
+            </HStack>
+          </SimpleGrid>
         </VStack>
       )}
     </PageLayout>
