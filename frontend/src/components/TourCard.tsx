@@ -255,7 +255,7 @@ const TourCard: React.FC<Props> = ({
         <ModalContent
           borderBottom="10px solid"
           borderColor={primaryColor}
-          borderRadius="15px"
+          borderRadius="10px"
           overflow="hidden"
         >
           <ModalHeader

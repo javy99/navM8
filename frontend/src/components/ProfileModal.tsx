@@ -46,9 +46,9 @@ const ProfileModal: React.FC<Props> = ({ user, children }) => {
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered={true}>
         <ModalOverlay bg="rgba(0,0,0,0.5)" />
         <ModalContent
-          borderBottom="15px solid"
+          borderBottom="10px solid"
           borderColor={primaryColor}
-          borderRadius="15px"
+          borderRadius="10px"
           overflow="hidden"
         >
           <ModalHeader

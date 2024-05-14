@@ -132,9 +132,9 @@ const MyTours: React.FC = () => {
             xl: '60%',
             '2xl': '50%',
           }}
-          borderBottom="16px solid"
+          borderBottom="10px solid"
           borderColor={primaryColor}
-          borderRadius="15px"
+          borderRadius="10px"
           overflow="hidden"
         >
           <ModalHeader

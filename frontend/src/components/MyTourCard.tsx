@@ -10,6 +10,13 @@ import {
   Flex,
   Icon,
   useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from '@chakra-ui/react'
 import { BsPeopleFill, BsGeoAltFill, BsCalendar4 } from 'react-icons/bs'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -59,6 +66,7 @@ const MyTourCard: React.FC<Props> = ({
   const secondaryColor = theme.colors.secondary
 
   const [bookings, setBookings] = useState<Booking[]>([])
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const openCardDetails = () => {
     navigate(`/tours/${tour._id}`)
@@ -126,7 +134,12 @@ const MyTourCard: React.FC<Props> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.stopPropagation()
+    setIsDeleteModalOpen(true)
+  }
+
+  const confirmDelete = () => {
     if (onDelete) onDelete()
+    setIsDeleteModalOpen(false)
   }
 
   const handleViewProfile = (userId) => {
@@ -297,6 +310,40 @@ const MyTourCard: React.FC<Props> = ({
           ))}
         </Box>
       )}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        isCentered={true}
+      >
+        <ModalOverlay bg="rgba(0,0,0,0.5)" />
+        <ModalContent
+          borderBottom="10px solid"
+          borderColor={primaryColor}
+          borderRadius="10px"
+          overflow="hidden"
+        >
+          <ModalHeader
+            bg="#F6FBFC"
+            boxShadow="xl"
+            color={primaryColor}
+            fontWeight="bold"
+          >
+            Confirm Tour Deletion
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody py={6}>
+            <Text>Are you sure you want to delete this tour?</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="red" mr={3} onClick={confirmDelete}>
+              Delete
+            </Button>
+            <Button variant="ghost" onClick={() => setIsDeleteModalOpen(false)}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }

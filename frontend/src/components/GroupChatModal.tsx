@@ -135,9 +135,9 @@ const GroupChatModal: React.FC<Props> = ({ children }) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
         <ModalOverlay bg="rgba(0,0,0,0.5)" />
         <ModalContent
-          borderBottom="15px solid"
+          borderBottom="10px solid"
           borderColor={primaryColor}
-          borderRadius="15px"
+          borderRadius="10px"
           overflow="hidden"
         >
           <ModalHeader

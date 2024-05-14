@@ -217,8 +217,6 @@ const useMyTours = () => {
   }
 
   const handleDeleteTour = async (tourId) => {
-    if (!window.confirm('Are you sure you want to delete this tour?')) return
-
     setIsLoading(true)
     try {
       await deleteTour(tourId)
