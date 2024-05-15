@@ -79,7 +79,6 @@ const HomePage: React.FC = () => {
         throw new Error('City name should be a string')
       }
 
-      // If cityName is empty, set filteredTours to allTours
       if (cityName.trim() === '') {
         setFilteredTours(allTours)
       } else {
@@ -139,7 +138,7 @@ const HomePage: React.FC = () => {
                 The Most Popular Tours
               </Text>
               <Flex wrap={'wrap'} gap={{ base: 6, '2xl': 10 }}>
-                {filteredTours.map((tour) => (
+                {filteredTours.slice(0, 20).map((tour) => (
                   <TourCard tour={tour} key={tour._id} />
                 ))}
               </Flex>
