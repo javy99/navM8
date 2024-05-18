@@ -43,7 +43,7 @@ const SearchBar: React.FC<Props> = ({ onSearch }) => {
       bg={whiteColor}
       borderRadius="full"
       boxShadow="md"
-      maxW="65%"
+      maxW={{ base: '90%', md: '80%', lg: '70%' }}
       mx="auto"
       mt={10}
     >
