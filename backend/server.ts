@@ -5,7 +5,7 @@ import * as http from 'http'
 import mongoose from 'mongoose'
 import * as cookieParser from 'cookie-parser'
 import { Server as SocketIOServer } from 'socket.io'
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import {
   authRouter,
   userRouter,
@@ -100,11 +100,13 @@ app.use(notFound)
 app.use(errorHandler)
 
 // Error handling middleware
-app.use((error: CustomError, req: Request, res: Response) => {
-  res
-    .status(error.status || 500)
-    .json({ message: error.message || 'An unexpected error occurred' })
-})
+app.use(
+  (error: CustomError, req: Request, res: Response, next: NextFunction) => {
+    res
+      .status(error.status || 500)
+      .json({ message: error.message || 'An unexpected error occurred' })
+  },
+)
 
 // connect to MongoDB
 if (MONGODB_URL) {
