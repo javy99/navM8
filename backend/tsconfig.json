@@ -4,7 +4,14 @@
     "noImplicitAny": false,
     "outDir": "dist",
     "sourceMap": true,
-    "target": "esnext",
+    "target": "esnext"
   },
+  "include": [
+    "./*.ts",
+    "controllers/*.ts",
+    "models/*.ts",
+    "routes/*.ts",
+    "middlewares/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
