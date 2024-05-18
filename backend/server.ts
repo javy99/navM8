@@ -46,7 +46,7 @@ const server = http.createServer(app)
 const io = new SocketIOServer(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'http://localhost:3001',
+    origin: 'https://navm8.vercel.app/',
   },
 })
 
