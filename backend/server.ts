@@ -22,7 +22,7 @@ interface CustomError extends Error {
 }
 
 dotenv.config()
-const { MONGODB_URL, BACKEND_PORT } = process.env
+const { MONGODB_URL, PORT } = process.env
 
 // express app
 const app = express()
@@ -112,12 +112,12 @@ if (MONGODB_URL) {
   mongoose
     .connect(MONGODB_URL)
     .then(() => {
-      server.listen(BACKEND_PORT, () => {
+      server.listen(PORT, () => {
         console.log(
           '==============================================================',
         )
         console.log(
-          `===== Connected to MongoDB and listening on port ${BACKEND_PORT} :) =====`,
+          `===== Connected to MongoDB and listening on port ${PORT} :) =====`,
         )
         console.log(
           '==============================================================',
