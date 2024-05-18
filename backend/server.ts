@@ -29,14 +29,14 @@ const app = express()
 
 // middleware
 app.use(cookieParser())
-// app.use(cors())
-// app.use(
-//   cors({
-//     origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
-//     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-//     credentials: true,
-//   }),
-// )
+app.use(cors())
+app.use(
+  cors({
+    origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true,
+  }),
+)
 app.use(express.json({ limit: '50mb' }))
 
 // Initialize HTTP server from Express app
@@ -45,9 +45,9 @@ const server = http.createServer(app)
 // Initialize socket.io and bind it to the HTTP server
 const io = new SocketIOServer(server, {
   pingTimeout: 60000,
-  // cors: {
-  //   origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
-  // },
+  cors: {
+    origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+  },
 })
 
 // socket.io connection event
