@@ -29,7 +29,6 @@ const app = express()
 
 // middleware
 app.use(cookieParser())
-app.use(cors())
 app.use(
   cors({
     origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
@@ -134,7 +133,3 @@ if (MONGODB_URL) {
 } else {
   console.error('MONGODB_URL is not defined')
 }
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
