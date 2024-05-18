@@ -32,7 +32,7 @@ app.use(cookieParser())
 // app.use(cors())
 app.use(
   cors({
-    origin: 'https://navm8.vercel.app',
+    origin: ['https://localhost:3001', 'https://navm8.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
   }),
@@ -46,7 +46,7 @@ const server = http.createServer(app)
 const io = new SocketIOServer(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'https://navm8.vercel.app',
+    origin: ['https://localhost:3001', 'https://navm8.vercel.app'],
   },
 })
 
@@ -134,3 +134,7 @@ if (MONGODB_URL) {
 } else {
   console.error('MONGODB_URL is not defined')
 }
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
