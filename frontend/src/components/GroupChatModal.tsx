@@ -76,10 +76,11 @@ const GroupChatModal: React.FC<Props> = ({ children }) => {
     }
 
     try {
-      const { data } = await createGroupChat(
-        groupChatName,
-        selectedUsers.map((u) => u._id),
-      )
+      const userIds = selectedUsers
+        .map((u) => u._id)
+        .filter((id): id is string => !!id)
+
+      const { data } = await createGroupChat(groupChatName, userIds)
 
       setChats([data, ...chats])
       setGroupChatName('')

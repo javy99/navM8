@@ -3,45 +3,98 @@ import axios from 'axios'
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
 axios.defaults.withCredentials = true
-axios.defaults.headers.common['Content-Type'] = 'application/json'
 
-const searchUsers = async (query) =>
-  axios.get(`${BASE_API_URL}/api/users?search=${query}`)
+const searchUsers = async (query: string) => {
+  try {
+    return await axios.get(`${BASE_API_URL}/api/users?search=${query}`)
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Error searching users')
+  }
+}
 
-const createGroupChat = async (name, users) =>
-  axios.post(`${BASE_API_URL}/api/chats/group`, {
-    name,
-    users: JSON.stringify(users),
-  })
+const createGroupChat = async (name: string, users: string[]) => {
+  try {
+    return await axios.post(`${BASE_API_URL}/api/chats/group`, {
+      name,
+      users: JSON.stringify(users),
+    })
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || 'Error creating group chat',
+    )
+  }
+}
 
-const accessChat = async (userId) =>
-  axios.post(`${BASE_API_URL}/api/chats`, { userId })
+const accessChat = async (userId: string) => {
+  try {
+    return await axios.post(`${BASE_API_URL}/api/chats`, { userId })
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Error accessing chat')
+  }
+}
 
-const fetchChats = async () => axios.get(`${BASE_API_URL}/api/chats`)
+const fetchChats = async () => {
+  try {
+    return await axios.get(`${BASE_API_URL}/api/chats`)
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Error fetching chats')
+  }
+}
 
-const fetchMessages = async (chatId: string) =>
-  axios.get(`${BASE_API_URL}/api/messages/${chatId}`)
+const fetchMessages = async (chatId: string) => {
+  try {
+    return await axios.get(`${BASE_API_URL}/api/messages/${chatId}`)
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Error fetching messages')
+  }
+}
 
-const sendMessage = async (content: string, chatId: string) =>
-  axios.post(`${BASE_API_URL}/api/messages`, { content, chatId })
+const sendMessage = async (content: string, chatId: string) => {
+  try {
+    return await axios.post(`${BASE_API_URL}/api/messages`, { content, chatId })
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Error sending message')
+  }
+}
 
-const renameGroupChat = async (chatId: string, chatName: string) =>
-  axios.put(`${BASE_API_URL}/api/chats/group/rename`, {
-    chatId,
-    chatName,
-  })
+const renameGroupChat = async (chatId: string, chatName: string) => {
+  try {
+    return await axios.put(`${BASE_API_URL}/api/chats/group/rename`, {
+      chatId,
+      chatName,
+    })
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || 'Error renaming group chat',
+    )
+  }
+}
 
-const addUserToGroup = async (chatId: string, userId: string) =>
-  axios.put(`${BASE_API_URL}/api/chats/group/addUser`, {
-    chatId,
-    userId,
-  })
+const addUserToGroup = async (chatId: string, userId: string) => {
+  try {
+    return await axios.put(`${BASE_API_URL}/api/chats/group/addUser`, {
+      chatId,
+      userId,
+    })
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || 'Error adding user to group',
+    )
+  }
+}
 
-const removeUserFromGroup = async (chatId: string, userId: string) =>
-  axios.put(`${BASE_API_URL}/api/chats/group/removeUser`, {
-    chatId,
-    userId,
-  })
+const removeUserFromGroup = async (chatId: string, userId: string) => {
+  try {
+    return await axios.put(`${BASE_API_URL}/api/chats/group/removeUser`, {
+      chatId,
+      userId,
+    })
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || 'Error removing user from group',
+    )
+  }
+}
 
 export {
   searchUsers,
