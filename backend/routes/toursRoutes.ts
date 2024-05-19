@@ -14,10 +14,7 @@ import {
 const toursRouter = express.Router()
 const upload = multer({ dest: 'uploads/' })
 
-toursRouter.get('/', (req, res, next) => {
-  console.log('GET /api/tours')
-  getAllTours(req, res)
-})
+toursRouter.get('/', getAllTours)
 
 toursRouter.use(requireAuth)
 

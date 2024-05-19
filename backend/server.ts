@@ -22,7 +22,7 @@ interface CustomError extends Error {
 }
 
 dotenv.config()
-const { MONGODB, PORT } = process.env
+const { MONGODB_URL, PORT } = process.env
 
 // express app
 const app = express()
@@ -90,7 +90,9 @@ io.on('connection', (socket) => {
   })
 })
 
-console.log('Routes have been set up')
+app.get('/', (_req: Request, res: Response) => {
+  res.send('Server is ready')
+})
 
 // routes
 app.use('/api/bookings', bookingRouter)
@@ -100,10 +102,8 @@ app.use('/api/tours', toursRouter)
 app.use('/api/users', userRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/chats', chatRouter)
-// app.use(notFound)
-// app.use(errorHandler)
-
-console.log('Routes have been set up')
+app.use(notFound)
+app.use(errorHandler)
 
 // Error handling middleware
 app.use(
@@ -115,9 +115,9 @@ app.use(
 )
 
 // connect to MongoDB
-if (MONGODB) {
+if (MONGODB_URL) {
   mongoose
-    .connect(MONGODB)
+    .connect(MONGODB_URL)
     .then(() => {
       server.listen(PORT, () => {
         console.log(
