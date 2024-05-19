@@ -6,15 +6,22 @@ import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import { Server as SocketIOServer } from 'socket.io'
 
-import {
-  authRouter,
-  userRouter,
-  toursRouter,
-  chatRouter,
-  messageRouter,
-  bookingRouter,
-  reviewRouter,
-} from './routes'
+// import {
+//   authRouter,
+//   userRouter,
+//   toursRouter,
+//   chatRouter,
+//   messageRouter,
+//   bookingRouter,
+//   reviewRouter,
+// } from './routes'
+import authRouter from './routes/authRoutes'
+import userRouter from './routes/userRoutes'
+import toursRouter from './routes/toursRoutes'
+import chatRouter from './routes/chatRoutes'
+import messageRouter from './routes/messageRoutes'
+import bookingRouter from './routes/bookingRoutes'
+import reviewRouter from './routes/reviewRoutes'
 import { notFound, errorHandler } from './middlewares'
 
 interface CustomError extends Error {
