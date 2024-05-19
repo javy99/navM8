@@ -12,7 +12,8 @@ import {
 } from '../controllers'
 
 const toursRouter = express.Router()
-const upload = multer({ dest: 'uploads/' })
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
 toursRouter.get('/', getAllTours)
 
