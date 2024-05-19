@@ -34,7 +34,6 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
           httpOnly: true,
           secure: true,
           maxAge: 3 * 24 * 60 * 60 * 1000,
-          domain: '.herokuapp.com',
           sameSite: 'none',
         })
 

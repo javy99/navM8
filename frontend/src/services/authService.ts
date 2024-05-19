@@ -14,7 +14,10 @@ const refreshToken = async () => {
     { withCredentials: true },
   )
 
-  Cookies.set('token', response.data.token)
+  Cookies.set('token', response.data.token, {
+    secure: true,
+    sameSite: 'none',
+  })
   return response.data.token
 }
 
@@ -26,8 +29,14 @@ const loginService = async (email, password) => {
       { withCredentials: true },
     )
 
-    Cookies.set('token', response.data.token)
-    Cookies.set('refreshToken', response.data.refreshToken)
+    Cookies.set('token', response.data.token, {
+      secure: true,
+      sameSite: 'none',
+    })
+    Cookies.set('refreshToken', response.data.refreshToken, {
+      secure: true,
+      sameSite: 'none',
+    })
 
     return response.data
   } catch (error) {
@@ -48,8 +57,14 @@ const signupService = async (email, password, username) => {
       { withCredentials: true },
     )
 
-    Cookies.set('token', response.data.token)
-    Cookies.set('refreshToken', response.data.refreshToken)
+    Cookies.set('token', response.data.token, {
+      secure: true,
+      sameSite: 'none',
+    })
+    Cookies.set('refreshToken', response.data.refreshToken, {
+      secure: true,
+      sameSite: 'none',
+    })
 
     return response.data
   } catch (error) {
