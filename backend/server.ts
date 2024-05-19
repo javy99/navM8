@@ -31,7 +31,8 @@ const app = express()
 app.use(cookieParser())
 app.use(
   cors({
-    origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+    // origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
@@ -47,7 +48,8 @@ const server = http.createServer(app)
 const io = new SocketIOServer(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+    // origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+    origin: '*',
   },
 })
 
