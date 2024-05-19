@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -58,6 +58,7 @@ const TourDetails: React.FC = () => {
   const secondaryColor = theme.colors.secondary
 
   const { isFavorite, handleToggleFavorite } = useFavorite(id, user)
+  const navigate = useNavigate()
 
   const [reviews, setReviews] = useState<Review[]>([])
   const [value, onChange] = useState<Value>(new Date())
@@ -180,6 +181,16 @@ const TourDetails: React.FC = () => {
       const bookingDateISO = format(bookingDate, 'yyyy-MM-dd')
 
       const booking = await createBooking(id, bookingDateISO)
+      toast({
+        title: 'Booking successful!',
+        description: 'Your tour has been booked.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+      setTimeout(() => {
+        navigate('/bookings')
+      }, 1000)
 
       setIsBooked(true)
       setBookingStatus('PENDING')
@@ -192,6 +203,9 @@ const TourDetails: React.FC = () => {
         status: 'success',
         duration: 5000,
         isClosable: true,
+        onCloseComplete: () => {
+          navigate('/bookings')
+        },
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
