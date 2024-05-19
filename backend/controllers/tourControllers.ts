@@ -1,12 +1,25 @@
 import * as dotenv from 'dotenv'
 import { v2 as cloudinary } from 'cloudinary'
 import { Request, Response } from 'express'
-import { Tour } from '../models'
+import { IUser, Tour } from '../models'
 
 dotenv.config()
 
 interface MulterRequest extends Request {
   files: Express.Multer.File[]
+  body: {
+    name: string
+    country: string
+    city: string
+    maxPeople: number
+    typeOfAvailability: string
+    availability: string
+    date: string
+    from: string
+    to: string
+    description: string
+  }
+  user: IUser
 }
 
 cloudinary.config({
