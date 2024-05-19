@@ -12,5 +12,9 @@
     "func-names": "off",
     "consistent-return": "off",
     "no-console": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_" },
+    ],
   },
 }

@@ -1,5 +1,5 @@
 import mongoose, { Schema as MongooseSchema } from 'mongoose'
-import ITour from './tourModel'
+import { ITour } from './tourModel'
 
 export default interface IBooking extends Document {
   tour: ITour

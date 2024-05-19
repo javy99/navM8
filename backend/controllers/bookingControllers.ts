@@ -1,13 +1,40 @@
 import { Request, Response } from 'express'
 import { Booking, Tour } from '../models'
 
+function validateBookingDate(
+  typeOfAvailability,
+  availability,
+  bookingDate,
+  tourDate,
+) {
+  const bookingDateStart = new Date(bookingDate).setUTCHours(0, 0, 0, 0)
+  const tourDateStart = new Date(tourDate).setUTCHours(0, 0, 0, 0)
+
+  const dayOfWeek = bookingDate.getDay()
+  if (typeOfAvailability === 'recurring') {
+    switch (availability) {
+      case 'weekdays':
+        return dayOfWeek >= 1 && dayOfWeek <= 5
+      case 'weekends':
+        return dayOfWeek === 0 || dayOfWeek === 6
+      case 'daily':
+        return true
+      default:
+        return false
+    }
+  } else if (typeOfAvailability === 'one-time') {
+    return bookingDateStart === tourDateStart
+  }
+  return false
+}
+
 const createBooking = async (req: Request, res: Response) => {
   try {
-    const { tourId, date: bookingDate } = req.body
+    const { tourId, date: bookingDateStr } = req.body
     const userId = req.user._id
 
     // Convert booking date to a Date object for comparison
-    const bookingDateObj = new Date(bookingDate)
+    const bookingDateObj = new Date(bookingDateStr)
     bookingDateObj.setUTCHours(0, 0, 0, 0)
 
     const tour = await Tour.findById(tourId)
@@ -49,7 +76,7 @@ const createBooking = async (req: Request, res: Response) => {
 
     // Proceed with booking creation if the date is valid
     const newBooking = await Booking.create({
-      tour: tour,
+      tour,
       userId,
       date: bookingDateObj,
       status: 'PENDING',
@@ -59,33 +86,6 @@ const createBooking = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
-}
-
-function validateBookingDate(
-  typeOfAvailability,
-  availability,
-  bookingDate,
-  tourDate,
-) {
-  const bookingDateStart = new Date(bookingDate).setUTCHours(0, 0, 0, 0)
-  const tourDateStart = new Date(tourDate).setUTCHours(0, 0, 0, 0)
-
-  const dayOfWeek = bookingDate.getDay()
-  if (typeOfAvailability === 'recurring') {
-    switch (availability) {
-      case 'weekdays':
-        return dayOfWeek >= 1 && dayOfWeek <= 5
-      case 'weekends':
-        return dayOfWeek === 0 || dayOfWeek === 6
-      case 'daily':
-        return true
-      default:
-        return false
-    }
-  } else if (typeOfAvailability === 'one-time') {
-    return bookingDateStart === tourDateStart
-  }
-  return false
 }
 
 const getBookingsForUser = async (req: Request, res: Response) => {

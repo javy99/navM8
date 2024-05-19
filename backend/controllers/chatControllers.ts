@@ -27,7 +27,7 @@ const accessChat = async (req: Request, res: Response) => {
   if (isChat) {
     res.send(isChat)
   } else {
-    let chatData = {
+    const chatData = {
       chatName: 'sender',
       isGroupChat: false,
       users: [req.user._id, userId],
@@ -73,7 +73,7 @@ const createGroupChat = async (req: Request, res: Response) => {
     return res.status(400).send({ error: 'Please provide all fields' })
   }
 
-  let users: IUser[] = JSON.parse(req.body.users)
+  const users: IUser[] = JSON.parse(req.body.users)
 
   if (users.length < 2) {
     return res.status(400).send({ error: 'Please provide at least 2 users' })
@@ -85,7 +85,7 @@ const createGroupChat = async (req: Request, res: Response) => {
     const groupChat: IChat = await Chat.create({
       chatName: req.body.name,
       isGroupChat: true,
-      users: users,
+      users,
       groupAdmin: req.user,
     })
 
@@ -111,7 +111,7 @@ const renameGroup = async (req: Request, res: Response) => {
   try {
     const chat: IChat = await Chat.findByIdAndUpdate(
       chatId,
-      { chatName: chatName },
+      { chatName },
       { new: true },
     )
       .populate('users', '-password')

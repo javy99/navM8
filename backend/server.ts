@@ -1,11 +1,11 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import http from 'http'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import { Server as SocketIOServer } from 'socket.io'
-import { Request, Response, NextFunction } from 'express'
+
 import {
   authRouter,
   userRouter,
@@ -78,12 +78,12 @@ io.on('connection', (socket) => {
   )
 
   socket.on('new message', (newMessageReceived) => {
-    let chat = newMessageReceived.chat
+    const { chat } = newMessageReceived
 
     if (!chat.users) return console.log('Chat.users not defined')
 
     chat.users.forEach((user) => {
-      if (user._id == newMessageReceived.sender._id) return
+      if (user._id === newMessageReceived.sender._id) return
 
       socket.in(user._id).emit('message received', newMessageReceived)
     })
@@ -103,7 +103,7 @@ app.use(errorHandler)
 
 // Error handling middleware
 app.use(
-  (error: CustomError, req: Request, res: Response, next: NextFunction) => {
+  (error: CustomError, req: Request, res: Response, _next: NextFunction) => {
     res
       .status(error.status || 500)
       .json({ message: error.message || 'An unexpected error occurred' })

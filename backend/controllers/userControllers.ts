@@ -138,6 +138,7 @@ const uploadProfilePhoto = async (req, res) => {
       { profilePictureURL: result.secure_url },
       { new: true },
     )
+    console.log('updatedUser:', updatedUser)
 
     res.json({
       message: 'Profile photo uploaded successfully',
@@ -192,7 +193,7 @@ const deleteProfilePhoto = async (req, res) => {
 // Search users
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const search = req.query.search
+    const { search } = req.query
 
     let queryObj = {}
 
@@ -244,7 +245,7 @@ const addFavoriteTour = async (req: Request, res: Response) => {
 
 const deleteFavoriteTour = async (req: Request, res: Response) => {
   const userId = req.params.id
-  const tourId = req.params.tourId
+  const { tourId } = req.params
 
   try {
     const updateResult = await User.findByIdAndUpdate(

@@ -39,12 +39,12 @@ const tourSchema: MongooseSchema = new Schema(
       type: String,
       required: true,
       validate: {
-        validator: function (value: string) {
-          const country = Country.getAllCountries().find(
+        validator(value: string) {
+          const countryObj = Country.getAllCountries().find(
             (country) => country.name === this.get('country'),
           )
-          if (country) {
-            return City.getCitiesOfCountry(country.isoCode).some(
+          if (countryObj) {
+            return City.getCitiesOfCountry(countryObj.isoCode).some(
               (city) => city.name === value,
             )
           }
@@ -65,11 +65,11 @@ const tourSchema: MongooseSchema = new Schema(
     },
     availability: {
       type: String,
-      required: function () {
+      required() {
         return this.typeOfAvailability === 'recurring'
       },
       validate: {
-        validator: function (value: string) {
+        validator(value: string) {
           if (this.typeOfAvailability === 'recurring') {
             const validAvailabilities = ['weekdays', 'weekends', 'daily']
             return validAvailabilities.includes(value)
@@ -82,11 +82,11 @@ const tourSchema: MongooseSchema = new Schema(
     },
     date: {
       type: String,
-      required: function () {
+      required() {
         return this.typeOfAvailability === 'one-time'
       },
       validate: {
-        validator: function (value: string) {
+        validator(value: string) {
           if (this.typeOfAvailability === 'one-time') {
             const inputDate = new Date(value)
             inputDate.setHours(0, 0, 0, 0)
@@ -121,7 +121,7 @@ const tourSchema: MongooseSchema = new Schema(
       type: [String],
       required: true,
       validate: {
-        validator: function (value: string[]) {
+        validator(value: string[]) {
           return value.length > 0
         },
         message: 'At least one photo is required.',

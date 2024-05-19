@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { User } from '../models'
 
@@ -82,16 +82,22 @@ const logoutUser = async (req: Request, res: Response): Promise<void> => {
 }
 
 // refresh token
-const refreshToken = async (req: Request, res: Response): Promise<void> => {
-  const refreshToken = req.cookies.refreshToken
+const refreshTokenHandler = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { refreshToken: refreshTokenFromCookie } = req.cookies
 
   try {
-    if (!refreshToken) {
+    if (!refreshTokenFromCookie) {
       throw new Error('Refresh token is missing')
     }
 
     // Verify the refresh token
-    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET) as {
+    const decoded = jwt.verify(
+      refreshTokenFromCookie,
+      process.env.JWT_SECRET,
+    ) as {
       _id: string
     }
 
@@ -116,7 +122,7 @@ const refreshToken = async (req: Request, res: Response): Promise<void> => {
 }
 
 const getUser = async (req: Request, res: Response): Promise<void> => {
-  const token = req.cookies.token
+  const { token } = req.cookies
 
   try {
     if (!req.user) {
@@ -137,4 +143,11 @@ const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export { createToken, loginUser, signupUser, logoutUser, refreshToken, getUser }
+export {
+  createToken,
+  loginUser,
+  signupUser,
+  logoutUser,
+  refreshTokenHandler,
+  getUser,
+}

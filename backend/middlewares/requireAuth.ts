@@ -1,12 +1,12 @@
-import * as jwt from 'jsonwebtoken'
-import { Secret } from 'jsonwebtoken'
+import jwt, { Secret } from 'jsonwebtoken'
+
 import { Request, Response, NextFunction } from 'express'
 import { User } from '../models'
 import { createToken } from '../controllers/authControllers'
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.token
-  const refreshToken = req.cookies.refreshToken
+  const { token } = req.cookies
+  const { refreshToken } = req.cookies
 
   if (!token && !refreshToken) {
     return res.status(401).json({ error: 'Authorization token required' })

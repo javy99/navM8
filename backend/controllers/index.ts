@@ -40,6 +40,6 @@ export {
   loginUser,
   signupUser,
   logoutUser,
-  refreshToken,
+  refreshTokenHandler,
   getUser,
 } from './authControllers'

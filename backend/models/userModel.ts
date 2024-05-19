@@ -1,5 +1,5 @@
 import mongoose, { Model, Schema as MongooseSchema } from 'mongoose'
-import * as bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt'
 import validator from 'validator'
 import { Country, City } from 'country-state-city'
 
@@ -55,15 +55,14 @@ const userSchema: MongooseSchema = new Schema(
       required: true,
       minLength: 8,
       validate: {
-        validator: (value) => {
-          return validator.isStrongPassword(value, {
+        validator: (value) =>
+          validator.isStrongPassword(value, {
             minLength: 8,
             minLowercase: 1,
             minUppercase: 1,
             minNumbers: 1,
             minSymbols: 1,
-          })
-        },
+          }),
         message: (props) => `${props.value} is not a strong enough password!`,
       },
     },
@@ -97,12 +96,12 @@ const userSchema: MongooseSchema = new Schema(
     city: {
       type: String,
       validate: {
-        validator: function (value: string) {
-          const country = Country.getAllCountries().find(
+        validator(value: string) {
+          const countryObj = Country.getAllCountries().find(
             (country) => country.name === this.get('country'),
           )
-          if (country) {
-            return City.getCitiesOfCountry(country.isoCode).some(
+          if (countryObj) {
+            return City.getCitiesOfCountry(countryObj.isoCode).some(
               (city) => city.name === value,
             )
           }

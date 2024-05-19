@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { User, Chat, IMessage, Message } from '../models'
+import { Chat, IMessage, Message } from '../models'
 
 const sendMessage = async (req: Request, res: Response) => {
   const { content, chatId } = req.body
@@ -8,7 +8,7 @@ const sendMessage = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Invalid data passed into request' })
   }
 
-  let newMessage = {
+  const newMessage = {
     sender: req.user._id,
     content,
     chat: chatId,
@@ -40,7 +40,7 @@ const sendMessage = async (req: Request, res: Response) => {
 }
 
 const getAllMessages = async (req: Request, res: Response) => {
-  const chatId = req.params.chatId
+  const { chatId } = req.params
 
   if (!chatId) {
     return res.status(400).json({ message: 'Invalid data passed into request' })
