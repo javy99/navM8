@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: navm8-api
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://javy_admin:javlonbek12345@navm8.bfjcjvk.mongodb.net/?retryWrites=true&w=majority&appName=NavM8
+      - key: JWT_SECRET
+        value: adefb2424647e4eb22a14c42aaf414bff21cc656eac190f6f9302d629b3002f5
+      - key: CLOUDINARY_API_SECRET
+        value: 7UaYQFlfeEIlgr2yPyhXsCp5gQQ
+      - key: CLOUDINARY_API_KEY
+        value: 385596364989284
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dh8ynhiu0
+      - key: NODE_ENV
+        value: development
+      - key: PORT
+        value: 3000
+    autoDeploy: true
+    branch: master
