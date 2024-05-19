@@ -6,22 +6,15 @@ import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import { Server as SocketIOServer } from 'socket.io'
 
-// import {
-//   authRouter,
-//   userRouter,
-//   toursRouter,
-//   chatRouter,
-//   messageRouter,
-//   bookingRouter,
-//   reviewRouter,
-// } from './routes'
-import authRouter from './routes/authRoutes'
-import userRouter from './routes/userRoutes'
-import toursRouter from './routes/toursRoutes'
-import chatRouter from './routes/chatRoutes'
-import messageRouter from './routes/messageRoutes'
-import bookingRouter from './routes/bookingRoutes'
-import reviewRouter from './routes/reviewRoutes'
+import {
+  authRouter,
+  userRouter,
+  toursRouter,
+  chatRouter,
+  messageRouter,
+  bookingRouter,
+  reviewRouter,
+} from './routes'
 import { notFound, errorHandler } from './middlewares'
 
 interface CustomError extends Error {
@@ -29,7 +22,7 @@ interface CustomError extends Error {
 }
 
 dotenv.config()
-const { MONGODB_URL, PORT } = process.env
+const { MONGODB, PORT } = process.env
 
 // express app
 const app = express()
@@ -97,6 +90,8 @@ io.on('connection', (socket) => {
   })
 })
 
+console.log('Routes have been set up')
+
 // routes
 app.use('/api/bookings', bookingRouter)
 app.use('/api/messages', messageRouter)
@@ -105,8 +100,10 @@ app.use('/api/tours', toursRouter)
 app.use('/api/users', userRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/chats', chatRouter)
-app.use(notFound)
-app.use(errorHandler)
+// app.use(notFound)
+// app.use(errorHandler)
+
+console.log('Routes have been set up')
 
 // Error handling middleware
 app.use(
@@ -118,9 +115,9 @@ app.use(
 )
 
 // connect to MongoDB
-if (MONGODB_URL) {
+if (MONGODB) {
   mongoose
-    .connect(MONGODB_URL)
+    .connect(MONGODB)
     .then(() => {
       server.listen(PORT, () => {
         console.log(
