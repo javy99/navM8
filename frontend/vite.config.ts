@@ -16,6 +16,13 @@ export default defineConfig({
         secure: true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
+      '/socket.io': {
+        target: process.env.VITE_API_URL,
+        changeOrigin: true,
+        secure: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/socket.io/, '/socket.io'),
+      },
     },
   },
 })

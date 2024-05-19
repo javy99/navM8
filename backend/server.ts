@@ -51,6 +51,7 @@ const io = new SocketIOServer(server, {
     methods: ['GET', 'POST', 'PUT'],
     credentials: true,
   },
+  transports: ['websocket', 'polling'],
   allowEIO3: true,
 })
 
