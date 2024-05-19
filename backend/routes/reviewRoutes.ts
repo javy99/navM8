@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { requireAuth } from '../middlewares'
 import { createReview, getReviewsForTour } from '../controllers'
 

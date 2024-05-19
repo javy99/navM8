@@ -4,7 +4,9 @@
     "noImplicitAny": false,
     "outDir": "dist",
     "sourceMap": true,
-    "target": "esnext"
+    "target": "esnext",
+    "types": ["node", "express", "multer"],
+    "esModuleInterop": true
   },
   "include": [
     "./*.ts",
