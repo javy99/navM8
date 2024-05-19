@@ -89,7 +89,7 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     socket = io(ENDPOINT, {
       withCredentials: true,
-      transports: ['websocket', 'polling'],
+      transports: ['websocket'],
     })
     socket.emit('setup', user)
     socket.on('connected', () => setSocketConnected(true))
