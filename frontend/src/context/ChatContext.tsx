@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { Chat, ChildrenProps, User } from '../types'
 import { io } from 'socket.io-client'
+import { Chat, ChildrenProps, User } from '../types'
 import { useAuthContext } from '../hooks'
 
 let socket

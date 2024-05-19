@@ -1,6 +1,6 @@
 import { Flex, Text, Box, useTheme, Spinner } from '@chakra-ui/react'
-import { SearchBar, TourCard, PageLayout } from '../components'
 import React, { useState, useEffect } from 'react'
+import { SearchBar, TourCard, PageLayout } from '../components'
 import { useAuthContext } from '../hooks'
 import { fetchReviews, getAllTours } from '../services'
 import { Tour } from '../types'

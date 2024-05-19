@@ -69,9 +69,9 @@ const toggleFavorite = async (
 
   try {
     await axios({
-      method: method,
-      url: url,
-      ...(method === 'post' && { data: { tourId: tourId } }),
+      method,
+      url,
+      ...(method === 'post' && { data: { tourId } }),
     })
   } catch (error) {
     console.error("Couldn't update the favorite status", error)

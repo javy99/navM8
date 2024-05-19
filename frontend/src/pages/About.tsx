@@ -11,11 +11,11 @@ import {
   HStack,
   Divider,
 } from '@chakra-ui/react'
-import { PageLayout } from '../components'
-import { useAuthContext } from '../hooks'
 import { FaCheckCircle, FaUserFriends } from 'react-icons/fa'
 import { MdTravelExplore } from 'react-icons/md'
 import { FcCheckmark, FcExpired } from 'react-icons/fc'
+import { useAuthContext } from '../hooks'
+import { PageLayout } from '../components'
 import { getAllTours, getAllUsers } from '../services'
 
 const About: React.FC = () => {

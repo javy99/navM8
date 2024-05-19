@@ -8,7 +8,7 @@ export {
   renameGroupChat,
   addUserToGroup,
   removeUserFromGroup,
-} from '../services/chatService'
+} from './chatService'
 export {
   getAllUsers,
   fetchUserProfile,
@@ -16,14 +16,14 @@ export {
   checkIsFavorite,
   toggleFavorite,
   getFavoriteTours,
-} from '../services/userService'
+} from './userService'
 export {
   fetchBookingsForTour,
   fetchBookings,
   createBooking,
   approveBooking,
   cancelBooking,
-} from '../services/bookingService'
+} from './bookingService'
 export {
   fetchMyTours,
   createTour,
@@ -32,7 +32,7 @@ export {
   updateTour,
   deleteTour,
   getUserTours,
-} from '../services/tourService'
+} from './tourService'
 export {
   fetchProfilePhoto,
   updateProfilePhoto,
@@ -44,5 +44,5 @@ export {
   signupService,
   logoutService,
   getUser,
-} from '../services/authService'
-export { submitReview, fetchReviews } from '../services/reviewService'
+} from './authService'
+export { submitReview, fetchReviews } from './reviewService'

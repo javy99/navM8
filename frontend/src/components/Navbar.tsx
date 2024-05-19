@@ -10,8 +10,8 @@ import {
   useBreakpointValue,
   useTheme,
 } from '@chakra-ui/react'
-import { useProfilePhoto, useSidebarContext } from '../context'
 import { BsPersonCircle, BsList } from 'react-icons/bs'
+import { useProfilePhoto, useSidebarContext } from '../context'
 import { useAuthContext, useLogout } from '../hooks'
 import Button from './Button'
 

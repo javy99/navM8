@@ -31,6 +31,7 @@ import {
   BsHeartFill,
 } from 'react-icons/bs'
 import { format, startOfDay } from 'date-fns'
+import axios from 'axios'
 import {
   getTourById,
   fetchBookings,
@@ -42,7 +43,6 @@ import {
 import { Button, PageLayout, StarRating, ReviewForm } from '../components'
 import { useAuthContext, useFavorite } from '../hooks'
 import { Tour, Booking, Review } from '../types'
-import axios from 'axios'
 
 type ValuePiece = Date | null
 type Value = ValuePiece | [ValuePiece, ValuePiece]

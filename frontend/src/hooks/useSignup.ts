@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { useToast } from '@chakra-ui/react'
 import { useAuthContext } from '.'
 import { signupService } from '../services'
-import { useToast } from '@chakra-ui/react'
 
 const useSignup = () => {
   const [error, setError] = useState<string | null>(null)

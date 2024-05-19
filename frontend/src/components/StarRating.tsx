@@ -16,7 +16,7 @@ const StarRating: React.FC<Props> = ({
   const numericRating = typeof rating === 'string' ? parseFloat(rating) : rating
 
   const renderStars = () => {
-    let stars: JSX.Element[] = []
+    const stars: JSX.Element[] = []
     for (let i = 1; i <= 5; i++) {
       if (i <= numericRating) {
         stars.push(

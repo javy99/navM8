@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { User } from '../types'
 import axios from 'axios'
 import { getCode } from 'country-list'
-import useAuthContext from './useAuthContext'
 import { useToast } from '@chakra-ui/react'
+import useAuthContext from './useAuthContext'
+import { User } from '../types'
 import { fetchUserProfile, updateUserProfile } from '../services'
 
 const useProfile = () => {

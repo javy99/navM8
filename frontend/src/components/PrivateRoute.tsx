@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useAuthContext } from '../hooks'
 import { Navigate, useLocation } from 'react-router-dom'
 import { Box, Spinner, useTheme } from '@chakra-ui/react'
+import { useAuthContext } from '../hooks'
 
 interface Props {
   component: React.FC

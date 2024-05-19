@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useAuthContext } from '../hooks'
 import {
   Badge,
   Box,
@@ -21,11 +20,12 @@ import {
   Avatar,
   Icon,
 } from '@chakra-ui/react'
+import { BsSearch, BsPeopleFill, BsPlus } from 'react-icons/bs'
+import { useAuthContext } from '../hooks'
 import ChatLoading from './ChatLoading'
 import { Chat, User } from '../types'
 import GroupChatModal from './GroupChatModal'
 import { getSender } from '../configs/ChatLogics'
-import { BsSearch, BsPeopleFill, BsPlus } from 'react-icons/bs'
 import UserListItem from './UserListItem'
 import Button from './Button'
 import FormField from './FormField'
@@ -160,9 +160,8 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
     fetchAllChats()
   }, [fetchAgain])
 
-  const hasNotification = (chatId) => {
-    return notification.some((n) => n.chat._id === chatId)
-  }
+  const hasNotification = (chatId) =>
+    notification.some((n) => n.chat._id === chatId)
 
   return (
     <Box

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useAuthContext } from '.'
 import { useDisclosure, useToast } from '@chakra-ui/react'
+import { useAuthContext } from '.'
 import { Tour } from '../types'
 import {
   fetchMyTours,
@@ -155,16 +155,14 @@ const useMyTours = () => {
           duration: 5000,
           isClosable: true,
         })
-      } else {
-        if (error instanceof Error) {
-          toast({
-            title: 'Error creating tour.',
-            description: error.message,
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-          })
-        }
+      } else if (error instanceof Error) {
+        toast({
+          title: 'Error creating tour.',
+          description: error.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
       }
     }
   }

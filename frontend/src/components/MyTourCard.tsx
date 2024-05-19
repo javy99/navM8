@@ -24,10 +24,10 @@ import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Booking } from '../types'
 import { useAuthContext } from '../hooks'
 import Button from './Button'
-import { useNavigate } from 'react-router-dom'
 import { cancelBooking, fetchBookingsForTour } from '../services'
 
 type ResponsiveWidth = {
@@ -77,9 +77,9 @@ const MyTourCard: React.FC<Props> = ({
       if (tour._id) {
         try {
           const bookingsData = await fetchBookingsForTour(tour._id)
-          const sortedBookings = bookingsData.sort((a, b) => {
-            return new Date(b.date).getTime() - new Date(a.date).getTime()
-          })
+          const sortedBookings = bookingsData.sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+          )
 
           setBookings(sortedBookings)
         } catch (error) {
@@ -100,11 +100,11 @@ const MyTourCard: React.FC<Props> = ({
       await cancelBooking(bookingId)
 
       setBookings((prevBookings) =>
-        prevBookings.map((booking) => {
-          return booking._id === bookingId
+        prevBookings.map((booking) =>
+          booking._id === bookingId
             ? { ...booking, status: 'CANCELLED' }
-            : booking
-        }),
+            : booking,
+        ),
       )
 
       toast({

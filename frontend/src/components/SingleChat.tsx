@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useAuthContext } from '../hooks'
 import {
   Box,
   IconButton,
@@ -12,21 +11,23 @@ import {
   Heading,
   Tooltip,
 } from '@chakra-ui/react'
-import animationData from '../animations/typing.json'
-import ScrollableChat from './ScrollableChat'
 import { io } from 'socket.io-client'
 import Lottie from 'react-lottie'
 import { BsArrowLeft } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
+import { useAuthContext } from '../hooks'
+import animationData from '../animations/typing.json'
+import ScrollableChat from './ScrollableChat'
 import { getSender, getSenderFull } from '../configs/ChatLogics'
 import { fetchMessages, sendMessage } from '../services'
 import UpdateGroupChatModal from './UpdateGroupChatModal'
 import ProfileModal from './ProfileModal'
 import { Message } from '../types'
 import { useChatState } from '../context'
-import { Link } from 'react-router-dom'
 
 const ENDPOINT = import.meta.env.VITE_API_URL
-let socket, selectedChatCompare
+let socket
+let selectedChatCompare
 
 interface Props {
   fetchAgain: boolean
@@ -53,7 +54,7 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: animationData,
+    animationData,
     rendererSettings: {
       preserveAspectRatio: 'xMidYMid slice',
     },
@@ -124,7 +125,9 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
         selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
         // Give notification
-        let exists = notification.find((n) => n._id === newMessageReceived._id)
+        const exists = notification.find(
+          (n) => n._id === newMessageReceived._id,
+        )
         if (!exists) {
           setNotification([newMessageReceived, ...notification])
         }
@@ -173,11 +176,11 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
       socket.emit('typing', { chatId: selectedChat._id })
     }
 
-    let lastTypingTime = new Date().getTime()
-    let timerLength = 3000
+    const lastTypingTime = new Date().getTime()
+    const timerLength = 3000
     setTimeout(() => {
-      let timeNow = new Date().getTime()
-      let timeDiff = timeNow - lastTypingTime
+      const timeNow = new Date().getTime()
+      const timeDiff = timeNow - lastTypingTime
       if (timeDiff >= timerLength && typing) {
         socket.emit('stop typing', { chatId: selectedChat._id })
         setTyping(false)

@@ -14,8 +14,8 @@ import {
   IconButton,
   Spinner,
 } from '@chakra-ui/react'
-import UserBadgeItem from './UserBadgeItem'
 import { BsEyeFill } from 'react-icons/bs'
+import UserBadgeItem from './UserBadgeItem'
 import {
   searchUsers,
   renameGroupChat,

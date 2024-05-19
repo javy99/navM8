@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { PageLayout, TourCard } from '../components'
-import { useAuthContext } from '../hooks'
 import {
   Avatar,
   Badge,
@@ -17,7 +15,6 @@ import {
   VStack,
   useTheme,
 } from '@chakra-ui/react'
-import { getAllUsers, getUserTours } from '../services'
 import {
   BsCalendar2Minus,
   BsTranslate,
@@ -31,6 +28,9 @@ import {
   BsCake2,
   BsFillGeoAltFill,
 } from 'react-icons/bs'
+import { PageLayout, TourCard } from '../components'
+import { useAuthContext } from '../hooks'
+import { getAllUsers, getUserTours } from '../services'
 import { Tour, User } from '../types'
 import bgImage from '../assets/user_page-bg.avif'
 
