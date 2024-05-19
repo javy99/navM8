@@ -48,11 +48,12 @@ const io = new SocketIOServer(server, {
   pingTimeout: 60000,
   cors: {
     origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
     exposedHeaders: ['Authorization'],
   },
+  transports: ['websocket', 'polling'],
 })
 
 // socket.io connection event
