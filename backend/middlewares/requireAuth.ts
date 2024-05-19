@@ -5,8 +5,7 @@ import { User } from '../models'
 import { createToken } from '../controllers/authControllers'
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const { token } = req.cookies
-  const { refreshToken } = req.cookies
+  const { token, refreshToken } = req.cookies
 
   if (!token && !refreshToken) {
     return res.status(401).json({ error: 'Authorization token required' })
@@ -35,6 +34,7 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
           httpOnly: true,
           secure: true,
           maxAge: 3 * 24 * 60 * 60 * 1000,
+          sameSite: 'none',
         })
 
         // Decode the new access token

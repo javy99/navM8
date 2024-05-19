@@ -34,8 +34,6 @@ app.use(
     origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
-    exposedHeaders: ['*'],
   }),
 )
 app.use(express.json({ limit: '50mb' }))
@@ -48,6 +46,8 @@ const io = new SocketIOServer(server, {
   pingTimeout: 60000,
   cors: {
     origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true,
   },
 })
 
