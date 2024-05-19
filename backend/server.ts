@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import http from 'http'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
+import csrf from 'csurf'
 import { Server as SocketIOServer } from 'socket.io'
 
 import {
@@ -27,6 +28,9 @@ const { MONGODB_URL, PORT } = process.env
 // express app
 const app = express()
 
+// CSRF protection middleware
+const csrfProtection = csrf({ cookie: true })
+
 // middleware
 app.use(cookieParser())
 app.use(
@@ -39,6 +43,12 @@ app.use(
   }),
 )
 app.use(express.json({ limit: '50mb' }))
+app.use(csrfProtection)
+
+// CSRF token endpoint
+app.get('/api/csrf-token', (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 // Initialize HTTP server from Express app
 const server = http.createServer(app)
