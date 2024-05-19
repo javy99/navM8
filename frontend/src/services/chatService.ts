@@ -3,6 +3,7 @@ import axios from 'axios'
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
 axios.defaults.withCredentials = true
+axios.defaults.headers.common['Content-Type'] = 'application/json'
 
 const searchUsers = async (query) =>
   axios.get(`${BASE_API_URL}/api/users?search=${query}`)

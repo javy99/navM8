@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Box,
   IconButton,
@@ -51,6 +51,8 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [typing, setTyping] = useState<boolean>(false)
 
+  const typingTimeoutRef = useRef<any>()
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -93,7 +95,7 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
       socket.off('connected')
       socket.disconnect()
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
     fetchMessagesHandler()
@@ -176,16 +178,14 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
       socket.emit('typing', { chatId: selectedChat._id })
     }
 
-    const lastTypingTime = new Date().getTime()
-    const timerLength = 3000
-    setTimeout(() => {
-      const timeNow = new Date().getTime()
-      const timeDiff = timeNow - lastTypingTime
-      if (timeDiff >= timerLength && typing) {
-        socket.emit('stop typing', { chatId: selectedChat._id })
-        setTyping(false)
-      }
-    }, timerLength)
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit('stop typing', { chatId: selectedChat._id })
+      setTyping(false)
+    }, 3000)
   }
 
   return (
