@@ -29,6 +29,16 @@ const app = express()
 
 // middleware
 app.use(cookieParser())
+app.options(
+  '*',
+  cors({
+    origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
+    exposedHeaders: ['*'],
+  }),
+)
 app.use(
   cors({
     origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
