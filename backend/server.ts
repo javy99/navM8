@@ -50,6 +50,8 @@ const io = new SocketIOServer(server, {
     origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
+    exposedHeaders: ['Authorization'],
   },
 })
 
