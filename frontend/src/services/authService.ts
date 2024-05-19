@@ -3,48 +3,35 @@ import Cookies from 'js-cookie'
 
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
-const loginService = async (email: string, password: string): Promise<any> => {
+// Function to refresh token
+const refreshToken = async () => {
+  const refreshToken = Cookies.get('refreshToken')
+  if (!refreshToken) throw new Error('Refresh token is missing')
+
+  const response = await axios.post(
+    `${BASE_API_URL}/api/auth/refresh_token`,
+    {},
+    { withCredentials: true },
+  )
+
+  Cookies.set('token', response.data.token)
+  return response.data.token
+}
+
+const loginService = async (email, password) => {
   try {
     const response = await axios.post(
       `${BASE_API_URL}/api/auth/login`,
-      {
-        email,
-        password,
-      },
-      {
-        withCredentials: true,
-      },
+      { email, password },
+      { withCredentials: true },
     )
 
-    // Update token in cookies
     Cookies.set('token', response.data.token)
+    Cookies.set('refreshToken', response.data.refreshToken)
 
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      if (error.response?.status === 401) {
-        const refreshToken = Cookies.get('refreshToken')
-        if (refreshToken) {
-          try {
-            const refreshResponse = await axios.post(
-              `${BASE_API_URL}/api/auth/refresh_token`,
-              {},
-              {
-                withCredentials: true,
-              },
-            )
-            // Update access token in cookies
-            Cookies.set('token', refreshResponse.data.token, {})
-            return await loginService(email, password)
-          } catch (refreshError: any) {
-            throw new Error(
-              refreshError.response?.data.error || 'Failed to refresh token',
-            )
-          }
-        } else {
-          throw new Error('Refresh token is missing')
-        }
-      }
       throw new Error(
         error.response?.data.error || 'An error occurred during login',
       )
@@ -53,23 +40,17 @@ const loginService = async (email: string, password: string): Promise<any> => {
   }
 }
 
-const signupService = async (
-  email: string,
-  password: string,
-  username: string,
-): Promise<any> => {
+const signupService = async (email, password, username) => {
   try {
     const response = await axios.post(
       `${BASE_API_URL}/api/auth/signup`,
-      {
-        email,
-        password,
-        username,
-      },
-      {
-        withCredentials: true,
-      },
+      { email, password, username },
+      { withCredentials: true },
     )
+
+    Cookies.set('token', response.data.token)
+    Cookies.set('refreshToken', response.data.refreshToken)
+
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -81,15 +62,16 @@ const signupService = async (
   }
 }
 
-const logoutService = async (): Promise<void> => {
+const logoutService = async () => {
   try {
     await axios.post(
       `${BASE_API_URL}/api/auth/logout`,
       {},
-      {
-        withCredentials: true,
-      },
+      { withCredentials: true },
     )
+
+    Cookies.remove('token')
+    Cookies.remove('refreshToken')
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -100,14 +82,32 @@ const logoutService = async (): Promise<void> => {
   }
 }
 
-const getUser = async (): Promise<any> => {
+const getUser = async () => {
   try {
     const response = await axios.get(`${BASE_API_URL}/api/auth/user`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
       withCredentials: true,
     })
+
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        try {
+          const newToken = await refreshToken()
+          const response = await axios.get(`${BASE_API_URL}/api/auth/user`, {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+            withCredentials: true,
+          })
+          return response.data
+        } catch (refreshError) {
+          throw new Error('Session expired. Please login again.')
+        }
+      }
       throw new Error(
         error.response?.data.error || 'An error occurred fetching user',
       )
