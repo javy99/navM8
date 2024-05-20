@@ -177,6 +177,13 @@ const About: React.FC = () => {
             <HStack align="start">
               <Icon as={FcCheckmark} w={6} h={6} />
               <Text>
+                <b>Profile Customization:</b> Update your profile with personal
+                information to enhance interactions.
+              </Text>
+            </HStack>
+            <HStack align="start">
+              <Icon as={FcCheckmark} w={6} h={6} />
+              <Text>
                 <b>Create and Manage Tours:</b> Design your own tours, set
                 schedules, and manage bookings with ease.
               </Text>
@@ -192,13 +199,6 @@ const About: React.FC = () => {
             <HStack align="start">
               <Icon as={FcCheckmark} w={6} h={6} />
               <Text>
-                <b>Exclusive Deals:</b> Gain access to special discounts and
-                offers available only to registered users.
-              </Text>
-            </HStack>
-            <HStack align="start">
-              <Icon as={FcCheckmark} w={6} h={6} />
-              <Text>
                 <b>Advanced Messaging:</b> Enjoy direct communication with
                 guides, allowing for detailed customization of your travel
                 plans.
@@ -207,15 +207,15 @@ const About: React.FC = () => {
             <HStack align="start">
               <Icon as={FcCheckmark} w={6} h={6} />
               <Text>
-                <b>Personalized Recommendations:</b> Receive tour suggestions
-                tailored to your preferences and travel history.
+                <b>Access to Bookings:</b> View and manage all current and past
+                bookings efficiently.
               </Text>
             </HStack>
             <HStack align="start">
               <Icon as={FcCheckmark} w={6} h={6} />
               <Text>
-                <b>Priority Support:</b> Benefit from faster response times and
-                dedicated support to assist with any inquiries or issues.
+                <b>Favorite Tours:</b> Save appealing tours to your Favorites
+                for quick access in the future.
               </Text>
             </HStack>
           </SimpleGrid>
