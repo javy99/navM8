@@ -85,92 +85,93 @@ const Signup: React.FC = () => {
             align="center"
             justify="center"
           >
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                width: '85%',
-                maxWidth: 'md',
-                padding: '32px',
-                borderRadius: 'lg',
-              }}
+            <Box
+              width="100%"
+              maxWidth="md"
+              borderRadius="lg"
+              position="absolute"
+              top="50%"
+              transform="translateY(-50%)"
             >
-              <VStack
-                spacing={4}
-                width="full"
-                px={{ base: 4, md: 8 }}
-                boxShadow="xl"
-                py={8}
-              >
-                <Heading size="lg" color={primaryColor}>
-                  Sign Up
-                </Heading>
-                <Text color={primaryColor}>Create your account</Text>
-                <Input
-                  name="username"
-                  color={primaryColor}
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  type="text"
-                  focusBorderColor={primaryColor}
-                  sx={{ '::placeholder': { color: primaryColor } }}
-                  autoComplete="username"
-                />
-                <Input
-                  name="email"
-                  color={primaryColor}
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="email"
-                  focusBorderColor={primaryColor}
-                  sx={{
-                    '::placeholder': {
-                      color: primaryColor,
-                    },
-                  }}
-                  autoComplete="email"
-                />
-                <InputGroup>
+              <form onSubmit={handleSubmit}>
+                <VStack
+                  spacing={4}
+                  width="full"
+                  px={{ base: 4, md: 8 }}
+                  boxShadow="xl"
+                  py={8}
+                >
+                  <Heading size="lg" color={primaryColor}>
+                    Sign Up
+                  </Heading>
+                  <Text color={primaryColor}>Create your account</Text>
                   <Input
-                    name="password"
+                    name="username"
                     color={primaryColor}
-                    placeholder="Password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    type="text"
+                    focusBorderColor={primaryColor}
+                    sx={{ '::placeholder': { color: primaryColor } }}
+                    autoComplete="username"
+                  />
+                  <Input
+                    name="email"
+                    color={primaryColor}
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
                     focusBorderColor={primaryColor}
                     sx={{
                       '::placeholder': {
                         color: primaryColor,
                       },
                     }}
-                    autoComplete="current-password"
+                    autoComplete="email"
                   />
-                  <InputRightElement width="4.5rem">
-                    <ChakraButton
-                      h="1.75rem"
-                      size="sm"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <ViewOffIcon color={primaryColor} />
-                      ) : (
-                        <ViewIcon color={primaryColor} />
-                      )}
-                    </ChakraButton>
-                  </InputRightElement>
-                </InputGroup>
-                <Button disabled={isLoading} type="submit" width="full">
-                  Sign Up
-                </Button>
-                {error && (
-                  <Text color="red.500" textAlign="center">
-                    {error}
-                  </Text>
-                )}
-              </VStack>
-            </form>
+                  <InputGroup>
+                    <Input
+                      name="password"
+                      color={primaryColor}
+                      placeholder="Password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      focusBorderColor={primaryColor}
+                      sx={{
+                        '::placeholder': {
+                          color: primaryColor,
+                        },
+                      }}
+                      autoComplete="current-password"
+                    />
+                    <InputRightElement width="4.5rem">
+                      <ChakraButton
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <ViewOffIcon color={primaryColor} />
+                        ) : (
+                          <ViewIcon color={primaryColor} />
+                        )}
+                      </ChakraButton>
+                    </InputRightElement>
+                  </InputGroup>
+                  <Button disabled={isLoading} type="submit" width="full">
+                    Sign Up
+                  </Button>
+                  {error && (
+                    <Text color="red.500" textAlign="center">
+                      {error}
+                    </Text>
+                  )}
+                </VStack>
+              </form>
+            </Box>
           </Flex>
         </Flex>
       </Box>

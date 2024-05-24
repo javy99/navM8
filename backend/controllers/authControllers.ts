@@ -11,6 +11,13 @@ const createToken = (_id: string, expiresIn: string): string => {
   })
 }
 
+const getCookieDomain = (): string | undefined => {
+  if (process.env.NODE_ENV === 'production') {
+    return '.herokuapp.com'
+  }
+  return undefined
+}
+
 // login user
 const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body
@@ -26,12 +33,14 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      domain: '.herokuapp.com',
       maxAge: 3 * 24 * 60 * 60 * 1000,
     })
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      domain: '.herokuapp.com',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
@@ -60,12 +69,14 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      domain: '.herokuapp.com',
       maxAge: 3 * 24 * 60 * 60 * 1000,
     })
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      domain: '.herokuapp.com',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
@@ -112,6 +123,8 @@ const refreshTokenHandler = async (
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
+      sameSite: 'none',
+      domain: '.herokuapp.com',
       maxAge: 3 * 24 * 60 * 60 * 1000,
     })
 

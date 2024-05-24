@@ -29,11 +29,7 @@ const app = express()
 
 // CORS configuration
 const corsOptions = {
-  origin: [
-    'http://localhost:3001',
-    'https://navm8.vercel.app',
-    'https://navm8.netlify.app',
-  ],
+  origin: ['http://localhost:3001', 'https://navm8.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],

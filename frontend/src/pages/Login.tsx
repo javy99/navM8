@@ -52,7 +52,11 @@ const Login: React.FC = () => {
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
       <Box position="relative" width="full">
-        <Flex direction={{ base: 'column', md: 'row' }} minHeight="100vh">
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          minHeight="100vh"
+          position="relative"
+        >
           <Box
             width={{ md: '50%' }}
             display={{ base: 'none', md: 'block' }}
@@ -84,82 +88,86 @@ const Login: React.FC = () => {
             align="center"
             justify="center"
           >
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                width: '85%',
-                maxWidth: 'md',
-                padding: '32px',
-                borderRadius: 'lg',
-              }}
+            <Box
+              width="100%"
+              maxWidth="md"
+              padding="32px"
+              borderRadius="lg"
+              position="absolute"
+              top="50%"
+              transform="translateY(-50%)"
             >
-              <VStack
-                spacing={4}
-                width="full"
-                px={{ base: 4, md: 8 }}
-                boxShadow="xl"
-                py={8}
-              >
-                <Heading size="lg" color={primaryColor}>
-                  Login
-                </Heading>
-                <Text color={primaryColor}>Welcome back!</Text>
-                <Input
-                  name="email"
-                  color={primaryColor}
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="email"
-                  focusBorderColor={primaryColor}
-                  sx={{
-                    '::placeholder': {
-                      color: primaryColor,
-                    },
-                  }}
-                  autoComplete="email"
-                />
-                <InputGroup>
+              <form onSubmit={handleSubmit}>
+                <VStack
+                  spacing={4}
+                  width="full"
+                  px={{ base: 4, md: 8 }}
+                  boxShadow="xl"
+                  py={8}
+                >
+                  <Heading size="lg" color={primaryColor}>
+                    Login
+                  </Heading>
+                  <Text color={primaryColor}>Welcome back!</Text>
                   <Input
-                    name="password"
+                    name="email"
                     color={primaryColor}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
                     focusBorderColor={primaryColor}
                     sx={{
                       '::placeholder': {
                         color: primaryColor,
                       },
                     }}
-                    autoComplete="current-password"
+                    autoComplete="email"
                   />
-                  <InputRightElement width="4.5rem">
-                    <ChakraButton
-                      h="1.75rem"
-                      size="sm"
-                      onClick={() => setShowPassword((prevState) => !prevState)}
-                    >
-                      {showPassword ? (
-                        <ViewOffIcon color={primaryColor} />
-                      ) : (
-                        <ViewIcon color={primaryColor} />
-                      )}
-                    </ChakraButton>
-                  </InputRightElement>
-                </InputGroup>
+                  <InputGroup>
+                    <Input
+                      name="password"
+                      color={primaryColor}
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      type={showPassword ? 'text' : 'password'}
+                      focusBorderColor={primaryColor}
+                      sx={{
+                        '::placeholder': {
+                          color: primaryColor,
+                        },
+                      }}
+                      autoComplete="current-password"
+                    />
+                    <InputRightElement width="4.5rem">
+                      <ChakraButton
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() =>
+                          setShowPassword((prevState) => !prevState)
+                        }
+                      >
+                        {showPassword ? (
+                          <ViewOffIcon color={primaryColor} />
+                        ) : (
+                          <ViewIcon color={primaryColor} />
+                        )}
+                      </ChakraButton>
+                    </InputRightElement>
+                  </InputGroup>
 
-                <Button disabled={isLoading} type="submit" width="full">
-                  Login
-                </Button>
-                {error && (
-                  <Text color="red.500" textAlign="center">
-                    {error}
-                  </Text>
-                )}
-              </VStack>
-            </form>
+                  <Button disabled={isLoading} type="submit" width="full">
+                    Login
+                  </Button>
+                  {error && (
+                    <Text color="red.500" textAlign="center">
+                      {error}
+                    </Text>
+                  )}
+                </VStack>
+              </form>
+            </Box>
           </Flex>
         </Flex>
       </Box>

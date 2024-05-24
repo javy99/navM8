@@ -129,7 +129,7 @@ const MyBookings: React.FC = () => {
               bg={whiteColor}
               borderRadius="20px"
               overflow="hidden"
-              mx={12}
+              mx={{ base: 0, md: 12 }}
               border={`4px solid ${primaryColor}`}
             >
               <Flex justifyContent="space-between" direction={flexDirection}>
