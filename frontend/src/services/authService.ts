@@ -4,11 +4,16 @@ import Cookies from 'js-cookie'
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
 const setCookieSettings = (expireDate) => {
+  const domain = window.location.hostname.includes('localhost')
+    ? ''
+    : '.herokuapp.com'
+
   return {
     secure: true,
-    sameSite: 'none',
+    sameSite: 'lax',
     expires: expireDate,
     path: '/',
+    domain: domain,
   }
 }
 
@@ -102,9 +107,6 @@ const logoutService = async () => {
 const getUser = async () => {
   try {
     const response = await axios.get(`${BASE_API_URL}/api/auth/user`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
       withCredentials: true,
     })
 
