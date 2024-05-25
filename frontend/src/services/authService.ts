@@ -4,16 +4,11 @@ import Cookies from 'js-cookie'
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
 const setCookieSettings = (expireDate) => {
-  const domain = window.location.hostname.includes('localhost')
-    ? ''
-    : '.herokuapp.com'
-
   return {
     secure: true,
     sameSite: 'none',
     expires: expireDate,
     path: '/',
-    domain: domain,
   }
 }
 
