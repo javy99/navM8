@@ -3,6 +3,20 @@ import Cookies from 'js-cookie'
 
 const BASE_API_URL = import.meta.env.VITE_API_URL
 
+const setCookieSettings = (expireDate) => {
+  const domain = window.location.hostname.includes('localhost')
+    ? ''
+    : '.herokuapp.com'
+
+  return {
+    secure: true,
+    sameSite: 'lax',
+    expires: expireDate,
+    path: '/',
+    domain: domain,
+  }
+}
+
 // Function to refresh token
 const refreshToken = async () => {
   const refreshToken = Cookies.get('refreshToken')
@@ -14,10 +28,7 @@ const refreshToken = async () => {
     { withCredentials: true },
   )
 
-  Cookies.set('token', response.data.token, {
-    secure: true,
-    sameSite: 'none',
-  })
+  Cookies.set('token', response.data.token, setCookieSettings(3))
   return response.data.token
 }
 
@@ -29,14 +40,12 @@ const loginService = async (email, password) => {
       { withCredentials: true },
     )
 
-    Cookies.set('token', response.data.token, {
-      secure: true,
-      sameSite: 'none',
-    })
-    Cookies.set('refreshToken', response.data.refreshToken, {
-      secure: true,
-      sameSite: 'none',
-    })
+    Cookies.set('token', response.data.token, setCookieSettings(3))
+    Cookies.set(
+      'refreshToken',
+      response.data.refreshToken,
+      setCookieSettings(7),
+    )
 
     return response.data
   } catch (error) {
@@ -57,14 +66,12 @@ const signupService = async (email, password, username) => {
       { withCredentials: true },
     )
 
-    Cookies.set('token', response.data.token, {
-      secure: true,
-      sameSite: 'none',
-    })
-    Cookies.set('refreshToken', response.data.refreshToken, {
-      secure: true,
-      sameSite: 'none',
-    })
+    Cookies.set('token', response.data.token, setCookieSettings(3))
+    Cookies.set(
+      'refreshToken',
+      response.data.refreshToken,
+      setCookieSettings(7),
+    )
 
     return response.data
   } catch (error) {
