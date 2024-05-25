@@ -10,7 +10,7 @@ const setCookieSettings = (expireDate) => {
 
   return {
     secure: true,
-    sameSite: 'lax',
+    sameSite: 'none',
     expires: expireDate,
     path: '/',
     domain: domain,
@@ -19,7 +19,7 @@ const setCookieSettings = (expireDate) => {
 
 // Function to refresh token
 const refreshToken = async () => {
-  const refreshToken = Cookies.get('refreshToken')
+  const refreshToken = Cookies.get('x-refresh-token')
   if (!refreshToken) throw new Error('Refresh token is missing')
 
   const response = await axios.post(
@@ -28,7 +28,7 @@ const refreshToken = async () => {
     { withCredentials: true },
   )
 
-  Cookies.set('token', response.data.token, setCookieSettings(3))
+  Cookies.set('x-auth-token', response.data.token, setCookieSettings(3))
   return response.data.token
 }
 
@@ -40,9 +40,9 @@ const loginService = async (email, password) => {
       { withCredentials: true },
     )
 
-    Cookies.set('token', response.data.token, setCookieSettings(3))
+    Cookies.set('x-auth-token', response.data.token, setCookieSettings(3))
     Cookies.set(
-      'refreshToken',
+      'x-refresh-token',
       response.data.refreshToken,
       setCookieSettings(7),
     )
@@ -66,9 +66,9 @@ const signupService = async (email, password, username) => {
       { withCredentials: true },
     )
 
-    Cookies.set('token', response.data.token, setCookieSettings(3))
+    Cookies.set('x-auth-token', response.data.token, setCookieSettings(3))
     Cookies.set(
-      'refreshToken',
+      'x-refresh-token',
       response.data.refreshToken,
       setCookieSettings(7),
     )
@@ -92,8 +92,8 @@ const logoutService = async () => {
       { withCredentials: true },
     )
 
-    Cookies.remove('token')
-    Cookies.remove('refreshToken')
+    Cookies.remove('x-auth-token')
+    Cookies.remove('x-refresh-token')
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
@@ -108,7 +108,7 @@ const getUser = async () => {
   try {
     const response = await axios.get(`${BASE_API_URL}/api/auth/user`, {
       headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
+        Authorization: `Bearer ${Cookies.get('x-auth-token')}`,
       },
       withCredentials: true,
     })
