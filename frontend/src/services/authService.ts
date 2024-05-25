@@ -1,25 +1,8 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
-
 const BASE_API_URL = import.meta.env.VITE_API_URL
-
-const setCookieSettings = (expireDate) => {
-  const domain = window.location.hostname.includes('localhost')
-    ? ''
-    : '.herokuapp.com'
-
-  return {
-    secure: true,
-    sameSite: 'lax',
-    expires: expireDate,
-    path: '/',
-    domain: domain,
-  }
-}
 
 // Function to refresh token
 const refreshToken = async () => {
-  const refreshToken = Cookies.get('refreshToken')
   if (!refreshToken) throw new Error('Refresh token is missing')
 
   const response = await axios.post(
@@ -28,7 +11,6 @@ const refreshToken = async () => {
     { withCredentials: true },
   )
 
-  Cookies.set('token', response.data.token, setCookieSettings(3))
   return response.data.token
 }
 
@@ -38,13 +20,6 @@ const loginService = async (email, password) => {
       `${BASE_API_URL}/api/auth/login`,
       { email, password },
       { withCredentials: true },
-    )
-
-    Cookies.set('token', response.data.token, setCookieSettings(3))
-    Cookies.set(
-      'refreshToken',
-      response.data.refreshToken,
-      setCookieSettings(7),
     )
 
     return response.data
@@ -66,13 +41,6 @@ const signupService = async (email, password, username) => {
       { withCredentials: true },
     )
 
-    Cookies.set('token', response.data.token, setCookieSettings(3))
-    Cookies.set(
-      'refreshToken',
-      response.data.refreshToken,
-      setCookieSettings(7),
-    )
-
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -91,9 +59,6 @@ const logoutService = async () => {
       {},
       { withCredentials: true },
     )
-
-    Cookies.remove('token')
-    Cookies.remove('refreshToken')
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(

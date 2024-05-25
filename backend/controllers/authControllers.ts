@@ -2,6 +2,30 @@ import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { User } from '../models'
 
+interface CookieSettings {
+  httpOnly: boolean
+  secure: boolean
+  sameSite: 'none' | 'lax' | 'strict'
+  domain?: string
+  maxAge: number
+}
+
+const generateCookieSettings = (maxAge: number): CookieSettings => {
+  return {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge,
+  }
+}
+
+const generateCookieSettingsForToken = generateCookieSettings(
+  3 * 24 * 60 * 60 * 1000,
+)
+const generateCookieSettingsForRefreshToken = generateCookieSettings(
+  7 * 24 * 60 * 60 * 1000,
+)
+
 const createToken = (_id: string, expiresIn: string): string => {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined in the environment variables')
@@ -22,22 +46,12 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const token = createToken(user._id.toString(), '3d')
     const refreshToken = createToken(user._id.toString(), '7d')
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      domain:
-        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
-      maxAge: 3 * 24 * 60 * 60 * 1000,
-    })
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      domain:
-        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    })
+    res.cookie('token', token, generateCookieSettingsForToken)
+    res.cookie(
+      'refreshToken',
+      refreshToken,
+      generateCookieSettingsForRefreshToken,
+    )
 
     res.status(200).json({ email, token, refreshToken, _id: user._id })
   } catch (error: unknown) {
@@ -60,22 +74,12 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
     const token = createToken(user._id.toString(), '3d')
     const refreshToken = createToken(user._id.toString(), '7d')
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      domain:
-        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
-      maxAge: 3 * 24 * 60 * 60 * 1000,
-    })
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      domain:
-        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    })
+    res.cookie('token', token, generateCookieSettingsForToken)
+    res.cookie(
+      'refreshToken',
+      refreshToken,
+      generateCookieSettingsForRefreshToken,
+    )
 
     res.status(200).json({ email, token, refreshToken, _id: user._id })
   } catch (error: unknown) {
@@ -117,14 +121,7 @@ const refreshTokenHandler = async (
     const token = createToken(decoded._id.toString(), '3d')
 
     // Send the new access token in the response
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      domain:
-        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
-      maxAge: 3 * 24 * 60 * 60 * 1000,
-    })
+    res.cookie('token', token, generateCookieSettingsForToken)
 
     res.status(200).json({ token })
   } catch (error: unknown) {
