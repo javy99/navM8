@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv'
 import { v2 as cloudinary } from 'cloudinary'
 import { Request, Response } from 'express'
 import { IUser, Tour } from '../models'
+import { Readable } from 'stream'
 
 dotenv.config()
 
@@ -28,16 +29,21 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-async function uploadTourImageToCloudinary(filePath: string): Promise<string> {
-  try {
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: 'tourPhotos',
-    })
-    return result.secure_url
-  } catch (error) {
-    console.error('Cloudinary Upload Error:', error)
-    throw new Error(`Failed to upload image: ${error.message}`)
-  }
+const streamUpload = (buffer: Buffer): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'tourPhotos' },
+      (error, result) => {
+        if (error) return reject(error)
+        resolve(result.secure_url)
+      },
+    )
+
+    const readableStream = new Readable()
+    readableStream.push(buffer)
+    readableStream.push(null)
+    readableStream.pipe(uploadStream)
+  })
 }
 
 const getAllTours = async (req: Request, res: Response) => {
@@ -67,7 +73,7 @@ const createTour = async (req: MulterRequest, res: Response) => {
 
     const files = req.files ?? []
     const imageUrls = await Promise.all(
-      files.map((file) => uploadTourImageToCloudinary(file.path)),
+      files.map((file) => streamUpload(file.buffer)),
     )
 
     const tour = new Tour({

@@ -5,6 +5,7 @@ import { v2 as cloudinary } from 'cloudinary'
 import { Country, City } from 'country-state-city'
 import { Request, Response } from 'express'
 import { User } from '../models'
+import { Readable } from 'stream'
 
 dotenv.config()
 
@@ -13,6 +14,23 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
+
+const uploadToCloudinary = (buffer: Buffer): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'userProfilePhotos', secure: true, resource_type: 'image' },
+      (error, result) => {
+        if (error) return reject(error)
+        resolve(result)
+      },
+    )
+
+    const readableStream = new Readable()
+    readableStream.push(buffer)
+    readableStream.push(null)
+    readableStream.pipe(uploadStream)
+  })
+}
 
 const updateProfile = async (req: Request, res: Response): Promise<void> => {
   const {
@@ -127,11 +145,7 @@ const uploadProfilePhoto = async (req, res) => {
   }
 
   try {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'userProfilePhotos',
-      secure: true,
-      resource_type: 'image',
-    })
+    const result = await uploadToCloudinary(req.file.buffer)
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,

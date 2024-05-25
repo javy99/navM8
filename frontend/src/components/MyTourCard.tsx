@@ -26,7 +26,6 @@ import 'swiper/css/pagination'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Booking } from '../types'
-import { useAuthContext } from '../hooks'
 import Button from './Button'
 import { cancelBooking, fetchBookingsForTour } from '../services'
 
@@ -54,9 +53,6 @@ const MyTourCard: React.FC<Props> = ({
   onEdit,
   onDelete,
 }) => {
-  const { state } = useAuthContext()
-  const { user } = state
-
   const navigate = useNavigate()
 
   const toast = useToast()
@@ -89,7 +85,7 @@ const MyTourCard: React.FC<Props> = ({
     }
 
     if (tour._id) getBookingsForTour()
-  }, [tour._id, user?.token, bookings])
+  }, [tour._id])
 
   const handleApproveBooking = async (bookingId: string) => {
     if (onApproveBooking) await onApproveBooking(bookingId)

@@ -16,6 +16,8 @@ const generateCookieSettings = (maxAge: number): CookieSettings => {
     secure: true,
     sameSite: 'none',
     maxAge,
+    domain:
+      process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
   }
 }
 
