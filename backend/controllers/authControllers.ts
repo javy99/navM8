@@ -11,13 +11,6 @@ const createToken = (_id: string, expiresIn: string): string => {
   })
 }
 
-const getCookieDomain = (): string | undefined => {
-  if (process.env.NODE_ENV === 'production') {
-    return '.herokuapp.com'
-  }
-  return undefined
-}
-
 // login user
 const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body
@@ -31,20 +24,22 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      domain: '.herokuapp.com',
+      domain:
+        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
       maxAge: 3 * 24 * 60 * 60 * 1000,
     })
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      domain: '.herokuapp.com',
+      domain:
+        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
-    res.status(200).json({ email, token, _id: user._id })
+    res.status(200).json({ email, token, refreshToken, _id: user._id })
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message })
@@ -67,20 +62,22 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      domain: '.herokuapp.com',
+      domain:
+        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
       maxAge: 3 * 24 * 60 * 60 * 1000,
     })
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      domain: '.herokuapp.com',
+      domain:
+        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
-    res.status(200).json({ email, token, _id: user._id })
+    res.status(200).json({ email, token, refreshToken, _id: user._id })
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message })
@@ -122,9 +119,10 @@ const refreshTokenHandler = async (
     // Send the new access token in the response
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      domain: '.herokuapp.com',
+      domain:
+        process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
       maxAge: 3 * 24 * 60 * 60 * 1000,
     })
 
@@ -139,7 +137,7 @@ const refreshTokenHandler = async (
 }
 
 const getUser = async (req: Request, res: Response): Promise<void> => {
-  const { token } = req.cookies
+  const { token, refreshToken } = req.cookies
 
   try {
     if (!req.user) {
@@ -150,6 +148,7 @@ const getUser = async (req: Request, res: Response): Promise<void> => {
       _id: req.user._id,
       email: req.user.email,
       token,
+      refreshToken,
     })
   } catch (error: unknown) {
     if (error instanceof Error) {
