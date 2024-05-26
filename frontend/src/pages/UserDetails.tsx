@@ -145,24 +145,28 @@ const UserDetails: React.FC = () => {
             bgSize="cover"
             bgPosition="center"
             color="white"
-            py={20}
+            py={{ base: '200px', md: '150px' }}
             px={8}
             mt={{ base: 12, md: 0 }}
-            minHeight={{ base: '14rem', md: '15rem', lg: '16rem', xl: '18rem' }}
             width="full"
+            maxWidth="100vw"
           >
             <Flex
               position="absolute"
               top="50%"
+              left={{ base: 0, md: 8 }}
               transform="translateY(-50%)"
               alignItems="center"
               gap={{ base: 4, md: 8 }}
+              flexDirection={{ base: 'column', md: 'row' }}
+              maxWidth="100vw"
+              width="full"
             >
               <Avatar
                 src={selectedUser.profilePictureURL}
                 width={{ base: '9rem', md: '12rem' }}
                 height={{ base: '9rem', md: '12rem' }}
-                marginRight={4}
+                marginRight={{ base: 0, md: 4 }}
                 style={{
                   border: '3px solid white',
                   padding: '5px',
@@ -171,7 +175,10 @@ const UserDetails: React.FC = () => {
                   boxShadow: '0 0 10px rgba(0,0,0,0.6)',
                 }}
               />
-              <Box paddingLeft={4}>
+              <Box
+                paddingLeft={{ base: 0, md: 4 }}
+                textAlign={{ base: 'center', md: 'left' }}
+              >
                 <Text
                   fontSize="xl"
                   fontWeight="bold"
@@ -195,6 +202,7 @@ const UserDetails: React.FC = () => {
                   borderRadius="xl"
                   display="flex"
                   alignItems="center"
+                  justifyContent={{ base: 'center', md: 'flex-start' }}
                   fontWeight="medium"
                   mb={2}
                 >
