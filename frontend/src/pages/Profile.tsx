@@ -155,6 +155,8 @@ const Profile: React.FC = () => {
                     boxSize={iconSize}
                     src={photo}
                     alt="Profile photo"
+                    objectFit="cover"
+                    objectPosition="center"
                   />
                 ) : (
                   <Icon
@@ -419,7 +421,7 @@ const Profile: React.FC = () => {
                 <FormField
                   label="Current Password"
                   name="currentPassword"
-                  type="text"
+                  type="password"
                   value={userInfo.currentPassword}
                   onChange={handleUserInfoChange}
                   isRequired={false}
@@ -428,7 +430,7 @@ const Profile: React.FC = () => {
                 <FormField
                   label="New Password"
                   name="newPassword"
-                  type="text"
+                  type="password"
                   value={userInfo.newPassword}
                   onChange={handleUserInfoChange}
                   isRequired={false}

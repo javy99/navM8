@@ -70,6 +70,8 @@ const Navbar: React.FC = () => {
                 boxSize={iconSize}
                 src={photo}
                 alt="Profile photo"
+                objectFit="cover"
+                objectPosition="center"
               />
             ) : (
               <Icon
