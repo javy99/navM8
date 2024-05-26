@@ -289,16 +289,18 @@ const TourDetails: React.FC = () => {
             </Heading>
             <Flex align="center" mb={4} justifyContent="space-between">
               <Flex align="center">
-                <Avatar
-                  color={whiteColor}
-                  key={tourDetails.author._id}
-                  mr={2}
-                  size="md"
-                  cursor="pointer"
-                  name={tourDetails.author.username}
-                  src={tourDetails.author.profilePictureURL}
-                  fontWeight={500}
-                />
+                <Link to={`/users/${tourDetails.author._id}`}>
+                  <Avatar
+                    color={whiteColor}
+                    key={tourDetails.author._id}
+                    mr={2}
+                    size="md"
+                    cursor="pointer"
+                    name={tourDetails.author.username}
+                    src={tourDetails.author.profilePictureURL}
+                    fontWeight={500}
+                  />
+                </Link>
                 <Tooltip
                   label={`View ${tourDetails.author.firstName}'s Profile`}
                   hasArrow
@@ -394,9 +396,7 @@ const TourDetails: React.FC = () => {
                     <Box
                       key={index}
                       flex={
-                        tourDetails.photos.length === 1
-                          ? '0 0 45%'
-                          : '0 0 100%'
+                        tourDetails.photos.length === 1 ? '0 0 45%' : '0 0 100%'
                       }
                       width="100%"
                       maxWidth="100%"

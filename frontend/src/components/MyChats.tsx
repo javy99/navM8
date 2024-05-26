@@ -16,7 +16,6 @@ import {
   DrawerBody,
   useToast,
   Spinner,
-  Heading,
   Avatar,
   Icon,
 } from '@chakra-ui/react'
@@ -258,9 +257,9 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
         borderTop={`3px solid ${primaryColor}`}
         borderBottom={`3px solid ${primaryColor}`}
       >
-        <Heading as="h1" size="md" mb={1} color={primaryColor}>
+        <Text mb={1} color={primaryColor} fontSize="xl">
           Chats
-        </Heading>
+        </Text>
         <GroupChatModal>
           <Button display="flex" rightIcon={<BsPlus size={25} />}>
             New Group

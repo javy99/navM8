@@ -9,6 +9,7 @@ import {
   Image,
   useBreakpointValue,
   useTheme,
+  Link,
 } from '@chakra-ui/react'
 import { BsPersonCircle, BsList } from 'react-icons/bs'
 import { useProfilePhoto, useSidebarContext } from '../context'
@@ -64,26 +65,30 @@ const Navbar: React.FC = () => {
       <HStack spacing={4} justifyContent="flex-end" flex={1}>
         {user && (
           <>
-            {photo ? (
-              <Image
-                borderRadius="full"
-                boxSize={iconSize}
-                src={photo}
-                alt="Profile photo"
-                objectFit="cover"
-                objectPosition="center"
-              />
-            ) : (
-              <Icon
-                as={BsPersonCircle}
-                boxSize={iconSize}
-                color="rgba(0, 0, 0, 0.3)"
-              />
-            )}
+            <Link onClick={() => navigate('/profile')}>
+              {photo ? (
+                <Image
+                  borderRadius="full"
+                  boxSize={iconSize}
+                  src={photo}
+                  alt="Profile photo"
+                  objectFit="cover"
+                  objectPosition="center"
+                />
+              ) : (
+                <Icon
+                  as={BsPersonCircle}
+                  boxSize={iconSize}
+                  color="rgba(0, 0, 0, 0.3)"
+                />
+              )}
+            </Link>
             {!isMobile && (
-              <Text color={primaryColor} fontWeight={600}>
-                {user.email}
-              </Text>
+              <Link onClick={() => navigate('/profile')}>
+                <Text color={primaryColor} fontWeight={600}>
+                  {user.email}
+                </Text>
+              </Link>
             )}
             <Button onClick={handleLogoutClick}>Logout</Button>
           </>
