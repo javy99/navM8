@@ -357,8 +357,7 @@ const TourDetails: React.FC = () => {
               )}
             </Flex>
             {tourDetails.photos &&
-              tourDetails.photos.length > 0 &&
-              (tourDetails.photos.length > 1 ? (
+              (tourDetails.photos.length > 0 ? (
                 <Swiper
                   spaceBetween={15}
                   slidesPerView={1}
