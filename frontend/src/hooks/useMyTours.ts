@@ -54,7 +54,6 @@ const useMyTours = () => {
 
   useEffect(() => {
     const fetchTours = async () => {
-      console.log('Fetching tours...')
       setIsLoading(true)
       try {
         const allTours = await fetchMyTours()

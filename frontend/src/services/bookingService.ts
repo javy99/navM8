@@ -64,10 +64,27 @@ const approveBooking = async (bookingId: string) => {
   }
 }
 
+const updateBookingToCompleted = async (bookingId: string) => {
+  try {
+    const response = await axios.patch(
+      `${BASE_API_URL}/api/bookings/${bookingId}`,
+      {
+        status: 'COMPLETED',
+      },
+    )
+
+    return response.data
+  } catch (error) {
+    console.error('Error updating booking to completed:', error)
+    throw error
+  }
+}
+
 export {
   fetchBookings,
   fetchBookingsForTour,
   createBooking,
   cancelBooking,
   approveBooking,
+  updateBookingToCompleted,
 }

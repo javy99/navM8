@@ -14,7 +14,10 @@ import {
 } from '@chakra-ui/react'
 import { BookingCard, Button, PageLayout } from '../components'
 import { useAuthContext } from '../hooks'
-import { fetchBookings } from '../services'
+import {
+  fetchBookings,
+  updateBookingToCompleted,
+} from '../services'
 import { Booking } from '../types'
 import myBookingsBg from '../assets/mybookings-bg.jpg'
 
@@ -54,12 +57,23 @@ const MyBookings: React.FC = () => {
           const fetchedBookings = await fetchBookings()
 
           const now = new Date()
-
-          const current = fetchedBookings.filter(
+          const updatedBookings = await Promise.all(
+            fetchedBookings.map(async (booking) => {
+              if (
+                new Date(booking.date) < now &&
+                booking.status !== 'COMPLETED'
+              ) {
+                await updateBookingToCompleted(booking._id)
+                booking.status = 'COMPLETED'
+              }
+              return booking
+            }),
+          )
+          const current = updatedBookings.filter(
             (booking) =>
               new Date(booking.date) >= now && booking.status !== 'COMPLETED',
           )
-          const past = fetchedBookings.filter(
+          const past = updatedBookings.filter(
             (booking) =>
               new Date(booking.date) < now || booking.status === 'COMPLETED',
           )

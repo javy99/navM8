@@ -127,11 +127,6 @@ const TourDetails: React.FC = () => {
     fetchTourReviews()
   }, [id, user?.token, tourDetails])
 
-  const getSlidesPerView = () => {
-    const photosCount = tourDetails?.photos?.length || 0
-    return photosCount >= 3 ? 3 : photosCount
-  }
-
   const handleBooking = async () => {
     if (!user || !id || !value || !user._id) {
       toast({
@@ -363,12 +358,23 @@ const TourDetails: React.FC = () => {
             </Flex>
             {tourDetails.photos &&
               tourDetails.photos.length > 0 &&
-              (tourDetails.photos.length > 3 ? (
+              (tourDetails.photos.length > 1 ? (
                 <Swiper
                   spaceBetween={15}
-                  slidesPerView={getSlidesPerView()}
+                  slidesPerView={1}
                   navigation
                   pagination={{ clickable: true }}
+                  breakpoints={{
+                    640: {
+                      slidesPerView: 1,
+                    },
+                    768: {
+                      slidesPerView: 2,
+                    },
+                    1024: {
+                      slidesPerView: 3,
+                    },
+                  }}
                   style={{ width: '100%' }}
                 >
                   {tourDetails.photos.map((image, index) => (
@@ -388,7 +394,11 @@ const TourDetails: React.FC = () => {
                   {tourDetails.photos.map((image, index) => (
                     <Box
                       key={index}
-                      flex={tourDetails.photos.length === 1 ? '0 1 auto' : '1'}
+                      flex={
+                        tourDetails.photos.length === 1
+                          ? '0 0 45%'
+                          : '0 0 100%'
+                      }
                       width="100%"
                       maxWidth="100%"
                       maxHeight="300px"

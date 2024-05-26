@@ -85,7 +85,7 @@ const TourCard: React.FC<Props> = ({
         .then(setReviews)
         .catch((error) => console.error('Error fetching reviews:', error))
     }
-  }, [tour._id, tour])
+  }, [tour])
 
   const handleToggleFavoriteClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

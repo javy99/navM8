@@ -15,6 +15,7 @@ const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
 
   const location = useLocation()
   const [isLoading, setLoading] = useState<boolean>(true)
+  const [timeoutReached, setTimeoutReached] = useState<boolean>(false)
 
   useEffect(() => {
     if (user !== undefined) {
@@ -22,7 +23,18 @@ const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
     }
   }, [user])
 
-  if (isLoading || !user) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeoutReached(true)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (isLoading || !state.user) {
+    if (timeoutReached) {
+      return <Navigate to="/login" state={{ from: location }} replace />
+    }
     return (
       <Box
         display="flex"

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Box,
   Flex,
@@ -12,6 +12,7 @@ import {
   InputGroup,
   InputRightElement,
   useTheme,
+  Spinner,
 } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Button } from '../components'
@@ -33,6 +34,7 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [password, setPassword] = useState<string>('')
   const [email, setEmail] = useState<string>('')
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false)
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -48,6 +50,12 @@ const Login: React.FC = () => {
       console.error('Login failed', errorResponse.response.data)
     }
   }
+
+  useEffect(() => {
+    const img = new window.Image()
+    img.src = AuthBgImage
+    img.onload = () => setImageLoaded(true)
+  }, [])
 
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
@@ -73,6 +81,26 @@ const Login: React.FC = () => {
               zIndex: 1,
             }}
           >
+            {!imageLoaded && (
+              <Flex
+                align="center"
+                justify="center"
+                position="absolute"
+                top="0"
+                left="0"
+                height="100%"
+                width="100%"
+                zIndex="1"
+                backgroundColor="blackAlpha.500"
+              >
+                <Spinner
+                  size="xl"
+                  color={primaryColor}
+                  thickness="5px"
+                  speed="1s"
+                />
+              </Flex>
+            )}
             <Image
               src={AuthBgImage}
               alt="Background"
@@ -80,6 +108,7 @@ const Login: React.FC = () => {
               objectPosition="left"
               width="100%"
               height="100vh"
+              display={imageLoaded ? 'block' : 'none'}
             />
           </Box>
 
@@ -91,7 +120,6 @@ const Login: React.FC = () => {
             <Box
               width="100%"
               maxWidth="md"
-              padding="32px"
               borderRadius="lg"
               position="absolute"
               top="50%"
@@ -165,6 +193,15 @@ const Login: React.FC = () => {
                       {error}
                     </Text>
                   )}
+                  <Text
+                    color={primaryColor}
+                    textAlign="center"
+                    textDecoration="underline"
+                    mt={4}
+                    fontWeight={500}
+                  >
+                    <Link to="/signup">Don't have an account? Sign Up</Link>
+                  </Text>
                 </VStack>
               </form>
             </Box>

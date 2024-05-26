@@ -23,6 +23,7 @@ export {
   createBooking,
   approveBooking,
   cancelBooking,
+  updateBookingToCompleted,
 } from './bookingService'
 export {
   fetchMyTours,

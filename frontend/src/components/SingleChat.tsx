@@ -220,6 +220,7 @@ const SingleChat: React.FC<Props> = ({ fetchAgain, setFetchAgain }) => {
                   placement="bottom-end"
                 >
                   <Link
+                    style={{ textAlign: 'center' }}
                     to={`/users/${selectedChat.users.find((u) => u._id !== user?._id)?._id ?? '#'}`}
                   >
                     <b>{getSender(user, selectedChat.users)}</b>

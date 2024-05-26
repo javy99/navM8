@@ -1,19 +1,20 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useToast } from '@chakra-ui/react'
-import { checkIsFavorite, toggleFavorite } from '../services'
+import { fetchUserProfile, toggleFavorite } from '../services'
+import { Tour } from '../types'
 
 const useFavorite = (tourId, user) => {
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [favoriteTours, setFavoriteTours] = useState<Tour[]>([])
   const toast = useToast()
 
   useEffect(() => {
     const fetchFavoriteStatus = async () => {
-      if (user && user._id && tourId) {
+      if (user && user._id) {
         try {
-          const status = await checkIsFavorite(user._id, tourId)
-          setIsFavorite(status)
+          const profile = await fetchUserProfile(user._id)
+          setFavoriteTours(profile.favoriteTours || [])
         } catch (error) {
-          console.error("Couldn't fetch the favorite status", error)
+          console.error("Couldn't fetch user profile", error)
         }
       }
     }
@@ -21,12 +22,16 @@ const useFavorite = (tourId, user) => {
     fetchFavoriteStatus()
   }, [tourId, user])
 
+  const isFavorite = favoriteTours.includes(tourId)
+
   const handleToggleFavorite = useCallback(async () => {
     if (!user || !user._id || !tourId) return
 
     try {
       await toggleFavorite(user._id, tourId, isFavorite, false)
-      setIsFavorite(!isFavorite)
+      setFavoriteTours((prev) =>
+        isFavorite ? prev.filter((id) => id !== tourId) : [...prev, tourId],
+      )
 
       const message = isFavorite
         ? 'Removed from favorites'
