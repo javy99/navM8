@@ -176,10 +176,11 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader
-            borderBottomWidth="3px"
+            borderBottomWidth="2px"
             borderColor={primaryColor}
             color={primaryColor}
             textAlign="center"
+            fontWeight="500"
           >
             Search Users
           </DrawerHeader>
@@ -238,6 +239,7 @@ const MyChats: React.FC<Props> = ({ fetchAgain }) => {
               px={4}
               color={primaryColor}
               fontSize={{ base: 'md', md: 'lg' }}
+              fontWeight="500"
             >
               Search User
             </Text>
