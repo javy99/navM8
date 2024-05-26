@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
   }
 
   const navPadding = useBreakpointValue({ base: 2, md: 4 })
-  const iconSize = useBreakpointValue({ base: '2rem', md: '2.5rem' })
+  const iconSize = useBreakpointValue({ base: '2.5rem', md: '2.6rem' })
   const isMobile = useBreakpointValue({ base: true, sm: false })
 
   return (
@@ -84,7 +84,12 @@ const Navbar: React.FC = () => {
               )}
             </Link>
             {!isMobile && (
-              <Link onClick={() => navigate('/profile')}>
+              <Link
+                onClick={() => navigate('/profile')}
+                _hover={{
+                  textDecoration: 'none',
+                }}
+              >
                 <Text color={primaryColor} fontWeight={600}>
                   {user.email}
                 </Text>
