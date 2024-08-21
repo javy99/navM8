@@ -92,10 +92,22 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
 }
 
 const logoutUser = async (req: Request, res: Response): Promise<void> => {
-  res.clearCookie('token')
-  res.clearCookie('refreshToken')
-  res.status(200).json({ message: 'Logged out successfully' })
-}
+  const cookieSettings = generateCookieSettingsForToken; 
+  const refreshCookieSettings = generateCookieSettingsForRefreshToken;
+
+  res.clearCookie('token', {
+    httpOnly: cookieSettings.httpOnly,
+    secure: cookieSettings.secure,
+    sameSite: cookieSettings.sameSite,
+  });
+  res.clearCookie('refreshToken', {
+    httpOnly: refreshCookieSettings.httpOnly,
+    secure: refreshCookieSettings.secure,
+    sameSite: refreshCookieSettings.sameSite,
+  });
+  
+  res.status(200).json({ message: 'Logged out successfully' });
+};
 
 // refresh token
 const refreshTokenHandler = async (
