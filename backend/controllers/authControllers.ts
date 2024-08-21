@@ -16,8 +16,6 @@ const generateCookieSettings = (maxAge: number): CookieSettings => {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'none',
     maxAge,
-    domain:
-      process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
   }
 }
 
