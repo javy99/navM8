@@ -13,11 +13,11 @@ interface CookieSettings {
 const generateCookieSettings = (maxAge: number): CookieSettings => {
   return {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'none',
     maxAge,
     domain:
-      process.env.NODE_ENV === 'production' ? '.herokuapp.com' : undefined,
+      process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
   }
 }
 
