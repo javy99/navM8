@@ -7,6 +7,8 @@ import { createToken } from '../controllers/authControllers'
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const { token, refreshToken } = req.cookies
 
+   console.log("Cookies received:", token);  // Add this line
+
   if (!token && !refreshToken) {
     return res.status(401).json({ error: 'Authorization token required' })
   }
