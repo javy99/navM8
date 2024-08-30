@@ -1,5 +1,7 @@
 # navM8
 
+![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 navM8 is a full-stack web application designed to connect travelers with local guides for authentic, personalized travel experiences. The application aims to make exploring new places more accessible and enjoyable by leveraging local insights without the financial burden of traditional tour services.
 
 ## Features
