@@ -4,8 +4,8 @@ import validator from 'validator'
 import { v2 as cloudinary } from 'cloudinary'
 import { Country, City } from 'country-state-city'
 import { Request, Response } from 'express'
-import { User } from '../models'
 import { Readable } from 'stream'
+import { User } from '../models'
 
 dotenv.config()
 
@@ -15,8 +15,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-const uploadToCloudinary = (buffer: Buffer): Promise<any> => {
-  return new Promise((resolve, reject) => {
+const uploadToCloudinary = (buffer: Buffer): Promise<any> =>
+  new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       { folder: 'userProfilePhotos', secure: true, resource_type: 'image' },
       (error, result) => {
@@ -30,7 +30,6 @@ const uploadToCloudinary = (buffer: Buffer): Promise<any> => {
     readableStream.push(null)
     readableStream.pipe(uploadStream)
   })
-}
 
 const updateProfile = async (req: Request, res: Response): Promise<void> => {
   const {

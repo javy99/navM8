@@ -1,8 +1,8 @@
 import * as dotenv from 'dotenv'
 import { v2 as cloudinary } from 'cloudinary'
 import { Request, Response } from 'express'
-import { IUser, Tour } from '../models'
 import { Readable } from 'stream'
+import { IUser, Tour } from '../models'
 
 dotenv.config()
 
@@ -29,8 +29,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-const streamUpload = (buffer: Buffer): Promise<string> => {
-  return new Promise((resolve, reject) => {
+const streamUpload = (buffer: Buffer): Promise<string> =>
+  new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       { folder: 'tourPhotos' },
       (error, result) => {
@@ -44,7 +44,6 @@ const streamUpload = (buffer: Buffer): Promise<string> => {
     readableStream.push(null)
     readableStream.pipe(uploadStream)
   })
-}
 
 const getAllTours = async (req: Request, res: Response) => {
   try {

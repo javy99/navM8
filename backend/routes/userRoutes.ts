@@ -15,7 +15,7 @@ import {
 
 const userRouter = express.Router()
 const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
+const upload = multer({ storage })
 
 userRouter.get('/', getAllUsers)
 

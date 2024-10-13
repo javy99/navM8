@@ -13,7 +13,7 @@ import {
 
 const toursRouter = express.Router()
 const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
+const upload = multer({ storage })
 
 toursRouter.get('/', getAllTours)
 

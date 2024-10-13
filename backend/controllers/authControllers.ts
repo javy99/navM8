@@ -10,14 +10,12 @@ interface CookieSettings {
   maxAge: number
 }
 
-const generateCookieSettings = (maxAge: number): CookieSettings => {
-  return {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
-    maxAge,
-  }
-}
+const generateCookieSettings = (maxAge: number): CookieSettings => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'none',
+  maxAge,
+})
 
 const generateCookieSettingsForToken = generateCookieSettings(
   3 * 24 * 60 * 60 * 1000,
@@ -92,22 +90,22 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
 }
 
 const logoutUser = async (req: Request, res: Response): Promise<void> => {
-  const cookieSettings = generateCookieSettingsForToken; 
-  const refreshCookieSettings = generateCookieSettingsForRefreshToken;
+  const cookieSettings = generateCookieSettingsForToken
+  const refreshCookieSettings = generateCookieSettingsForRefreshToken
 
   res.clearCookie('token', {
     httpOnly: cookieSettings.httpOnly,
     secure: cookieSettings.secure,
     sameSite: cookieSettings.sameSite,
-  });
+  })
   res.clearCookie('refreshToken', {
     httpOnly: refreshCookieSettings.httpOnly,
     secure: refreshCookieSettings.secure,
     sameSite: refreshCookieSettings.sameSite,
-  });
-  
-  res.status(200).json({ message: 'Logged out successfully' });
-};
+  })
+
+  res.status(200).json({ message: 'Logged out successfully' })
+}
 
 // refresh token
 const refreshTokenHandler = async (
