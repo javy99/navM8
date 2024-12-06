@@ -32,9 +32,9 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
         // Set the new access token in the response cookies
         res.cookie('token', newToken, {
           httpOnly: true,
-          secure: true,
+          secure: process.env.NODE_ENV === 'production',
           maxAge: 3 * 24 * 60 * 60 * 1000,
-          sameSite: 'none',
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         })
 
         // Decode the new access token
